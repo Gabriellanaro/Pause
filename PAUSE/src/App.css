@@ -40,3 +40,25 @@
 .read-the-docs {
   color: #888;
 }
+
+/* new part */
+
+h1 {
+  color: #212121;
+  text-align: center;
+  font-family: "Bona Nova";
+  font-weight: bolder;
+  line-height: normal;
+  letter-spacing: 1 px;
+}
+
+h2 {
+  color: #212121;
+  text-align: center;
+  font-family: "Inter";
+  font-style: medium;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 1 px;
+}
+
