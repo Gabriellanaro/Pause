@@ -5,10 +5,11 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
   const [data, setData] = useState(null)
+  const [inputText, setInputText] = useState('')
 
   const sendHttpRequest = async () => {
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+      const response = await fetch('https://...');
       const result = await response.json();
       setData(result); 
       console.log(result);
@@ -29,8 +30,13 @@ function App() {
         </button>
         <br />
         <br />
-        <button onClick={sendHttpRequest}>
-          Fetch Data
+        <input
+          type="text"
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+        />
+        <button onClick={sendHttpRequest} className="send-button">
+          Send Text
         </button>
         
       </div>

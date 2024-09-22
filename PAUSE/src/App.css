@@ -43,6 +43,10 @@
 
 /* new part */
 
+.send-button {
+  margin-left: 10px; /* Add space above the button */
+}
+
 h1 {
   color: #212121;
   text-align: center;
