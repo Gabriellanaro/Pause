@@ -41,10 +41,9 @@
   color: #888;
 }
 
-/* new part */
 
 .send-button {
-  margin-left: 10px; /* Add space above the button */
+  margin-left: 10px; 
 }
 
 h1 {
@@ -65,4 +64,6 @@ h2 {
   line-height: normal;
   letter-spacing: 1 px;
 }
+
+/* Feed Page */
 
