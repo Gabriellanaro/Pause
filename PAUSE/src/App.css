@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: red;
 }
 
 .logo {
@@ -67,3 +68,11 @@ h2 {
 
 /* Feed Page */
 
+.feed-page {
+  /* max-width: 800px; */
+  /* margin: 20px auto; */
+  padding: 20px;
+  background-color: red;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px white;
+}
