@@ -24,12 +24,13 @@ class Event(db.Model):
     def __repr__(self):
         return f"<Event {self.name}>"
 
+
     def __init__(self, description, name, email):
         self.name = name
         self.email = email
         self.description = description
-
-@app.route("/event", methods=["POST"])
+# Create an event
+@app.route("/events", methods=["POST"])
 def create_event():
     name = request.json["name"]
     email = request.json["email"]
@@ -41,6 +42,58 @@ def create_event():
 
     return format_event(event)
 
+
+# Get all events
+@app.route("/events", methods=["GET"])
+def get_events():
+    events = Event.query.order_by(Event.id.asc()).all()
+    event_list = []
+
+    for event in events:
+        event_list.append(format_event(event))
+    return {"events": event_list}
+
+
+# Get a single event
+@app.route("/events/<id>", methods=["GET"])
+def get_event(id):
+    event = Event.query.filter_by(id=id).one()
+    formatted_event = format_event(event)
+    return {"event": formatted_event}
+
+
+# Delete an event
+@app.route("/events/<id>", methods=["DELETE"])
+def delete_event(id):
+    event = Event.query.filter_by(id=id).one()
+    db.session.delete(event)
+    db.session.commit()
+    return f"Message: Event {id} deleted successfully"
+
+
+# Update an event
+@app.route("/events/<id>", methods=["PUT"])
+def update_event(id):
+    event = Event.query.filter_by(id=id)  # get events list
+
+    # get all the info needed to update
+    name = request.json["name"]
+    email = request.json["email"]
+    description = request.json["description"]
+
+    # update the event
+    event.update(
+        dict(
+            name=name,
+            email=email,
+            description=description,
+            created_at=datetime.utcnow(),
+        )
+    )
+    db.session.commit()
+    return {"event": format_event(event.one())}
+
+
 def format_event(event):
     return {
         "id": event.id,
@@ -50,7 +103,7 @@ def format_event(event):
         "created_at": event.created_at
     }   
 
-#---------------------------------#
+# ---------------------------------#
 
 @app.route("/", methods=["GET", "POST"])
 def hello_world():
