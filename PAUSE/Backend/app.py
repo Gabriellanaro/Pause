@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -6,12 +6,15 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Configuration for the database
-app.config["SECRET_KEY"] = "password"
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres:password@192.38.81.6:5000/PAUSE"
+    "postgresql://postgres:Pause2024@localhost:5432/pauseDemo"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
+# app.config["SECRET_KEY"] = "password"
+# app.config["SQLALCHEMY_DATABASE_URI"] = (
+#     "postgresql://postgres:password@192.38.81.6:5000/PAUSE"
+# )
 CORS(app)
 
 # ---------------------------------#
@@ -126,21 +129,47 @@ def format_event(event):
 
 # ---------------------------------#
 
-@app.route("/", methods=["GET", "POST"])
-def hello_world():
+# Model for table Event (one model for each table in the database)
+class Event(db.Model):
+    __tablename__ = "events"  # table name in postgresql
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    request_method = request.method
+    def __repr__(self):
+        return f"<Event {self.text}>"
 
-    if request_method == "POST":
-        print("-----------------")
-        print(request_method)
-        print(request.form)
-        print(request.args)
-        print(request.data)
-        print("-----------------")
-        first_name = request.form["first_name"]
-        return redirect(url_for("name", first_name=first_name))
-    return render_template("hello.html", request_method=request_method)
+
+@app.route("/event", methods=["POST"])
+def create_event():
+    data = request.json  #retrieve data in json format from the request body 
+    text = data.get("myInput")  #get the value of the key "myInput" from the json data
+
+    # Crea una nuova istanza dell'oggetto Event
+    event = Event(text=text)
+    db.session.add(event)  # Aggiungi l'evento alla sessione
+    db.session.commit()  # Esegui il commit della sessione
+
+    return jsonify({"id": event.id, "text": event.text, "created_at": event.created_at}), 201
+
+
+with app.app_context():
+    db.create_all()  # Crea le tabelle se non esistono
+
+
+# @app.route("/", methods=["GET", "POST"])
+# def hello_world():
+
+#     request_method = request.method
+
+#     if request_method == "POST":
+#         print("-----------------")
+#         print(request.form)
+#         print(request.args)
+#         print(request.data)
+#         print("-----------------")
+
+#     return render_template("hello.html", request_method=request_method)
 
 
 @app.route("/name/<first_name>", methods=["GET"])
