@@ -6,15 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 CORS(app)
 
-#database connection
-#format: postgresql://username:password@host:port/database_name
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:Pause2024@localhost:5432/testPause"
+# database connection
+# format: postgresql://username:password@host:port/database_name
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "postgresql://postgres:Pause2024@localhost:5432/pauseDemo"
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-#Model for table Event (one model for each table in the database)
+# Model for table Event (one model for each table in the database)
 class Event(db.Model):
-    __tablename__ = 'event'  #table name in postgresql
+    __tablename__ = "events"  # table name in postgresql
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -53,7 +55,6 @@ with app.app_context():
 #         print("-----------------")
 
 #     return render_template("hello.html", request_method=request_method)
-
 
 
 if __name__ == "__main__":
