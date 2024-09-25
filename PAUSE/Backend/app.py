@@ -11,19 +11,15 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
-# app.config["SECRET_KEY"] = "password"
-# app.config["SQLALCHEMY_DATABASE_URI"] = (
-#     "postgresql://postgres:password@192.38.81.6:5000/PAUSE"
-# )
 CORS(app)
 
 # ---------------------------------#
 # trial for database POStGRESQL
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    email = db.Column(db.String(100), unique=True)
-    description = db.Column(db.String(200))
+    text = db.Column(db.String(50))
+    # email = db.Column(db.String(100), unique=True)
+    # description = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -34,23 +30,24 @@ class Event(db.Model):
         self.email = email
         self.description = description
 
+
 # Create an event
-@app.route("/events", methods=["POST"])
-def create_event():
-    # Extract data from the request
-    name = request.json["name"]
-    email = request.json["email"]
-    description = request.json["description"]
+# @app.route("/events", methods=["POST"])
+# def create_event1():
+#     # Extract data from the request
+#     name = request.json["name"]
+#     text = request.json["email"]
+#     description = request.json["description"]
 
-    # Create a new event instance
-    event = Event(name=name, email=email, description=description)
+#     # Create a new event instance
+#     event = Event(name=name, email=email, description=description)
 
-    # Add the event to the database
-    db.session.add(event)
-    db.session.commit()
+#     # Add the event to the database
+#     db.session.add(event)
+#     db.session.commit()
 
-    # Return the formatted event data
-    return format_event(event)
+#     # Return the formatted event data
+#     return format_event(event)
 
 
 # Get all events
@@ -140,10 +137,10 @@ class Event(db.Model):
         return f"<Event {self.text}>"
 
 
-@app.route("/event", methods=["POST"])
+@app.route("/events", methods=["POST"])
 def create_event():
-    data = request.json  #retrieve data in json format from the request body 
-    text = data.get("myInput")  #get the value of the key "myInput" from the json data
+    data = request.json  # retrieve data in json format from the request body
+    text = data.get("text")  # get the value of the key "myInput" from the json data
 
     # Crea una nuova istanza dell'oggetto Event
     event = Event(text=text)
