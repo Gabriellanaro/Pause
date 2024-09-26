@@ -2,6 +2,8 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import urllib.parse
+import requests
 
 app = Flask(__name__)
 
@@ -15,20 +17,20 @@ CORS(app)
 
 # ---------------------------------#
 # trial for database POStGRESQL
-class Event(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(50))
-    # email = db.Column(db.String(100), unique=True)
-    # description = db.Column(db.String(200))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+# class Event(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     text = db.Column(db.String(50))
+#     # email = db.Column(db.String(100), unique=True)
+#     # description = db.Column(db.String(200))
+#     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return f"<Event {self.name}>"
+#     def __repr__(self):
+#         return f"<Event {self.name}>"
 
-    def __init__(self, description, name, email):
-        self.name = name
-        self.email = email
-        self.description = description
+#     def __init__(self, description, name, email):
+#         self.name = name
+#         self.email = email
+#         self.description = description
 
 
 # Create an event
