@@ -5,12 +5,17 @@ import veras from '../assets/veras-market.jpg';
 
 const exampleEvents = [
   {
-    time: "Every Sunday 10h - 15h",
+    date: "12-10-2024",
+    startingTime: "10",
+    endingTime: "15",
     title: "VERAS MARKET",
     location: "Bispeengen 20, 2000 Frederiksberg",
     image: veras
   },
   {
+    date: "13-10-2024",
+    startingTime: "9",
+    endingTime: "15",
     time: "Every Saturday 9h - 15h",
     title: "FREDERIKSBERG FLEA MARKET",
     location: "Frederiksberg Rådhus, Smallegade, 2000 Frederiksberg",
