@@ -86,3 +86,69 @@ h2 {
 .feed-page h2 {
   color: white; /* New color for h2 */
 }
+
+.feed-container {
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem; /* Match the padding of #root */
+  background-color: #212121;
+  height: 100vh; /* Match the height of #root */
+  background-color: #212121;
+  height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+/* Event container */
+
+.event-container {
+  display: flex;
+  margin-bottom: 20px;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+  width: 80%;
+}
+
+.event-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.event-time {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.event-title {
+  color: white;
+  text-align: left;
+  font-family: "Bona Nova";
+  font-weight: bolder;
+  line-height: normal;
+  letter-spacing: 1 px;
+  font-size: 40px;
+  margin: 0.5rem 0;
+}
+
+.event-subtitle {
+  color: white;
+  text-align: left;
+  font-family: "Inter";
+  font-style: medium;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 1 px;
+  margin: 0.5rem 0;
+}
