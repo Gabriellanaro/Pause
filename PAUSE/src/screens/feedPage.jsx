@@ -2,6 +2,8 @@ import React, {useEffect, useState, useContext} from "react";
 import '../App.css';
 import EventInFeedPage from "../components/eventInFeedPage";
 import veras from '../assets/veras-market.jpg';
+import { FaPlus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const exampleEvents = [
   {
@@ -25,6 +27,11 @@ const exampleEvents = [
 
 const FeedPage = () => {
     const [events, setEvents] = useState([]);
+    const navigate = useNavigate();
+
+    const addEvent = () => {
+      navigate('/event-form'); // Redirect to the EventFormPage
+    };
 
     // useEffect() function for test events (not in the database)
     useEffect(() => {
@@ -49,9 +56,9 @@ const FeedPage = () => {
 
     return (
     <div className="feed-container">
-      {/* <h1>FeedPage</h1>
-      <h2>Welcome to the Feed</h2>
-      Add more content here */}
+      <button className="add-event-button" onClick={addEvent}>
+        <FaPlus className="add-icon" />
+      </button>
       {events.map((event, index) => (
         <EventInFeedPage key={index} event={event} />
       ))}

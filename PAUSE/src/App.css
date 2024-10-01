@@ -161,5 +161,20 @@ h2 {
   .event-subtitle {
     font-size: 1vw;
   }
+}
 
+.add-event-button {
+  position: absolute;
+  top: 4vh; /* Adjust based on your preference */
+  right: 4vw; /* Adjust based on your preference */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.add-icon {
+  width: 4vw; /* Adjust size based on your preference */
+  height: auto;
+  color: #60ECAA; /* Change the color of the icon if necessary */
 }
