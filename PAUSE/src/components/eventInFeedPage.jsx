@@ -13,8 +13,8 @@ const EventInFeedPage = ( { event }) => {
         <div className="event-container">
       <img src={event.image} alt={event.title} className="event-image" />
       <div className="event-details">
-        <p className="event-subtitle" style={{ fontSize: '25px' }}>{eventTime}</p>
-        <h2 className="event-title">{event.title}</h2>
+        <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
+        <p className="event-title">{event.title}</p>
         <p className="event-subtitle">{event.location}</p>
       </div>
     </div>

@@ -1,11 +1,15 @@
-#root {
+body, html, #root {
   width: 100%; /* Make it full width */
   /* max-width: 1280px; Limit the maximum width */
-  height: 100vh; /* Make it full height */
+  height: 100%; /* Make it full height */
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
   background-color: #212121;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo {
@@ -60,7 +64,7 @@ h1 {
 
 h2 {
   color: #212121;
-  text-align: center;
+  text-align: left;
   font-family: "Inter";
   font-style: medium;
   font-weight: 500;
@@ -70,65 +74,48 @@ h2 {
 
 /* Feed Page */
 
-.feed-page {
-  /* max-width: 800px; */
-  /* margin: 20px auto; */
-  padding: 20px;
-  background-color: #212121;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px #212121;
-}
-
-.feed-page h1 {
-  color: white; /* New color for h1 */
-}
-
-.feed-page h2 {
-  color: white; /* New color for h2 */
-}
-
 .feed-container {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem; /* Match the padding of #root */
   background-color: #212121;
-  height: 100vh; /* Match the height of #root */
-  background-color: #212121;
-  height: 100vh;
   width: 100%;
-  overflow-y: scroll;
+  height: 100%;
+  padding: 5vh 5vw; /* Proportional padding: 5% of the viewport height and width */
+  box-sizing: border-box; /* Ensures padding is included in the element's total size */
+  overflow-y: auto; /* Use auto instead of scroll for a better user experience */
 }
 
-/* Event container */
+/* Event Container */
 
 .event-container {
   display: flex;
+  flex-direction: row;
   margin-bottom: 20px;
   background-color: #333;
-  padding: 10px;
+  padding: 20px;
   border-radius: 5px;
   color: #fff;
-  width: 80%;
+  width: 90vw; /* 80% of the viewport width */
+  max-width: 1000px; /* Maximum width for larger screens */
+  min-width: 300px; /* Minimum width for smaller screens */
+  margin: 20px auto; /* Center the container horizontally */
 }
 
 .event-image {
-  width: 150px;
-  height: 150px;
+  width: 20vw; /* 20% of the viewport width */
+  height: auto; /* Maintain aspect ratio */
   object-fit: cover;
-  margin-right: 20px;
+  margin-right: 2vw; /* Proportional margin for spacing between image and text */
+  max-width: 150px;
 }
 
 .event-details {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.event-time {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  margin-right: 20px;
+  flex: 1;
+  padding: 0 1vw; /* Proportional padding for event details */
 }
 
 .event-title {
@@ -137,9 +124,9 @@ h2 {
   font-family: "Bona Nova";
   font-weight: bolder;
   line-height: normal;
-  letter-spacing: 1 px;
-  font-size: 40px;
-  margin: 0.5rem 0;
+  letter-spacing: 1px;
+  font-size: 3.5vw; /* Scales with viewport width */
+  margin: 0.5rem 0; /* Proportional margin */
 }
 
 .event-subtitle {
@@ -149,6 +136,30 @@ h2 {
   font-style: medium;
   font-weight: 500;
   line-height: normal;
-  letter-spacing: 1 px;
+  letter-spacing: 1px;
   margin: 0.5rem 0;
+  font-size: 1.3vw; /* Scales with viewport width */
+}
+
+/* Media queries for larger screens */
+@media (min-width: 768px) {
+  .event-title {
+    font-size: 2.5vw;
+  }
+
+  .event-subtitle {
+    font-size: 1.3vw;
+  }
+}
+
+/* Media queries for very large screens */
+@media (min-width: 1200px) {
+  .event-title {
+    font-size: 2vw;
+  }
+
+  .event-subtitle {
+    font-size: 1vw;
+  }
+
 }

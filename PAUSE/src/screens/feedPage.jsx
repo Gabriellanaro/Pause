@@ -26,11 +26,27 @@ const exampleEvents = [
 const FeedPage = () => {
     const [events, setEvents] = useState([]);
 
+    // useEffect() function for test events (not in the database)
     useEffect(() => {
       // To test the code with some event
       setEvents(exampleEvents);
     });
     
+    // useEffect() function to fetch events from the database
+    // useEffect(() => {
+    //   const fetchEvents = async () => {
+    //     try {
+    //       const response = await fetch('http://localhost:5000/events'); // Fetch events from the database- add the api endpoint
+    //       const data = await response.json();
+    //       setEvents(data);
+    //     } catch (error) {
+    //       console.error('Error fetching data:', error);
+    //     }
+    //   };
+
+    //   fetchEvents();
+    // }, []); 
+
     return (
     <div className="feed-container">
       {/* <h1>FeedPage</h1>
