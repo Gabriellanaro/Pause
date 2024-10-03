@@ -7,47 +7,42 @@ app = Flask(__name__)
 
 # Configuration for the database
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres:Pause2024@localhost:5432/pauseDemo"
+    "postgresql://postgres:Pause2024@localhost:5432/Pausedatabase" #URI EXPOSED, MUY PELIGROSO
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 CORS(app)
 
-# ---------------------------------#
-# trial for database POStGRESQL
+
+# --------------------------------------------------------------------
+
+# Model for table Event (one model for each table in the database)
 class Event(db.Model):
+    __tablename__ = "events"  # table name in postgresql
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(50))
-    # email = db.Column(db.String(100), unique=True)
-    # description = db.Column(db.String(200))
+    event_name = db.Column(db.String(200), nullable=False)
+    event_description = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    event_date = db.Column(db.Date, nullable=False)  
+    event_start_time = db.Column(db.Time, nullable=False) 
+    event_end_time = db.Column(db.Time, nullable=False)
+    event_location = db.Column(db.String(255), nullable=True) 
 
     def __repr__(self):
-        return f"<Event {self.name}>"
-
-    def __init__(self, description, name, email):
-        self.name = name
-        self.email = email
-        self.description = description
-
-
-# Create an event
-# @app.route("/events", methods=["POST"])
-# def create_event1():
-#     # Extract data from the request
-#     name = request.json["name"]
-#     text = request.json["email"]
-#     description = request.json["description"]
-
-#     # Create a new event instance
-#     event = Event(name=name, email=email, description=description)
-
-#     # Add the event to the database
-#     db.session.add(event)
-#     db.session.commit()
-
-#     # Return the formatted event data
-#     return format_event(event)
+        return f"<Event {self.event_name}>"
+    
+# return a formatted dictionary of the event to the frontend
+def format_event(event):
+    return {
+        "id": event.id,
+        "event_name": event.event_name,
+        "event_description": event.event_description,
+        "event_date": event.event_date,
+        "event_start_time": event.event_start_time.strftime('%H:%M'), 
+        "event_end_time": event.event_end_time.strftime('%H:%M'),
+        "event_location": event.event_location,
+        "created_at": event.created_at
+    }
 
 
 # Get all events
@@ -95,80 +90,66 @@ def delete_event(id):
 # Update an event
 @app.route("/events/<id>", methods=["PUT"])
 def update_event(id):
-    event = Event.query.filter_by(id=id)  # get events list
+    event = Event.query.filter_by(id=id).first()  # get the event by id
+    if not event:
+        return jsonify({"error": "Event not found"}), 404  # return an error if not found
 
     # get all the info needed to update
-    name = request.json["name"]
-    email = request.json["email"]
-    description = request.json["description"]
+    event_name = request.json.get("event_name", event.event_name)
+    event_description = request.json.get("event_description", event.event_description)
+    event_date = request.json.get("event_date", event.event_date)
+    event_start_time = request.json.get("event_start_time", event.event_start_time)
+    event_end_time = request.json.get("event_end_time", event.event_end_time)
+    event_location = request.json.get("event_location", event.event_location)
 
     # update the event
-    event.update(
-        dict(
-            name=name,
-            email=email,
-            description=description,
-            created_at=datetime.utcnow(),
-        )
-    )
+    event.event_name = event_name
+    event.event_description = event_description
+    event.event_date = event_date
+    event.event_start_time = event_start_time
+    event.event_end_time = event_end_time
+    event.event_location = event_location
+
     db.session.commit()
-    return {"event": format_event(event.one())}
+    
+    return {"event": format_event(event)}
 
-
-def format_event(event):
-    return {
-        "id": event.id,
-        "name": event.name,
-        "email": event.email,
-        "description": event.description,
-        "created_at": event.created_at
-    }   
-
-# ---------------------------------#
-
-# Model for table Event (one model for each table in the database)
-class Event(db.Model):
-    __tablename__ = "events"  # table name in postgresql
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(200), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<Event {self.text}>"
-
-
+# Create a new event
 @app.route("/events", methods=["POST"])
 def create_event():
     data = request.json  # retrieve data in json format from the request body
-    text = data.get("text")  # get the value of the key "myInput" from the json data
+    event_name = data.get("event_name")  # get the value of the key "event_name" from the json data
+    event_description = data.get("event_description")  
+    event_date = data.get("event_date") 
+    event_start_time = data.get("event_start_time")
+    event_end_time = data.get("event_end_time")
+    event_location = data.get("event_location")
 
-    # Crea una nuova istanza dell'oggetto Event
-    event = Event(text=text)
+    # Convert start and end times to time objects
+    start_time = datetime.strptime(event_start_time, "%H:%M").time()
+    end_time = datetime.strptime(event_end_time, "%H:%M").time()
+
+    # Create new instance of Event object
+    event = Event(
+        event_name=event_name,
+        event_description=event_description,
+        event_date=event_date,
+        event_start_time=start_time,
+        event_end_time=end_time,
+        event_location=event_location
+    )
     db.session.add(event)  # Aggiungi l'evento alla sessione
     db.session.commit()  # Esegui il commit della sessione
 
-    return jsonify({"id": event.id, "text": event.text, "created_at": event.created_at}), 201
+    # Return the created event in json format for the frontend
+    return jsonify(format_event(event)), 201
 
-
+#creates tables in the database if they do not exist
 with app.app_context():
-    db.create_all()  # Crea le tabelle se non esistono
+    db.create_all()  
 
 
-# @app.route("/", methods=["GET", "POST"])
-# def hello_world():
-
-#     request_method = request.method
-
-#     if request_method == "POST":
-#         print("-----------------")
-#         print(request.form)
-#         print(request.args)
-#         print(request.data)
-#         print("-----------------")
-
-#     return render_template("hello.html", request_method=request_method)
-
-
+#what is the purpose of this?
 @app.route("/name/<first_name>", methods=["GET"])
 def name(first_name):
     return f"{first_name}"

@@ -33,26 +33,31 @@ const FeedPage = () => {
       navigate('/event-form'); // Redirect to the EventFormPage
     };
 
-    // useEffect() function for test events (not in the database)
-    useEffect(() => {
-      // To test the code with some event
-      setEvents(exampleEvents);
-    });
-    
-    // useEffect() function to fetch events from the database
+    //function for test events (not in the database)
+    // useEffect() 
     // useEffect(() => {
-    //   const fetchEvents = async () => {
-    //     try {
-    //       const response = await fetch('http://localhost:5000/events'); // Fetch events from the database- add the api endpoint
-    //       const data = await response.json();
-    //       setEvents(data);
-    //     } catch (error) {
-    //       console.error('Error fetching data:', error);
-    //     }
-    //   };
+    //   // To test the code with some event
+    //   setEvents(exampleEvents);
+    // });
+    
+    //FETCH EVENTS FROM THE DATABASE
+    useEffect(() => {
+      const fetchEvents = async () => {
+          try {
+              const response = await fetch('http://localhost:5000/events'); // Assicurati che questo corrisponda al tuo endpoint backend
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              const data = await response.json();
+              setEvents(data.events); 
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
 
-    //   fetchEvents();
-    // }, []); 
+      fetchEvents();
+    }, []);
+
 
     return (
     <div className="feed-container">
