@@ -7,7 +7,11 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useEffect } from 'react';
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth, provider } from "./firebase"; // Assicurati che il percorso sia corretto
+import { auth, provider } from "./Firebase/firebase";
+
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import AuthDetails from './components/AuthDetails';
 
 const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
@@ -36,7 +40,6 @@ const locations = [
 ];
 
 
-
 function App() {
   const [count, setCount] = useState(0)
   const [data, setData] = useState(null)
@@ -62,46 +65,38 @@ function App() {
     }
   };
 
+  const handleClick = () => {
+    console.log('Popup clicked!');
+    // Add any other actions you want to perform on click
+  };
 
   return (
     <>
       <img src={img} alt="logo" />
-      <h1>PAUSE</h1>
+      <h1 style={{ color: 'white' }}>PAUSE</h1>
       <h2>Take a break from fast fashion</h2>
 
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <br />
-        <br />
-        <input
-          type="text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-        />
-        <button onClick={sendHttpRequest} className="send-button">
-          Send Text
-        </button>
-        
-      </div>
-      
-      {data && (
-        <div>
-          <h2>Fetched Data:</h2>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      )}
+
+      <SignIn />
+      <SignUp />
+      <AuthDetails />
 
       {/* Mappa */}
-      <MapContainer center={center} zoom={13} style={{ height: '400px', width: '800px' }}>
+      <MapContainer center={center} zoom={13} style={{ height: '400px', width: '800px', paddingTop: '200px' }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         {locations.map(location => (
-          <Marker key={location.id} position={[location.lat, location.lng]}>
-            <Popup>{location.name}</Popup>
+          <Marker
+            key={location.id}
+            position={[location.lat, location.lng]}
+            eventHandlers={{ click: handleClick }}>
+
+            <Popup >
+              {location.name}
+              <div onClick={handleClick}> click me!</div>
+            </Popup>
           </Marker>
         ))}
       </MapContainer>
