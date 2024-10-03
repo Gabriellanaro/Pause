@@ -3,7 +3,7 @@ import img from './assets/img.jpg'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FeedPage from './screens/feedPage';
-// import EventFormPage from './screens/eventFormPage';
+import EventFormPage from './screens/eventFormPage';
 
 // function App() {
   // const [count, setCount] = useState(0)
@@ -69,7 +69,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<FeedPage />} />
-        {/* <Route path="/event-form" element={<EventFormPage />} /> */}
+        <Route path="/event-form" element={<EventFormPage />} />
       </Routes>
     </Router>
   );
