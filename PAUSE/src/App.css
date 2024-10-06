@@ -1,180 +1,105 @@
+/* General styles */
 body, html, #root {
-  width: 100%; /* Make it full width */
-  /* max-width: 1280px; Limit the maximum width */
-  height: 100%; /* Make it full height */
-  margin: 0 auto;
-  padding: 0;
-  text-align: center;
-  background-color: #212121;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-
-.send-button {
-  margin-left: 10px; 
-}
-
-h1 {
-  color: #212121;
-  text-align: center;
-  font-family: "Bona Nova";
-  font-weight: bolder;
-  line-height: normal;
-  letter-spacing: 1 px;
-}
-
-h2 {
-  color: #212121;
-  text-align: left;
-  font-family: "Inter";
-  font-style: medium;
-  font-weight: 500;
-  line-height: normal;
-  letter-spacing: 1 px;
-}
-
-/* Feed Page */
-
-.feed-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #212121;
   width: 100%;
   height: 100%;
-  padding: 5vh 5vw; /* Proportional padding: 5% of the viewport height and width */
-  box-sizing: border-box; /* Ensures padding is included in the element's total size */
-  overflow-y: auto; /* Use auto instead of scroll for a better user experience */
-}
-
-/* Event Container */
-
-.event-container {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 20px;
-  background-color: #333;
-  padding: 20px;
-  border-radius: 5px;
-  color: #fff;
-  width: 90vw; /* 80% of the viewport width */
-  max-width: 1000px; /* Maximum width for larger screens */
-  min-width: 300px; /* Minimum width for smaller screens */
-  margin: 20px auto; /* Center the container horizontally */
-}
-
-.event-image {
-  width: 20vw; /* 20% of the viewport width */
-  height: auto; /* Maintain aspect ratio */
-  object-fit: cover;
-  margin-right: 2vw; /* Proportional margin for spacing between image and text */
-  max-width: 150px;
-}
-
-.event-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-  padding: 0 1vw; /* Proportional padding for event details */
-}
-
-.event-title {
-  color: white;
-  text-align: left;
-  font-family: "Bona Nova";
-  font-weight: bolder;
-  line-height: normal;
-  letter-spacing: 1px;
-  font-size: 3.5vw; /* Scales with viewport width */
-  margin: 0.5rem 0; /* Proportional margin */
-}
-
-.event-subtitle {
-  color: white;
-  text-align: left;
-  font-family: "Inter";
-  font-style: medium;
-  font-weight: 500;
-  line-height: normal;
-  letter-spacing: 1px;
-  margin: 0.5rem 0;
-  font-size: 1.3vw; /* Scales with viewport width */
-}
-
-/* Media queries for larger screens */
-@media (min-width: 768px) {
-  .event-title {
-    font-size: 2.5vw;
-  }
-
-  .event-subtitle {
-    font-size: 1.3vw;
-  }
-}
-
-/* Media queries for very large screens */
-@media (min-width: 1200px) {
-  .event-title {
-    font-size: 2vw;
-  }
-
-  .event-subtitle {
-    font-size: 1vw;
-  }
-}
-
-.add-event-button {
-  position: absolute;
-  top: 4vh; /* Adjust based on your preference */
-  right: 4vw; /* Adjust based on your preference */
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+  margin: 0;
   padding: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Screen 1: Initial "+" screen */
+.plus-screen {
+  background-color: #212121; /* Dark background */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+/* "+" button */
+.add-event-button {
+  background-color: #60ECAA; /* Green button */
+  border: none;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .add-icon {
-  width: 4vw; /* Adjust size based on your preference */
-  height: auto;
-  color: #60ECAA; /* Change the color of the icon if necessary */
+  font-size: 40px;
+  color: #212121; /* Dark icon inside green button */
+}
+
+/* Screen 2: Form screen */
+.form-screen {
+  background-color: #60ECAA; /* Light green background */
+  width: 100vw;
+  height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Centered header title */
+.header-title {
+  font-family: "Bona Nova", serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: black;
+  margin-bottom: 30px;
+}
+
+/* Form styles */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 600px;
+}
+
+/* Form fields */
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+/* Save button */
+.save-button {
+  background-color: #8444C4; /* Purple button */
+  color: white;
+  font-family: "Bona Nova", serif;
+  font-size: 48px;
+  font-weight: 700;
+  padding: 41px 0;
+  border: none;
+  border-radius: 50px; /* Rounded */
+  width: 630px;
+  height: 158px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.save-button:hover {
+  background-color: #8444C4; /* No hover color change */
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #8444C4; /* Purple border on focus */
 }
