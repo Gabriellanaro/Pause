@@ -178,3 +178,68 @@ h2 {
   height: auto;
   color: #60ECAA; /* Change the color of the icon if necessary */
 }
+
+/*form screen*/
+.form-screen {
+  background-color: #60ECAA; /* Light green background */
+  width: 100vw;
+  height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+ /* Centered header title */
+ .header-title {
+  font-family: "Bona Nova", serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: black;
+  margin-bottom: 30px;
+}
+
+/* Form styles */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 600px;
+}
+
+/* Form fields */
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+/* Save button */
+.save-button {
+  background-color: #8444C4; /* Purple button */
+  color: white;
+  font-family: "Bona Nova", serif;
+  font-size: 48px;
+  font-weight: 700;
+  padding: 41px 0;
+  border: none;
+  border-radius: 50px; /* Rounded */
+  width: 630px;
+  height: 158px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.save-button:hover {
+  background-color: #8444C4; /* No hover color change */
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #8444C4; /* Purple border on focus */
+}

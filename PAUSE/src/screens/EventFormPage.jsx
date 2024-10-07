@@ -47,81 +47,67 @@ function EventFormPage() {
 
   return (
     <>
-      {/* test form to upload event */}
-      <form onSubmit={sendHttpRequest}>
-      <div style={{border: '1px solid red'}}>
-        <label htmlFor="event_name">Name of the Event:</label>
-        <input
-          type="text"
-          name="event_name"
-          placeholder='My amazing clothes'
-          value={formData.event_name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="event_description">Description:</label>
-        <textarea
-          name="event_description"
-          value={formData.event_description}
-          placeholder='female clothes, all sizes, all colors'
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="event_date">Date:</label>
-        <input
-          type="date"
-          name="event_date"
-          value={formData.event_date}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="event_start_time">Start time</label>
-        <input
-          type="time"
-          name="event_start_time"
-          value={formData.event_start_time}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="event_end_time">End time</label>
-        <input
-          type="time"
-          name="event_end_time"
-          value={formData.event_end_time}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="event_location">Location</label>
-        <input
-          type="text"
-          name="event_location"
-          value={formData.event_location}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <button type="submit">Crea Evento</button>
-    </form>
-      
-
-      
-      
-      {/* {data && (
-        <div>
-          <h2>Fetched Data:</h2>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+      {/* test form to upload event */}        
+      <div className="form-screen">
+          <h2 className="header-title">Tell us more about your event</h2>
+          <form onSubmit={sendHttpRequest}>
+            <div>
+              <label htmlFor="event_name">Name of your event</label>
+              <input
+                type="text"
+                name="event_name"
+                placeholder="Name of your event"
+                value={formData.event_name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="event_date">Select Date</label>
+              <input
+                type="date"
+                name="event_date"
+                value={formData.event_date}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <div style={{ flex: 1 }}>
+                <label htmlFor="event_start_time">Select Starting Time</label>
+                <input
+                  type="time"
+                  name="event_start_time"
+                  value={formData.event_start_time}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label htmlFor="event_end_time">Select Closing Time</label>
+                <input
+                  type="time"
+                  name="event_end_time"
+                  value={formData.event_end_time}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="event_location">Location</label>
+              <input
+                type="text"
+                name="event_location"
+                placeholder="Location"
+                value={formData.event_location}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <button type="submit" className="save-button">Save</button>
+          </form>
         </div>
-      )} */}
     </>
   )
 }
