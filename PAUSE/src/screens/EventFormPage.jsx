@@ -47,12 +47,9 @@ function EventFormPage() {
 
   return (
     <>
-      <h1>PAUSE</h1>
-      <h2>Take a break from fast fashion</h2>
-
       {/* test form to upload event */}
       <form onSubmit={sendHttpRequest}>
-      <div>
+      <div style={{border: '1px solid red'}}>
         <label htmlFor="event_name">Name of the Event:</label>
         <input
           type="text"
