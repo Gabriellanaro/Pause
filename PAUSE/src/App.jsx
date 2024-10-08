@@ -4,6 +4,7 @@ import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FeedPage from './screens/feedPage';
 import EventFormPage from './screens/eventFormPage';
+import LoginPage from './screens/LoginPage';
 
 // function App() {
   // const [count, setCount] = useState(0)
@@ -70,6 +71,7 @@ function App() {
       <Routes>
         <Route path="/" element={<FeedPage />} />
         <Route path="/event-form" element={<EventFormPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   );
