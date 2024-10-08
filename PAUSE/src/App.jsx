@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react'
-import img from './assets/img.jpg'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FeedPage from './screens/feedPage';
 import EventFormPage from './screens/eventFormPage';
 import LoginPage from './screens/LoginPage';
+import MapPage from './screens/MapPage';
 
 // function App() {
   // const [count, setCount] = useState(0)
@@ -72,6 +73,7 @@ function App() {
         <Route path="/" element={<FeedPage />} />
         <Route path="/event-form" element={<EventFormPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/map" element={<MapPage />} />
       </Routes>
     </Router>
   );

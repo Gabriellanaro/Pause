@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/screens/EventFormPage.js
 import React from "react";
 import { useState } from 'react'
@@ -26,7 +27,7 @@ function EventFormPage() {
     
 
   const sendHttpRequest = async (e) => {
-    e.preventDefault(); //prevents refreshh of the page
+    e.preventDefault(); //prevents refresh of the page
     try {
       console.log(formData);
       const response = await fetch('http://localhost:5000/events', {

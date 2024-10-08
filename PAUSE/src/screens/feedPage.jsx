@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useContext} from "react";
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState, useContext } from "react";
 import '../App.css';
 import EventInFeedPage from "../components/eventInFeedPage";
 import veras from '../assets/veras-market.jpg';
