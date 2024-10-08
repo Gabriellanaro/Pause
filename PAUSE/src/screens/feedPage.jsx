@@ -60,7 +60,7 @@ const FeedPage = () => {
 
 
     return (
-    <div className="feed-container">
+      <div className="feed-container">
       <button className="add-event-button" onClick={addEvent}>
         <FaPlus className="add-icon" />
       </button>
