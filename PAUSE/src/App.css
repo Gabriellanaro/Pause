@@ -158,6 +158,7 @@ input, select, textarea {
   border-radius: 10px;
   box-sizing: border-box;
   background-color: #fff;
+  color:#333;
 }
 
 /* Save button */

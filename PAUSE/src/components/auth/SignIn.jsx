@@ -42,13 +42,13 @@ const SignIn = () => {
         <div className='sign-in-container'>
             <form onSubmit={handleSignIn}>
                 <h1 style={{ color: 'white' }}>Log In</h1>
-                <input
+                <input className='input'
                     type='email'
                     placeholder='Email'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}>
                 </input>
-                <input
+                <input className='input'
                     type='password'
                     placeholder='Password'
                     value={password}
