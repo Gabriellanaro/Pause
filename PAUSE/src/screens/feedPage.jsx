@@ -42,7 +42,14 @@ const FeedPage = () => {
           </button>
 
           <div className="feed-controls">
-              <div className="map-view">Map View</div>
+              <div className="tags">
+                  <button className="switchview-button" onClick={() => navigate('/map')}>
+                    Map View
+                  </button>
+                  <button className="switchview-button" onClick={() => navigate('/')}>
+                    Feed View
+                  </button>
+              </div>
               <div className="tags">
                   <span className="tag">Tag 1</span>
                   <span className="tag">Tag 2</span>
