@@ -6,6 +6,7 @@ import FeedPage from './screens/feedPage';
 import EventFormPage from './screens/eventFormPage';
 import LoginPage from './screens/LoginPage';
 import MapPage from './screens/MapPage';
+import NavBar from './components/NavBar';
 
 // function App() {
   // const [count, setCount] = useState(0)
@@ -69,6 +70,7 @@ import MapPage from './screens/MapPage';
 function App() {
   return (
     <Router>
+      <NavBar/>
       <Routes>
         <Route path="/" element={<FeedPage />} />
         <Route path="/event-form" element={<EventFormPage />} />
