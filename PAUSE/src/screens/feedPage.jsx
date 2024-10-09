@@ -61,12 +61,24 @@ const FeedPage = () => {
 
     return (
       <div className="feed-container">
-      <button className="add-event-button" onClick={addEvent}>
-        <FaPlus className="add-icon" />
-      </button>
-      {events.map((event, index) => (
-        <EventInFeedPage key={index} event={event} />
-      ))}
+          <h1 className="feed-title">HOT IN COPENHAGEN</h1>
+          <button className="add-event-button" onClick={addEvent}>
+            <FaPlus className="add-icon" />
+          </button>
+
+          <div className="feed-controls">
+              <div className="map-view">Map View</div>
+              <div className="tags">
+                  <span className="tag">Tag 1</span>
+                  <span className="tag">Tag 2</span>
+                  <span className="tag">Tag 3</span>
+              </div>
+          </div>
+
+          
+          {events.map((event, index) => (
+            <EventInFeedPage key={index} event={event} />
+          ))}
     </div>
     )
 }

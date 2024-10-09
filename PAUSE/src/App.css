@@ -24,12 +24,22 @@ body, html, #root {
   flex-direction: column;
   align-items: center;
   background-color: #212121;
-  width: 100%;
+  width: 60%;
   height: 100%;
-  padding: 5vh 5vw; /* Proportional padding: 5% of the viewport height and width */
+  /* padding: 5vh 5vw; Proportional padding: 5% of the viewport height and width */
   box-sizing: border-box; /* Ensures padding is included in the element's total size */
   overflow-y: auto; /* Use auto instead of scroll for a better user experience */
-  border: 1px solid #d00f0f; /* Add a border to the container */
+  /* border: 1px solid #d00f0f;  */
+}
+
+/* Nasconde la scrollbar nei browser che supportano WebKit (Chrome, Safari, etc.) */
+.feed-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Opzionale: Per Firefox, puoi usare una regola diversa ma non è supportata in tutti i browser */
+.feed-container {
+  scrollbar-width: none; /* Nasconde la scrollbar in Firefox */
 }
 
 /* Event Container */
@@ -41,10 +51,12 @@ body, html, #root {
   background-color: #333;
   padding: 20px;
   border-radius: 5px;
-  width: 90vw; /* 80% of the viewport width */
+  width: 100%; /* 80% of the viewport width */
   max-width: 1000px; /* Maximum width for larger screens */
   min-width: 300px; /* Minimum width for smaller screens */
-  margin: 20px auto; /* Center the container horizontally */
+  margin: 20px auto; /*Center the container horizontally*/
+  box-sizing: border-box;
+  /* border: 1px solid yellow; */
 }
 
 .event-image {
@@ -122,6 +134,18 @@ body, html, #root {
   color: #60ECAA; /* Change the color of the icon if necessary */
 }
 
+.feed-title {
+  letter-spacing: 0.2px;
+  font-size: 5.5vw; /* Scales with viewport width */
+  margin: 0;
+  padding: 0;
+  margin-bottom: 50px;
+  width: 100%; /* Imposta la larghezza al 100% del feed-container */
+  text-align: center; /* Centra il testo all'interno */
+  font-weight: 700;
+}
+
+
 /*form screen*/
 .form-screen {
   background-color: #60ECAA; /* Light green background */
@@ -198,15 +222,17 @@ nav {
   display: flex; /* Utilizza Flexbox per posizionare gli elementi */
   justify-content: space-between; /* Spazia tra gli elementi */
   align-items: center; /* Allinea verticalmente gli elementi al centro */
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
   box-sizing: border-box; 
-
+  font-size: small;
+  margin: 0;
 }
 
 .navbar-left {
   /* Stile per la parte sinistra della navbar */
   display: flex;
   align-items: center; /* Centra verticalmente il contenuto */
+  font-weight: 600;
 }
 
 .navbar-right {
@@ -231,5 +257,33 @@ nav {
 
 
 /* ---------------------------------------------*/
+/* feed controls styles */
+.feed-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+}
 
 
+.map-view {
+  font-size: 0.7em;
+  font-weight: 500;
+}
+
+.tags {
+  display: flex;
+  gap: 10px;
+}
+
+.tag {
+  padding: 5px 10px;
+  border: 1px solid #fff5f5;
+  border-radius: 20px;
+  background-color: transparent;
+  font-size: 0.9em;
+}
