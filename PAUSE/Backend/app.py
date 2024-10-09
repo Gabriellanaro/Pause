@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Configuration for the database
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres:Pause2024@localhost:5432/Pausedatabase" #URI EXPOSED, MUY PELIGROSO
+    "postgresql://postgres:Pause2024@10.209.155.74:5432/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -30,7 +30,7 @@ class Event(db.Model):
 
     def __repr__(self):
         return f"<Event {self.event_name}>"
-    
+
 # return a formatted dictionary of the event to the frontend
 def format_event(event):
     return {
@@ -144,12 +144,12 @@ def create_event():
     # Return the created event in json format for the frontend
     return jsonify(format_event(event)), 201
 
-#creates tables in the database if they do not exist
+# creates tables in the database if they do not exist
 with app.app_context():
     db.create_all()  
 
 
-#what is the purpose of this?
+# what is the purpose of this?
 @app.route("/name/<first_name>", methods=["GET"])
 def name(first_name):
     return f"{first_name}"

@@ -13,7 +13,7 @@ function EventFormPage() {
     event_date: '2024-10-12',
     event_start_time: '10:00',
     event_end_time: '14:01',
-    event_location: 'via pippo',
+    event_location: 'via pippo la white',
   });
 
   const handleChange = (e) => {
@@ -24,7 +24,6 @@ function EventFormPage() {
     });
   };
 
-    
 
   const sendHttpRequest = async (e) => {
     e.preventDefault(); //prevents refresh of the page
