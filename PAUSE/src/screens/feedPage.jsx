@@ -6,25 +6,6 @@ import veras from '../assets/veras-market.jpg';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-const exampleEvents = [
-  {
-    date: "12-10-2024",
-    startingTime: "10",
-    endingTime: "15",
-    title: "VERAS MARKET",
-    location: "Bispeengen 20, 2000 Frederiksberg",
-    image: veras
-  },
-  {
-    date: "13-10-2024",
-    startingTime: "9",
-    endingTime: "15",
-    time: "Every Saturday 9h - 15h",
-    title: "FREDERIKSBERG FLEA MARKET",
-    location: "Frederiksberg Rådhus, Smallegade, 2000 Frederiksberg",
-    image: veras
-  }
-];
 
 const FeedPage = () => {
     const [events, setEvents] = useState([]);
@@ -33,13 +14,6 @@ const FeedPage = () => {
     const addEvent = () => {
       navigate('/event-form'); // Redirect to the EventFormPage
     };
-
-    //function for test events (not in the database)
-    // useEffect() 
-    // useEffect(() => {
-    //   // To test the code with some event
-    //   setEvents(exampleEvents);
-    // });
     
     //FETCH EVENTS FROM THE DATABASE
     useEffect(() => {
