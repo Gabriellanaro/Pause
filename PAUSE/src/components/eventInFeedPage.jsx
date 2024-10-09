@@ -23,4 +23,16 @@ const EventInFeedPage = ( { event }) => {
   );
 };
 
+EventInFeedPage.propTypes = {
+  event: PropTypes.shape({
+      event_date: PropTypes.string.isRequired,
+      event_start_time: PropTypes.string.isRequired,
+      event_end_time: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      event_title: PropTypes.string.isRequired,
+      event_name: PropTypes.string.isRequired,
+      event_location: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 export default EventInFeedPage;
