@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import img from '../assets/img.jpg';
 import '../App.css';
@@ -14,12 +13,13 @@ import { useNavigate } from 'react-router-dom';
 import SignIn from '../components/auth/SignIn';
 import SignUp from '../components/auth/SignUp';
 import AuthDetails from '../components/AuthDetails';
+import ErrorPopup from '../components/errorPopUp/ErrorPopUp';
 
 
 const LoginPage = () => {
-  const [count, setCount] = useState(0)
-  const [data, setData] = useState(null)
-  const [inputText, setInputText] = useState('')
+  const [inputText, setInputText] = useState('');
+  const [data, setData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const signInWithGoogle = () => {
@@ -31,36 +31,39 @@ const LoginPage = () => {
       })
       .catch((error) => {
         // Handle different types of errors
+        let message = 'An unknown error occurred.';
         if (error.code === 'auth/popup-closed-by-user') {
-          console.error('The popup was closed by the user before completing the sign-in.');
+          message = 'The popup was closed by the user before completing the sign-in.';
         } else if (error.code === 'auth/cancelled-popup-request') {
-          console.error('The popup request was cancelled.');
+          message = 'The popup request was cancelled.';
         } else if (error.code === 'auth/network-request-failed') {
-          console.error('A network error occurred.');
-        } else {
-          console.error('An unknown error occurred:', error);
+          message = 'A network error occurred.';
+        } else if (error.code === 'auth/invalid-credential') {
+          message = 'The credential is invalid.';
         }
+        setErrorMessage(message);
       });
   };
 
-  // const sendHttpRequest = async () => {
-  //   try {
+  
+  const sendHttpRequest = async () => {
+    try {
 
-  //     const response = await fetch('http://localhost:5000/events', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ text: inputText }),
-  //     });
+      const response = await fetch('http://localhost:5000/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: inputText }),
+      });
 
-  //     const result = await response.json();
-  //     setData(result);
-  //     console.log(result);
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
+      const result = await response.json();
+      setData(result);
+      console.log(result);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
 
   return (
@@ -78,6 +81,9 @@ const LoginPage = () => {
 
         <button onClick={signInWithGoogle}>Sign in with Google</button>
       </div>
+
+      <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
+
     </div>
   );
 };
