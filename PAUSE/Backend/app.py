@@ -102,6 +102,7 @@ def update_event(id):
     event_end_time = request.json.get("event_end_time", event.event_end_time)
     event_location = request.json.get("event_location", event.event_location)
 
+
     # update the event
     event.event_name = event_name
     event.event_description = event_description
