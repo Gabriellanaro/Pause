@@ -31,13 +31,10 @@ function MapPage() {
 
   return (
     <>
-      <img src={img} alt="logo" />
-      <h1 style={{ color: 'white' }}>PAUSE</h1>
-
       {/* Mappa */}
-      <MapContainer center={center} zoom={13} style={{ height: '400px', width: '800px', paddingTop: '200px' }}>
+      <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '100vh', width: '100vh'}}>
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         {locations.map(location => (
