@@ -4,12 +4,34 @@ import PropTypes from 'prop-types';
 import '../App.css';
 
 const EventInFeedPage = ( { event }) => {
-    // Split the date to get day, month, and year
-    const [day, month, year] = event.event_date.split('-');
-    // Format the date as dd/mm/yyyy
-    const formattedDate = `${day}/${month}/${year}`;
+
+  // Function to format the event date and time
+  const formatEventDateTime = (event) => {
+    // Extract year, month, and day from the event_date
+    const eventDate = new Date(event.event_date);
+
+    // Get the day of the week (e.g., 'Sat')
+    const dayOfWeek = eventDate.toLocaleDateString('en-US', { weekday: 'short' });
+
+    // Get the formatted date (e.g., '12 Oct 2024')
+    const formattedDate = `${dayOfWeek}, ${eventDate.getDate()} ${eventDate.toLocaleString('en-US', { month: 'long' })} ${eventDate.getFullYear()}`;
+
+    // Format start and end times
+    const formatTime = (time) => {
+      const [hour, minute] = time.split(':');
+      return `${hour}:${minute}`;
+    };
+
+    const eventStartTime = formatTime(event.event_start_time);
+    const eventEndTime = formatTime(event.event_end_time);
+
     // Combine formatted date with starting and ending times
-    const eventTime = `${formattedDate}, ${event.event_start_time}h - ${event.event_end_time}h`;
+    const eventTime = `${formattedDate}, ${eventStartTime}h - ${eventEndTime}h`;
+
+    return eventTime;
+  };
+
+    const eventTime = formatEventDateTime(event);
 
     return (
         <div className="event-container">
