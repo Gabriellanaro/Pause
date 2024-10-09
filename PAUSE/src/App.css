@@ -17,7 +17,7 @@ body, html, #root {
 }
 
 
-/* Feed Page */
+/*----------------- Feed Page ----------------------*/
 
 .feed-container {
   display: flex;
@@ -73,6 +73,7 @@ body, html, #root {
   justify-content: center;
   flex: 1;
   padding: 0 1vw; /* Proportional padding for event details */
+  /* border: 1px solid #d00f0f; */
 }
 
 .event-title {
@@ -83,6 +84,7 @@ body, html, #root {
   letter-spacing: 1px;
   font-size: 3.5vw; /* Scales with viewport width */
   margin: 0.5rem 0; /* Proportional margin */
+  /* border: 1px solid #d00f0f; */
 }
 
 .event-subtitle {
@@ -94,6 +96,7 @@ body, html, #root {
   letter-spacing: 1px;
   margin: 0.5rem 0;
   font-size: 1.3vw; /* Scales with viewport width */
+  /* border: 1px solid #1fde85; */
 }
 
 /* Media queries for larger screens */
@@ -143,10 +146,44 @@ body, html, #root {
   width: 100%; /* Imposta la larghezza al 100% del feed-container */
   text-align: center; /* Centra il testo all'interno */
   font-weight: 700;
+  /* border: 1px solid #2978b9; */
+}
+
+/* feed controls styles */
+.feed-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+  /* border: 1px solid #2978b9; */
 }
 
 
-/*form screen*/
+.map-view {
+  font-size: 0.7em;
+  font-weight: 500;
+}
+
+.tags {
+  display: flex;
+  gap: 10px;
+}
+
+.tag {
+  padding: 5px 10px;
+  border: 1px solid #fff5f5;
+  border-radius: 20px;
+  background-color: transparent;
+  font-size: 0.9em;
+}
+
+/********************end feed page style********************************/
+
+/********************form screen***************************************/
 .form-screen {
   background-color: #60ECAA; /* Light green background */
   width: 100vw;
@@ -210,10 +247,10 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #8444C4; /* Purple border on focus */
 }
+/*********************end form screen style************************************/
 
 
-/*----------------------------------------------
-/* navbar styles */
+/********************* navbar styles ****************************************/
 nav {
   width: 100%;
   background: #212121;
@@ -256,34 +293,4 @@ nav {
 }
 
 
-/* ---------------------------------------------*/
-/* feed controls styles */
-.feed-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 10px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #ddd;
-  width: 100%;
-}
-
-
-.map-view {
-  font-size: 0.7em;
-  font-weight: 500;
-}
-
-.tags {
-  display: flex;
-  gap: 10px;
-}
-
-.tag {
-  padding: 5px 10px;
-  border: 1px solid #fff5f5;
-  border-radius: 20px;
-  background-color: transparent;
-  font-size: 0.9em;
-}
+/********************end nav bar styles*****************************/
