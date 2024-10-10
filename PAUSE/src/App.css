@@ -247,6 +247,30 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #8444C4; /* Purple border on focus */
 }
+
+.suggestions-dropdown {
+  /* position: absolute; Posizionamento relativo all'input */
+  background-color: white; /* Colore di sfondo */
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: calc(100% - 20px);
+  max-height: 100px;
+  overflow-y: auto;
+  color:#212121
+}
+
+.suggestions-dropdown li {
+  padding: 10px; 
+  cursor: pointer; 
+}
+
+.suggestions-dropdown li:hover {
+  background-color: #f0f0f0; 
+}
+
 /*********************end form screen style************************************/
 
 

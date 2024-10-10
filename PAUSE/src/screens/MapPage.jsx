@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import img from '../assets/img.jpg';
 import '../App.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+
 
 
 // Configurazione per i marker della mappa
@@ -16,13 +17,31 @@ L.Icon.Default.mergeOptions({
 });
 
 const center = [55.6867243, 12.5700724];
-const locations = [
-  { id: 1, lat: 55.7291550, lng: 12.5706350, name: "Casa Gabriel" },
-  { id: 2, lat: 55.7101760, lng: 12.5529000, name: "Casa Ture" },
-];
+// const locations = [
+// //example locations, gabriel and ture's houses
+//   { id: 1, lat: 55.7291550, lng: 12.5706350, name: "Casa Gabriel" },
+//   { id: 2, lat: 55.7101760, lng: 12.5529000, name: "Casa Ture" },
+// ];
 
 
 function MapPage() {
+
+  const [events, setEvents] = useState([]);
+  //function to fetch events from the database
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/events');
+      const data = await response.json();
+      setEvents(data.events); // Store events in state
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+
+  //to load the events when the page is loaded
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const handleClick = () => {
     console.log('Popup clicked!');
@@ -35,17 +54,20 @@ function MapPage() {
       <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '100vh', width: '100vh'}}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        {locations.map(location => (
+        {events.map(event => (
           <Marker
-            key={location.id}
-            position={[location.lat, location.lng]}
+            key={event.id}
+            position={[event.event_latitude, event.event_longitude]}
             eventHandlers={{ click: handleClick }}>
 
             <Popup >
-              {location.name}
-              <div onClick={handleClick}> click me!</div>
+              <strong>{event.event_name}</strong>
+                <p>{event.event_description}</p>
+                <p>{`Date: ${event.event_date}`}</p>
+                <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
+              <div onClick={handleClick}></div>
             </Popup>
           </Marker>
         ))}
