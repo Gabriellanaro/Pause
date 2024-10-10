@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import '../App.css';
 import EventInFeedPage from "../components/eventInFeedPage";
-import veras from '../assets/veras-market.jpg';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 

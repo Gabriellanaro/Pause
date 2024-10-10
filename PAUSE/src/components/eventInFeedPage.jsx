@@ -31,11 +31,16 @@ const EventInFeedPage = ( { event }) => {
     return eventTime;
   };
 
+
     const eventTime = formatEventDateTime(event);
+
+    const defaultImage = '/default_img_vintageshop.jpg'; 
+    //use image from event if present in the database, otherwise use default image
+    const eventImage = event.event_image && event.event_image !== 'null' ? event.event_image : defaultImage;
 
     return (
         <div className="event-container">
-      <img src={event.image} alt={event.event_title} className="event-image" />
+      <img src={eventImage} alt={event.event_name} className="event-image" />
       <div className="event-details">
         <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
         <p className="event-title">{event.event_name}</p>
@@ -45,16 +50,16 @@ const EventInFeedPage = ( { event }) => {
   );
 };
 
-EventInFeedPage.propTypes = {
-  event: PropTypes.shape({
-      event_date: PropTypes.string.isRequired,
-      event_start_time: PropTypes.string.isRequired,
-      event_end_time: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      event_title: PropTypes.string.isRequired,
-      event_name: PropTypes.string.isRequired,
-      event_location: PropTypes.string.isRequired,
-  }).isRequired,
-};
+// EventInFeedPage.propTypes = {
+//   event: PropTypes.shape({
+//       event_date: PropTypes.string.isRequired,
+//       event_start_time: PropTypes.string.isRequired,
+//       event_end_time: PropTypes.string.isRequired,
+//       image: PropTypes.string.isRequired,
+//       event_title: PropTypes.string.isRequired,
+//       event_name: PropTypes.string.isRequired,
+//       event_location: PropTypes.string.isRequired,
+//   }).isRequired,
+// };
 
 export default EventInFeedPage;

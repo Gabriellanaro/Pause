@@ -61,10 +61,11 @@ body, html, #root {
 
 .event-image {
   width: 20vw; /* 20% of the viewport width */
-  height: auto; /* Maintain aspect ratio */
-  object-fit: cover;
+  height: 20vw; 
+  max-width: 150px; 
+  max-height: 150px; 
+  object-fit: cover; /* Scale the image to cover the entire container */
   margin-right: 2vw; /* Proportional margin for spacing between image and text */
-  max-width: 150px;
 }
 
 .event-details {
