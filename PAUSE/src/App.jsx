@@ -6,7 +6,9 @@ import { UserProvider } from './contexts/UserContext';
 import EventFormPage from './screens/eventFormPage';
 import LoginPage from './screens/LoginPage';
 import MapPage from './screens/MapPage';
+import NavBar from './components/NavBar';
 import './App.css'
+
 
 // function App() {
   // const [count, setCount] = useState(0)
@@ -69,6 +71,7 @@ import './App.css'
 
 function App() {
   return (
+
     <UserProvider>
       <Router>
         <Routes>
