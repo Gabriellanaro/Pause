@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 import { useState } from 'react'
-import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FeedPage from './screens/feedPage';
+import { UserProvider } from './contexts/UserContext';
 import EventFormPage from './screens/eventFormPage';
 import LoginPage from './screens/LoginPage';
 import MapPage from './screens/MapPage';
 import NavBar from './components/NavBar';
+import './App.css'
+
 
 // function App() {
   // const [count, setCount] = useState(0)
@@ -69,15 +71,17 @@ import NavBar from './components/NavBar';
 
 function App() {
   return (
-    <Router>
-      <NavBar/>
-      <Routes>
-        <Route path="/" element={<FeedPage />} />
-        <Route path="/event-form" element={<EventFormPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/map" element={<MapPage />} />
-      </Routes>
-    </Router>
+
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<FeedPage />} />
+          <Route path="/event-form" element={<EventFormPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/map" element={<MapPage />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

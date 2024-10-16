@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Configuration for the database
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres:Pause2024@localhost:5432/Pausedatabase" #URI EXPOSED, MUY PELIGROSO
+    "postgresql://postgres:Pause2024@10.209.155.74:5432/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -32,11 +32,11 @@ class Event(db.Model):
     event_longitude = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
-        return f"<Event {self.event_name}>"
-    
+        return f"<Event {self.event_name}>"    
 
 # it converts the Event object (that is an instance of SQLAlchemy model) to a dictionary, that can be converted to JSON.
 # this is because SQLAlchemy objects are not serializable to JSON.
+
 def format_event(event):
     return {
         "id": event.id,
@@ -160,12 +160,12 @@ def create_event():
     # Return the created event in json format for the frontend
     return jsonify(format_event(event)), 201
 
-#creates tables in the database if they do not exist
+# creates tables in the database if they do not exist
 with app.app_context():
     db.create_all()  
 
 
-#what is the purpose of this?
+# what is the purpose of this?
 @app.route("/name/<first_name>", methods=["GET"])
 def name(first_name):
     return f"{first_name}"
