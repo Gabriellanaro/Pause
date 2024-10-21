@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 // src/screens/UserRegistrationPage.jsx
 import React, { useState, useEffect} from "react";
-// import { useUser } from './contexts/useUser'; // Import the useUser hook
 import { useUser } from "../contexts/UserContext";
 import '../App.css';
 
@@ -15,6 +14,8 @@ function UserRegistrationPage() {
         confirm_password: '',
     });
 
+  const [message, setMessage] = useState(null); // Error message
+  
   // Pre-fill the email field if the user is authenticated
   useEffect(() => {
     if (user && user.email) {
@@ -42,17 +43,28 @@ function UserRegistrationPage() {
     try {
       console.log(formData); // You can handle your registration logic here
 
-      const response = await fetch('http://localhost:5000/register', {
+      const response = await fetch('http://localhost:5000/registration', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          email: formData.email,
+          password: formData.password,
+        }),
+        credentials: 'include',
       });
+      if (!response.ok) {
+        throw new Error('Failed to register user');
+      }
+  
       const result = await response.json();
       console.log(result);
     } catch (error) {
       console.error('Error registering user:', error);
+      setMessage("Error registering user. Please try again later.");
     }
   };
 
@@ -119,6 +131,10 @@ function UserRegistrationPage() {
           </div>
           <button type="submit" className="save-button">Register</button>
         </form>
+
+        {/*display message if registration is successful*/}
+        {message && <p>{message}</p>}
+
       </div>
     </>
   );

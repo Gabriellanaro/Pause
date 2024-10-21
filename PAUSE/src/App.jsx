@@ -6,7 +6,7 @@ import { UserProvider } from './contexts/UserContext';
 import EventFormPage from './screens/eventFormPage';
 import LoginPage from './screens/LoginPage';
 import MapPage from './screens/MapPage';
-import UserRegistrationPage from './screens/Registration';
+import UserRegistrationPage from './screens/RegistrationPage';
 import NavBar from './components/NavBar';
 import './App.css'
 

@@ -12,7 +12,12 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
-CORS(app)
+# Allow CORS for specific origin
+CORS(
+    app,
+    resources={r"/*": {"origins": "http://localhost:5173"}},
+    supports_credentials=True,
+)
 
 
 # --------------------------------------------------------------------
@@ -31,6 +36,9 @@ class Event(db.Model):
     event_location = db.Column(db.String(255), nullable=True) 
     event_latitude = db.Column(db.Float, nullable=True)
     event_longitude = db.Column(db.Float, nullable=True)
+    user_email = db.Column(
+        db.String(200), db.ForeignKey("users.email"), nullable=False
+    )  # Foreign key
 
     def __repr__(self):
         return f"<Event {self.event_name}>"    
@@ -131,58 +139,100 @@ def update_event(id):
 def create_event():
     data = request.json  # retrieve data in json format from the request body
     print(data)
-    event_name = data.get("event_name")  # get the value of the key "event_name" from the json data
-    event_description = data.get("event_description")  
-    event_date = data.get("event_date") 
-    event_start_time = data.get("event_start_time")
-    event_end_time = data.get("event_end_time")
-    event_location = data.get("event_location")
-    event_latitude = data.get("event_latitude")
-    event_longitude = data.get("event_longitude")
+
+    user_email = data.get(
+        "user_email"
+    )  # get the value of the key "user_email" from the json data
+    if not user_email:
+        return jsonify({"error": "User email is required"}), 400
 
     # Convert start and end times to time objects
-    start_time = datetime.strptime(event_start_time, "%H:%M").time()
-    end_time = datetime.strptime(event_end_time, "%H:%M").time()
+    start_time = datetime.strptime(start_time, "%H:%M").time()
+    end_time = datetime.strptime(end_time, "%H:%M").time()
 
     # Create new instance of Event object
     event = Event(
-        event_name=event_name,
-        event_description=event_description,
-        event_date=event_date,
+        event_name=data["event_name"],
+        event_description=data["event_description"],
+        event_date=data["event_date"],
         event_start_time=start_time,
         event_end_time=end_time,
-        event_location=event_location,
-        event_latitude=event_latitude,
-        event_longitude=event_longitude
+        event_location=data.get("event_location"),
+        event_latitude=data.get("event_latitude"),
+        event_longitude=data.get("event_longitude"),
+        user_email=user_email,  # Store the user email for reference
     )
-    db.session.add(event)  # Aggiungi l'evento alla sessione
-    db.session.commit()  # Esegui il commit della sessione
+
+    db.session.add(event)  # add event to the session
+    db.session.commit()  # Commit session to the database
 
     # Return the created event in json format for the frontend
     return jsonify(format_event(event)), 201
 
-# creates tables in the database if they do not exist
-with app.app_context():
-    db.create_all()  
 
-
-# what is the purpose of this?
-@app.route("/name/<first_name>", methods=["GET"])
-def name(first_name):
-    return f"{first_name}"
-
-
-# Model for table Event (one model for each table in the database)
+# Model for table User
 class User(db.Model):
-    # NB: the names of the fields like event_name don't have to match the names of the columns in the database
     __tablename__ = "users"  # table name in postgresql
-    id = db.Column(db.Integer, primary_key=True)
-    user_email = db.Column(db.String(200), nullable=False)
-    user_first_name = db.Column(db.String(200), nullable=False)
-    user_last_name = db.Column(db.String(200), nullable=False)
+    user_id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(200), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    first_name = db.Column(db.String(200), nullable=False)
+    last_name = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    events = db.relationship(
+        "Event", backref="user", lazy=True
+    )  # Relationship with Event table
 
     def __repr__(self):
-        return f"<User {self.user_email}>"
+        return f"<User {self.email}>"
+
+
+# Registration endpoint
+@app.route("/registration", methods=["POST"])
+def register_user():
+    data = request.json  # Get the registration data from the request body (JSON)
+
+    # Extract user data
+    email = data.get("email")
+    password = data.get("password")  # to hash
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+
+    # Check if any of these values are None
+    if not email or not password or not first_name or not last_name:
+        return jsonify({"error": "Missing fields"}), 400
+
+    # Check if user already exists
+    existing_user = db.session.query(User).filter(User.email == email).first()
+    if existing_user:
+        return jsonify({"error": "User already exists"}), 400
+
+    # Create a new user and add to the database
+    new_user = User(
+        email=email,
+        password=password,  # Remember to hash this in a real application!
+        first_name=first_name,
+        last_name=last_name,
+        created_at=datetime.utcnow(),
+    )
+
+    print("Received data:", data)
+    print("Email:", email)
+    print("First Name:", first_name)
+    print("Last Name:", last_name)
+
+    # Add the user to the database
+    db.session.add(new_user)
+    db.session.commit()
+
+    # Return success message
+    return jsonify({"message": "User registered successfully"}), 201
+
+
+# creates tables in the database if they do not exist
+with app.app_context():
+    db.create_all()
 
 
 if __name__ == "__main__":

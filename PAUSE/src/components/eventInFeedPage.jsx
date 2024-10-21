@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import PropTypes from 'prop-types';
 import '../App.css';
 
 const EventInFeedPage = ( { event }) => {
@@ -27,9 +27,8 @@ const EventInFeedPage = ( { event }) => {
 
     // Combine formatted date with starting and ending times
     const eventTime = `${formattedDate}, ${eventStartTime}h - ${eventEndTime}h`;
-
-    return eventTime;
-  };
+      return eventTime;
+    };
 
 
     const eventTime = formatEventDateTime(event);
@@ -45,21 +44,10 @@ const EventInFeedPage = ( { event }) => {
         <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
         <p className="event-title">{event.event_name}</p>
         <p className="event-subtitle">{event.event_location}</p>
+        <p className="event-subtitle">{event.user_email}</p>
       </div>
     </div>
   );
 };
-
-// EventInFeedPage.propTypes = {
-//   event: PropTypes.shape({
-//       event_date: PropTypes.string.isRequired,
-//       event_start_time: PropTypes.string.isRequired,
-//       event_end_time: PropTypes.string.isRequired,
-//       image: PropTypes.string.isRequired,
-//       event_title: PropTypes.string.isRequired,
-//       event_name: PropTypes.string.isRequired,
-//       event_location: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
 
 export default EventInFeedPage;
