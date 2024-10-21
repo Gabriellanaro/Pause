@@ -7,7 +7,8 @@ app = Flask(__name__)
 
 # Configuration for the database
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres:Pause2024@10.209.155.74:5432/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
+    # "postgresql://postgres:Pause2024@10.209.155.74:5432/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
+    "postgresql://postgres:Pause2024@localhost:5432/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -169,6 +170,19 @@ with app.app_context():
 @app.route("/name/<first_name>", methods=["GET"])
 def name(first_name):
     return f"{first_name}"
+
+
+# Model for table Event (one model for each table in the database)
+class User(db.Model):
+    # NB: the names of the fields like event_name don't have to match the names of the columns in the database
+    __tablename__ = "users"  # table name in postgresql
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String(200), nullable=False)
+    user_first_name = db.Column(db.String(200), nullable=False)
+    user_last_name = db.Column(db.String(200), nullable=False)
+
+    def __repr__(self):
+        return f"<User {self.user_email}>"
 
 
 if __name__ == "__main__":

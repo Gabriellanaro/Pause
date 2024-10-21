@@ -18,7 +18,8 @@ const SignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 console.log(userCredential)
-                navigate('/map')
+                // navigate('/map')
+                navigate('/registration')
             })
             .catch((error) => {
                 // Handle different types of errors

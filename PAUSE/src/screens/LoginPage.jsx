@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import {signInWithPopup} from 'firebase/auth';
 import { auth, provider } from "../Firebase/firebase";
 import { useNavigate } from 'react-router-dom';
-
+import { useUser } from '../contexts/UserContext';
 import SignIn from '../components/auth/SignIn';
 import SignUp from '../components/auth/SignUp';
 import AuthDetails from '../components/AuthDetails';
@@ -17,9 +17,11 @@ import ErrorPopup from '../components/errorPopUp/ErrorPopUp';
 
 
 const LoginPage = () => {
-  const [inputText, setInputText] = useState('');
-  const [data, setData] = useState(null);
+  // const [inputText, setInputText] = useState('');
+  // const [data, setData] = useState(null);
+
   const [errorMessage, setErrorMessage] = useState('');
+  const { setUser } = useUser();
   const navigate = useNavigate();
 
   const signInWithGoogle = () => {
@@ -27,7 +29,8 @@ const LoginPage = () => {
       .then((result) => {
         // User info is available here
         console.log(result.user);
-        navigate('/map'); // Navigate to home page
+        setUser(result.user); // Set user in context
+        navigate('/'); // Navigate to home page
       })
       .catch((error) => {
         // Handle different types of errors
@@ -46,24 +49,24 @@ const LoginPage = () => {
   };
 
   
-  const sendHttpRequest = async () => {
-    try {
+  // const sendHttpRequest = async () => {
+  //   try {
 
-      const response = await fetch('http://localhost:5000/events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: inputText }),
-      });
+  //     const response = await fetch('http://localhost:5000/events', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ text: inputText }),
+  //     });
 
-      const result = await response.json();
-      setData(result);
-      console.log(result);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  //     const result = await response.json();
+  //     setData(result);
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
 
 
   return (

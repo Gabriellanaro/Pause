@@ -1,9 +1,13 @@
 /* eslint-disable no-unused-vars */
 // src/screens/EventFormPage.js
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import BackButton from '../components/backButton'; // Adjust the path as needed
 import '../App.css';
 
 function EventFormPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     event_name: 'test name',
     event_description: 'beautiful clothes',
@@ -74,6 +78,7 @@ function EventFormPage() {
       });
       const result = await response.json();
       console.log(result);
+      navigate('/'); // Navigate to home page after successful form submission
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -81,6 +86,7 @@ function EventFormPage() {
 
   return (
     <>
+      <BackButton />
       {/* Test form per caricare l'evento */}
       <div className="form-screen">
         <h2 className="header-title">Tell us more about your event</h2>

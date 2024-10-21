@@ -18,7 +18,7 @@ const SignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 console.log(userCredential)
-                navigate('/map');
+                navigate('/');
             })
             .catch((error) => {
                 // Handle different types of errors

@@ -367,12 +367,6 @@ nav {
   width: 100%;
 }
 
-
-.map-view {
-  font-size: 0.7em;
-  font-weight: 500;
-}
-
 .tags {
   display: flex;
   gap: 10px;
@@ -404,3 +398,32 @@ nav {
 /*****************end feed control styles*************************/
 
 /*****************MAP styles********************************/
+
+
+.map-container {
+  height: 200vh; /* Full viewport height */
+  width: 200vh; /* Full viewport width */
+}
+
+/***************** END MAP styles********************************/
+
+
+/*****************BACK BUTTON********************************/
+.back-button {
+  color: #333;
+  background: none; /* No background */
+  border: none; /* No border */
+  padding: 10px; /* Padding for better click area */
+  font-size: 40px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  position: absolute; /* Position it absolutely */
+  left: 50px; /* Distance from the left side */
+  top: 50px; /* Distance from the top */
+}
+
+.back-button:hover {
+  background-color: #8444C4; /* Darker green on hover */
+  border: none;
+  border-radius: 15px;
+}
+/*****************end back button********************************/
