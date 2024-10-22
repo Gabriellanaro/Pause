@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useState } from 'react';
-import img from '../assets/img.jpg';
+import img from '../assets/logo_nobackground.png';
 import '../App.css';
 import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';

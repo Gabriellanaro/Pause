@@ -76,9 +76,9 @@ function App() {
     <UserProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<FeedPage />} />
+          <Route path="/feed" element={<FeedPage />} />
           <Route path="/event-form" element={<EventFormPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/registration" element={<UserRegistrationPage />} />
 
