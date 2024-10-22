@@ -72,10 +72,14 @@ const LoginPage = () => {
   return (
     <div className='form-screen' style={{ backgroundColor: '#8444C4'}}>
       <div>
-        <img src={img} alt="logo" style={{ width: '150px', height: 'auto' }}/>
+      <img
+        src={img}
+        alt="logo"
+        style={{ width: '150px', height: 'auto' }} // Set max height as needed
+      />
       </div>
 
-      <div>
+      <div className='login_body'>
         <SignIn />
         <SignUp />
         <AuthDetails />

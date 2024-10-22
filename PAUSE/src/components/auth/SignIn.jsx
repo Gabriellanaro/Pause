@@ -39,7 +39,7 @@ const SignIn = () => {
     }
 
     return (
-        <div className='sign-in-container'>
+        <div className='login_body'>
             <form onSubmit={handleSignIn}>
                 <p className='header-title' style={{ textAlign: 'center', color: 'white' }}>Log In</p>
                 <input className='input'
@@ -54,7 +54,9 @@ const SignIn = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}>
                 </input>
-                <button type='submit'>Sign In</button>
+                <div class="button-container">
+                  <button className="sign-button" type='submit'>Sign In</button>
+                </div>
             </form>
 
             <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
