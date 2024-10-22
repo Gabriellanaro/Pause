@@ -15,8 +15,8 @@ db = SQLAlchemy(app)
 # Allow CORS for specific origin
 CORS(
     app,
-    resources={r"/*": {"origins": "http://localhost:5174"}},
-    supports_credentials=True,
+    # resources={r"/*": {"origins": "http://localhost:5173"}},
+    # supports_credentials=True,
 )
 
 
@@ -60,6 +60,11 @@ def format_event(event):
         "created_at": event.created_at,
         "user_email": event.user_email,
     }
+
+
+@app.route("/events", methods=["OPTIONS", "GET", "POST"])
+def events_options():
+    return "", 200
 
 
 # Get all events
@@ -144,6 +149,7 @@ def create_event():
     user_email = data.get(
         "user_email"
     )  # get the value of the key "user_email" from the json data
+    print("USER EMAIL: ", user_email)
     if not user_email:
         return jsonify({"error": "User email is required. Sign-in or log-in"}), 400
 

@@ -10,6 +10,7 @@ const EventInFeedPage = ( { event }) => {
   
   const user = useUser();
   const userEmail = user.user.email;
+  console.log("USER EMAIL: ",userEmail);
 
   // Function to format the event date and time
   const formatEventDateTime = (event) => {

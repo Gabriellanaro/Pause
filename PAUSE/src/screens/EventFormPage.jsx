@@ -8,6 +8,10 @@ import { useUser } from "../contexts/UserContext";
 
 function EventFormPage() {
   const navigate = useNavigate();
+  
+  const { user } = useUser(); // Access the user information
+  console.log("THIS IS THE USER", user);
+
 
   const [formData, setFormData] = useState({
     event_name: 'test name',
@@ -18,6 +22,7 @@ function EventFormPage() {
     event_location: 'via pippo',
     event_latitude: 0,
     event_longitude: 0,
+    user_email: user.email
   });
 
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
@@ -66,8 +71,6 @@ function EventFormPage() {
     setSuggestions([]); //hide suggestions after selection of location
   };
   
-  const { user } = useUser(); // Access the user information
-  console.log("THIS IS THE USER", user);
 
   const handleCreateEvent = async (e) => {
     e.preventDefault(); // Prevent page refresh
@@ -83,7 +86,7 @@ function EventFormPage() {
         body: JSON.stringify(formData),
       });
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
       navigate('/'); // Navigate to home page after successful form submission
     } catch (error) {
       console.error('Error fetching data:', error);

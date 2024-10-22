@@ -25,6 +25,7 @@ function UserRegistrationPage() {
       setFormData((prevFormData) => ({
         ...prevFormData,
         email: user.email,
+        // password: user.password,
       }));
     }
   }, [user]);
