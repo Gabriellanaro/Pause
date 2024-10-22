@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Footer.jsx
 import React from 'react';
 

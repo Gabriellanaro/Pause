@@ -2,9 +2,12 @@
 // src/screens/UserRegistrationPage.jsx
 import React, { useState, useEffect} from "react";
 import { useUser } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 import '../App.css';
 
 function UserRegistrationPage() {
+
+    const navigate = useNavigate(); // Navigation object to redirect the user
     const { user } = useUser(); // Access the user information
     const [formData, setFormData] = useState({
         first_name: '',
@@ -56,14 +59,20 @@ function UserRegistrationPage() {
         }),
         credentials: 'include',
       });
-      if (!response.ok) {
-        throw new Error('Failed to register user');
-      }
-  
+      
       const result = await response.json();
-      console.log(result);
+
+      if (response.ok) {
+        alert(result.message); // Optional: Show success alert
+
+        // Redirect to the home page after successful registration
+        navigate("/");
+      } else {
+        alert(result.error); // Handle any error from backend
+      }
     } catch (error) {
-      console.error('Error registering user:', error);
+      console.error("Error registering user:", error);
+      alert("Error registering user");
     }
   };
 

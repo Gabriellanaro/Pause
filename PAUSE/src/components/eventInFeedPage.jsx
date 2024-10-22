@@ -2,8 +2,14 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import '../App.css';
+import { useUser } from '../contexts/UserContext';
+import { FaPen } from "react-icons/fa";
+
 
 const EventInFeedPage = ( { event }) => {
+  
+  const user = useUser();
+  const userEmail = user.user.email;
 
   // Function to format the event date and time
   const formatEventDateTime = (event) => {
@@ -30,7 +36,6 @@ const EventInFeedPage = ( { event }) => {
       return eventTime;
     };
 
-
     const eventTime = formatEventDateTime(event);
 
     const defaultImage = '/default_img_vintageshop.jpg'; 
@@ -38,14 +43,19 @@ const EventInFeedPage = ( { event }) => {
     const eventImage = event.event_image && event.event_image !== 'null' ? event.event_image : defaultImage;
 
     return (
-        <div className="event-container">
+    <div className="event-container">
       <img src={eventImage} alt={event.event_name} className="event-image" />
       <div className="event-details">
         <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
         <p className="event-title">{event.event_name}</p>
         <p className="event-subtitle">{event.event_location}</p>
-        <p className="event-subtitle">{event.user_email}</p>
+        <p className="event-subtitle" style={{fontSize: '0.8vw'}}>Created by: {event.user_email}</p>
       </div>
+      {userEmail === event.user_email && (
+          <button className='modify-button'>
+            <FaPen /> 
+          </button>
+      )}  
     </div>
   );
 };

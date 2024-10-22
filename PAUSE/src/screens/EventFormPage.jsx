@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import BackButton from '../components/backButton'; // Adjust the path as needed
 import '../App.css';
+import { useUser } from "../contexts/UserContext";
 
 function EventFormPage() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function EventFormPage() {
     event_longitude: 0,
   });
 
-  const [suggestions, setSuggestions] = useState([]); // State per i suggerimenti degli indirizzi
+  const [suggestions, setSuggestions] = useState([]); // State for address suggestions
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,13 +29,13 @@ function EventFormPage() {
       [name]: value,
     });
 
-    // Chiamata per recuperare i suggerimenti degli indirizzi
+    // Call to get the suggestions for the address
     if (name === 'event_location') {
       fetchSuggestions(value);
     }
   };
 
-  // Funzione per recuperare i suggerimenti degli indirizzi
+  // Function to fetch address suggestions
   const fetchSuggestions = async (inputValue) => {
     if (inputValue.length > 2) {
       try {
@@ -64,9 +65,14 @@ function EventFormPage() {
     });
     setSuggestions([]); //hide suggestions after selection of location
   };
+  
+  const { user } = useUser(); // Access the user information
+  console.log("THIS IS THE USER", user);
 
-  const sendHttpRequest = async (e) => {
-    e.preventDefault(); // Previene il refresh della pagina
+  const handleCreateEvent = async (e) => {
+    e.preventDefault(); // Prevent page refresh
+    
+
     try {
       console.log(formData);
       const response = await fetch('http://localhost:5000/events', {
@@ -87,10 +93,10 @@ function EventFormPage() {
   return (
     <>
       <BackButton />
-      {/* Test form per caricare l'evento */}
+      {/* Test form to load event */}
       <div className="form-screen">
         <h2 className="header-title">Tell us more about your event</h2>
-        <form onSubmit={sendHttpRequest}>
+        <form onSubmit={handleCreateEvent}>
           <div>
             <label htmlFor="event_name">Name of your event</label>
             <input

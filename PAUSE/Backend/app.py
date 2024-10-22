@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 # Allow CORS for specific origin
 CORS(
     app,
-    resources={r"/*": {"origins": "http://localhost:5173"}},
+    resources={r"/*": {"origins": "http://localhost:5174"}},
     supports_credentials=True,
 )
 
@@ -52,12 +52,13 @@ def format_event(event):
         "event_name": event.event_name,
         "event_description": event.event_description,
         "event_date": event.event_date,
-        "event_start_time": event.event_start_time.strftime('%H:%M'), 
-        "event_end_time": event.event_end_time.strftime('%H:%M'),
+        "event_start_time": event.event_start_time.strftime("%H:%M"),
+        "event_end_time": event.event_end_time.strftime("%H:%M"),
         "event_location": event.event_location,
         "event_latitude": event.event_latitude,
         "event_longitude": event.event_longitude,
-        "created_at": event.created_at
+        "created_at": event.created_at,
+        "user_email": event.user_email,
     }
 
 
@@ -144,7 +145,7 @@ def create_event():
         "user_email"
     )  # get the value of the key "user_email" from the json data
     if not user_email:
-        return jsonify({"error": "User email is required"}), 400
+        return jsonify({"error": "User email is required. Sign-in or log-in"}), 400
 
     # Convert start and end times to time objects
     start_time = datetime.strptime(start_time, "%H:%M").time()

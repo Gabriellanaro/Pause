@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FeedPage from './screens/feedPage';
 import { UserProvider } from './contexts/UserContext';
-import EventFormPage from './screens/eventFormPage';
+import EventFormPage from './screens/EventFormPage';
 import LoginPage from './screens/LoginPage';
 import MapPage from './screens/MapPage';
 import UserRegistrationPage from './screens/RegistrationPage';
@@ -76,9 +76,9 @@ function App() {
     <UserProvider>
       <Router>
         <Routes>
-          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/" element={<FeedPage />} />
           <Route path="/event-form" element={<EventFormPage />} />
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/registration" element={<UserRegistrationPage />} />
 
