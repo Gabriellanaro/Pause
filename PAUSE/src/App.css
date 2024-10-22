@@ -194,6 +194,7 @@ body, html, #root {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
 }
 
  /* Centered header title */

@@ -40,7 +40,7 @@ const SignUp = () => {
     return (
         <div className='sign-in-container'>
             <form onSubmit={handleSignUp}>
-                <h1 style={{ color: 'white' }}>Create an account</h1>
+              <p className='header-title' style={{ textAlign: 'center', color: 'white' }}>Create an account</p>
                 <input className='input'
                     type='email'
                     placeholder='Email'

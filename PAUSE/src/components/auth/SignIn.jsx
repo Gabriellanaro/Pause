@@ -41,7 +41,7 @@ const SignIn = () => {
     return (
         <div className='sign-in-container'>
             <form onSubmit={handleSignIn}>
-                <h1 style={{ color: 'white' }}>Log In</h1>
+                <p className='header-title' style={{ textAlign: 'center', color: 'white' }}>Log In</p>
                 <input className='input'
                     type='email'
                     placeholder='Email'
