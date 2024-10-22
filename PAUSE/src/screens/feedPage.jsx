@@ -23,7 +23,16 @@ const FeedPage = () => {
                   throw new Error('Network response was not ok');
               }
               const data = await response.json();
-              setEvents(data.events); 
+
+              // get today's data
+              const today = new Date();
+
+              // filter past events and sort by date and time
+              const filteredAndSortedEvents = data.events
+                  .filter(event => new Date(event.date) >= today)
+                  .sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
+
+              setEvents(filteredAndSortedEvents); 
           } catch (error) {
               console.error('Error fetching data:', error);
           }
