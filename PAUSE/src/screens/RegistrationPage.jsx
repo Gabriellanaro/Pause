@@ -64,7 +64,6 @@ function UserRegistrationPage() {
       console.log(result);
     } catch (error) {
       console.error('Error registering user:', error);
-      setMessage("Error registering user. Please try again later.");
     }
   };
 
@@ -131,10 +130,6 @@ function UserRegistrationPage() {
           </div>
           <button type="submit" className="save-button">Register</button>
         </form>
-
-        {/*display message if registration is successful*/}
-        {message && <p>{message}</p>}
-
       </div>
     </>
   );
