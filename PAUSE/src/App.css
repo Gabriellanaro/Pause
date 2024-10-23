@@ -226,6 +226,7 @@ body, html, #root {
   font-weight: 700;
   color: black;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 /* Form styles */
@@ -234,6 +235,16 @@ form {
   flex-direction: column;
   gap: 20px;
   width: 600px;
+}
+
+/* Label styling */
+label {
+  text-align: left; 
+  display: block; 
+  width: 100%;
+  margin-bottom: 0.5rem; 
+  font-size: 1rem; 
+  color: black;
 }
 
 /* Form fields */
@@ -245,21 +256,27 @@ input, select, textarea {
   border-radius: 10px;
   box-sizing: border-box;
   background-color: #fff;
+  resize: none; /* Prevent resizing of the textarea */
+}
+
+textarea {
+  font-family: 'Arial', sans-serif; /* Ensure consistent font with input fields */
+  height: auto;
   color:#333;
 }
 
 /* Save button */
 .save-button {
   background-color: #8444C4; /* Purple button */
-  color: white;
+  color: black;
   font-family: "Bona Nova", serif;
   font-size: 48px;
   font-weight: 700;
-  padding: 41px 0;
+  padding: 20px 0;
   border: none;
-  border-radius: 50px; /* Rounded */
+  border-radius: 100px; /* Rounded */
   width: 630px;
-  height: 158px;
+  height: 100px;
   cursor: pointer;
   margin-top: 20px;
 }
@@ -271,6 +288,40 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #8444C4; /* Purple border on focus */
+}
+
+/* Image upload styling */
+.image-upload {
+  width: 100%;
+  font-size: 16px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+ 
+  background-color: #f9f9f9;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Styling for the Back button */
+.back-button {
+  background-color: #8444C4; /* Purple background */
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 100%;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.back-button:hover {
+  background-color: #6a2e99; /* Slightly darker on hover */
+}
+
+.back-button svg {
+  color:#60ECAA; /* Make sure the arrow icon is white */
+  display: block;
 }
 
 .error-popup {
