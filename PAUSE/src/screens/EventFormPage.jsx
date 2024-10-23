@@ -41,12 +41,12 @@ function EventFormPage() {
 
 
   // Handle image upload
-  const handleImageUpload = (e) => {
-    setFormData({
-      ...formData,
-      event_image: e.target.files[0],  // Get the uploaded file
-    });
-  };
+  // const handleImageUpload = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     event_image: e.target.files[0],  // Get the uploaded file
+  //   });
+  // };
 
   // Fetch address suggestions
   const fetchSuggestions = async (inputValue) => {
@@ -92,14 +92,14 @@ function EventFormPage() {
     formDataToSend.append('event_start_time', formData.event_start_time);
     formDataToSend.append('event_end_time', formData.event_end_time);
     formDataToSend.append('event_location', formData.event_location);
-    if (formData.event_image) {
-      formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
-    }
+    // if (formData.event_image) {
+    //   formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
+    // }
 
     try {
       const response = await fetch('http://localhost:5000/events', {
         method: 'POST',
-        body: formDataToSend,  // Send form data
+        body: JSON.stringify(formDataToSend),  // Send form data
       });
 
       const result = await response.json();
@@ -127,7 +127,7 @@ function EventFormPage() {
 
       <form onSubmit={sendHttpRequest}>
         {/* Image Upload Field */}
-        <div>
+        {/* <div>
           <label htmlFor="event_image">Upload your cover</label>
           <input
             type="file"
@@ -136,7 +136,7 @@ function EventFormPage() {
             onChange={handleImageUpload}
             className="image-upload"
           />
-        </div>
+        </div> */}
 
         {/* Input Fields with Placeholders */}
         <div>
