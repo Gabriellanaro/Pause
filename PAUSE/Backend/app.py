@@ -148,7 +148,7 @@ def update_event(id):
 @app.route("/events", methods=["POST"])
 def create_event():
     data = request.json  # retrieve data in json format from the request body
-
+    print("DATA:", data)
     user_email = data.get(
         "user_email"
     )  # get the value of the key "user_email" from the json data
