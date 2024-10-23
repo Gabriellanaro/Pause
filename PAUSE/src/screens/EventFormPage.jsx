@@ -8,23 +8,33 @@ import '../App.css';
 function EventFormPage() {
   const navigate = useNavigate();  // Initialize the useNavigate hook
 
+  // Handle input change
+function EventFormPage() {
   const [formData, setFormData] = useState({
-    event_name: '',
-    event_description: '',
-    event_date: '',
-    event_start_time: '',
-    event_end_time: '',
-    event_location: '',
-    event_image: null,  // For image upload
+    event_name: 'test name',
+    event_description: 'beautiful clothes',
+    event_date: '2024-10-12',
+    event_start_time: '10:00',
+    event_end_time: '14:01',
+    event_location: 'via pippo',
+    event_latitude: 0,
+    event_longitude: 0,
   });
 
-  // Handle input change
+  const [suggestions, setSuggestions] = useState([]); // State per i suggerimenti degli indirizzi
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    // Chiamata per recuperare i suggerimenti degli indirizzi
+    if (name === 'event_location') {
+      fetchSuggestions(value);
+    }
   };
 
   // Handle image upload
@@ -33,6 +43,36 @@ function EventFormPage() {
       ...formData,
       event_image: e.target.files[0],  // Get the uploaded file
     });
+
+  // Funzione per recuperare i suggerimenti degli indirizzi
+  const fetchSuggestions = async (inputValue) => {
+    if (inputValue.length > 2) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(inputValue)}&format=json`);
+        const data = await response.json();
+        const formattedSuggestions = data.map((suggestion) => ({
+          value: suggestion.place_id,  
+          label: suggestion.display_name,
+          lat: suggestion.lat,
+          lon: suggestion.lon, 
+        }));
+        setSuggestions(formattedSuggestions);
+      } catch (error) {
+        console.error('Error fetching addresses:', error);
+      }
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setFormData({
+      ...formData, 
+      event_location: suggestion.label,
+      event_latitude: suggestion.lat,
+      event_longitude: suggestion.lon,
+    });
+    setSuggestions([]); //hide suggestions after selection of location
   };
 
   // Send HTTP request to backend
@@ -50,6 +90,8 @@ function EventFormPage() {
     if (formData.event_image) {
       formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
     }
+
+    e.preventDefault(); // Previene il refresh della pagina
 
     try {
       const response = await fetch('http://localhost:5000/events', {
@@ -96,6 +138,15 @@ function EventFormPage() {
           
           {/* Input Fields with Placeholders */}
           <div>
+
+  return (
+    <>
+      {/* Test form per caricare l'evento */}
+      <div className="form-screen">
+        <h2 className="header-title">Tell us more about your event</h2>
+        <form onSubmit={sendHttpRequest}>
+          <div>
+            <label htmlFor="event_name">Name of your event</label>
             <input
               type="text"
               name="event_name"
@@ -119,6 +170,8 @@ function EventFormPage() {
           </div>
           
           <div>
+          <div>
+            <label htmlFor="event_date">Select Date</label>
             <input
               type="date"
               name="event_date"
@@ -129,6 +182,7 @@ function EventFormPage() {
           </div>
           <div style={{ display: 'flex', gap: '20px' }}>
             <div style={{ flex: 1 }}>
+
               <input
                 type="time"
                 name="event_start_time"
@@ -139,6 +193,7 @@ function EventFormPage() {
               />
             </div>
             <div style={{ flex: 1 }}>
+
               <input
                 type="time"
                 name="event_end_time"
@@ -150,6 +205,8 @@ function EventFormPage() {
             </div>
           </div>
           <div>
+
+            <label htmlFor="event_location">Location</label>
             <input
               type="text"
               name="event_location"
@@ -161,6 +218,16 @@ function EventFormPage() {
           </div>
 
           {/* Submit Button */}
+            {suggestions.length > 0 && (
+              <ul className="suggestions-dropdown">
+                {suggestions.map((suggestion) => (
+                  <li key={suggestion.value} onClick={() => handleSuggestionClick(suggestion)}>
+                    {suggestion.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <button type="submit" className="save-button">Save</button>
         </form>
       </div>

@@ -1,35 +1,51 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import img from '../assets/img.jpg';
 import '../App.css';
 import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
-// import { signInWithPopup, GoogleAuthProvider } from "./firebase/auth";
+// import {GoogleAuthProvider } from "./firebase/auth";
 import {signInWithPopup} from 'firebase/auth';
 import { auth, provider } from "../Firebase/firebase";
+import { useNavigate } from 'react-router-dom';
 
 import SignIn from '../components/auth/SignIn';
 import SignUp from '../components/auth/SignUp';
 import AuthDetails from '../components/AuthDetails';
+import ErrorPopup from '../components/errorPopUp/ErrorPopUp';
 
-const signInWithGoogle = () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      // User info is available here
-      console.log(result.user);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
 
 const LoginPage = () => {
-  const [count, setCount] = useState(0)
-  const [data, setData] = useState(null)
-  const [inputText, setInputText] = useState('')
+  const [inputText, setInputText] = useState('');
+  const [data, setData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // User info is available here
+        console.log(result.user);
+        navigate('/map'); // Navigate to home page
+      })
+      .catch((error) => {
+        // Handle different types of errors
+        let message = 'An unknown error occurred.';
+        if (error.code === 'auth/popup-closed-by-user') {
+          message = 'The popup was closed by the user before completing the sign-in.';
+        } else if (error.code === 'auth/cancelled-popup-request') {
+          message = 'The popup request was cancelled.';
+        } else if (error.code === 'auth/network-request-failed') {
+          message = 'A network error occurred.';
+        } else if (error.code === 'auth/invalid-credential') {
+          message = 'The credential is invalid.';
+        }
+        setErrorMessage(message);
+      });
+  };
+
+  
   const sendHttpRequest = async () => {
     try {
 
@@ -51,19 +67,24 @@ const LoginPage = () => {
 
 
   return (
-    <>
+    <div style={{flexDirection: 'column', height: '100vh', overflow: 'auto' }}>
       <div>
         <img src={img} alt="logo" />
-        <h1 style={{ color: 'white' }}>PAUSE</h1>
-        <h2>Take a break from fast fashion</h2>
       </div>
 
       <div>
         <SignIn />
         <SignUp />
         <AuthDetails />
+        
+        <h1>PAUSE</h1>
+
+        <button onClick={signInWithGoogle}>Sign in with Google</button>
       </div>
-    </>
+
+      <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
+
+    </div>
   );
 };
 
