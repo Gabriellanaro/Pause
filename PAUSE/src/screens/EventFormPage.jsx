@@ -7,9 +7,6 @@ import '../App.css';
 
 function EventFormPage() {
   const navigate = useNavigate();  // Initialize the useNavigate hook
-
-  // Handle input change
-function EventFormPage() {
   const [formData, setFormData] = useState({
     event_name: 'test name',
     event_description: 'beautiful clothes',
@@ -21,8 +18,7 @@ function EventFormPage() {
     event_longitude: 0,
   });
 
-  const [suggestions, setSuggestions] = useState([]); // State per i suggerimenti degli indirizzi
-
+  const [suggestions, setSuggestions] = useState([]); // State for address suggestions
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +27,7 @@ function EventFormPage() {
       [name]: value,
     });
 
-    // Chiamata per recuperare i suggerimenti degli indirizzi
+    // Fetch address suggestions
     if (name === 'event_location') {
       fetchSuggestions(value);
     }
@@ -43,18 +39,19 @@ function EventFormPage() {
       ...formData,
       event_image: e.target.files[0],  // Get the uploaded file
     });
+  };
 
-  // Funzione per recuperare i suggerimenti degli indirizzi
+  // Fetch address suggestions
   const fetchSuggestions = async (inputValue) => {
     if (inputValue.length > 2) {
       try {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(inputValue)}&format=json`);
         const data = await response.json();
         const formattedSuggestions = data.map((suggestion) => ({
-          value: suggestion.place_id,  
+          value: suggestion.place_id,
           label: suggestion.display_name,
           lat: suggestion.lat,
-          lon: suggestion.lon, 
+          lon: suggestion.lon,
         }));
         setSuggestions(formattedSuggestions);
       } catch (error) {
@@ -65,14 +62,15 @@ function EventFormPage() {
     }
   };
 
+  // Handle suggestion click
   const handleSuggestionClick = (suggestion) => {
     setFormData({
-      ...formData, 
+      ...formData,
       event_location: suggestion.label,
       event_latitude: suggestion.lat,
       event_longitude: suggestion.lon,
     });
-    setSuggestions([]); //hide suggestions after selection of location
+    setSuggestions([]); // Hide suggestions after selection
   };
 
   // Send HTTP request to backend
@@ -91,8 +89,6 @@ function EventFormPage() {
       formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
     }
 
-    e.preventDefault(); // Previene il refresh della pagina
-
     try {
       const response = await fetch('http://localhost:5000/events', {
         method: 'POST',
@@ -101,6 +97,7 @@ function EventFormPage() {
 
       const result = await response.json();
       console.log(result);
+      navigate('/');  // Navigate back to the FeedPage after successful submission
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -112,126 +109,112 @@ function EventFormPage() {
   };
 
   return (
-    <>
-      <div className="form-screen">
-        
-        {/* Back button with arrow */}
-        <button onClick={handleBackClick} className="back-button">
-          <FaArrowLeft size={30} />
-        </button>
+    <div className="form-screen">
+      {/* Back button with arrow */}
+      <button onClick={handleBackClick} className="back-button">
+        <FaArrowLeft size={30} />
+      </button>
 
-        <h2 className="header-title">Tell us more about your event</h2>
+      <h2 className="header-title">Tell us more about your event</h2>
 
-        <form onSubmit={sendHttpRequest}>
-          
-          {/* Image Upload Field */}
-          <div>
-            <label htmlFor="event_image">Upload your cover</label>
-            <input 
-              type="file"
-              name="event_image"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="image-upload"
-            />
-          </div>
-          
-          {/* Input Fields with Placeholders */}
-          <div>
+      <form onSubmit={sendHttpRequest}>
+        {/* Image Upload Field */}
+        <div>
+          <label htmlFor="event_image">Upload your cover</label>
+          <input
+            type="file"
+            name="event_image"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="image-upload"
+          />
+        </div>
 
-  return (
-    <>
-      {/* Test form per caricare l'evento */}
-      <div className="form-screen">
-        <h2 className="header-title">Tell us more about your event</h2>
-        <form onSubmit={sendHttpRequest}>
-          <div>
-            <label htmlFor="event_name">Name of your event</label>
+        {/* Input Fields with Placeholders */}
+        <div>
+          <label htmlFor="event_name">Name of your event</label>
+          <input
+            type="text"
+            name="event_name"
+            placeholder="Name of your event"
+            value={formData.event_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* Description Input Field */}
+        <div>
+          <textarea
+            name="event_description"
+            placeholder="Event Description"
+            value={formData.event_description}
+            onChange={handleChange}
+            rows="5"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="event_date">Select Date</label>
+          <input
+            type="date"
+            name="event_date"
+            value={formData.event_date}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <div style={{ flex: 1 }}>
+            <label htmlFor="event_start_time">Select Starting Time</label>
             <input
-              type="text"
-              name="event_name"
-              placeholder="Name of your event"
-              value={formData.event_name}
+              type="time"
+              name="event_start_time"
+              placeholder="Select Starting Time"
+              value={formData.event_start_time}
               onChange={handleChange}
               required
             />
           </div>
-
-          {/* Description Input Field */}
-          <div>
-            <textarea
-              name="event_description"
-              placeholder="Event Description"
-              value={formData.event_description}
-              onChange={handleChange}
-              rows="5"
-              required
-            />
-          </div>
-          
-          <div>
-          <div>
-            <label htmlFor="event_date">Select Date</label>
+          <div style={{ flex: 1 }}>
+            <label htmlFor="event_end_time">Select Closing Time</label>
             <input
-              type="date"
-              name="event_date"
-              value={formData.event_date}
+              type="time"
+              name="event_end_time"
+              placeholder="Select Closing Time"
+              value={formData.event_end_time}
               onChange={handleChange}
               required
             />
           </div>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <div style={{ flex: 1 }}>
+        </div>
 
-              <input
-                type="time"
-                name="event_start_time"
-                placeholder="Select Starting Time"
-                value={formData.event_start_time}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div style={{ flex: 1 }}>
+        <div>
+          <label htmlFor="event_location">Location</label>
+          <input
+            type="text"
+            name="event_location"
+            placeholder="Location"
+            value={formData.event_location}
+            onChange={handleChange}
+            required
+          />
+          {suggestions.length > 0 && (
+            <ul className="suggestions-dropdown">
+              {suggestions.map((suggestion) => (
+                <li key={suggestion.value} onClick={() => handleSuggestionClick(suggestion)}>
+                  {suggestion.label}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-              <input
-                type="time"
-                name="event_end_time"
-                placeholder="Select Closing Time"
-                value={formData.event_end_time}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div>
-
-            <label htmlFor="event_location">Location</label>
-            <input
-              type="text"
-              name="event_location"
-              placeholder="Location"
-              value={formData.event_location}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Submit Button */}
-            {suggestions.length > 0 && (
-              <ul className="suggestions-dropdown">
-                {suggestions.map((suggestion) => (
-                  <li key={suggestion.value} onClick={() => handleSuggestionClick(suggestion)}>
-                    {suggestion.label}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <button type="submit" className="save-button">Save</button>
-        </form>
-      </div>
-    </>
+        <button type="submit" className="save-button">Save</button>
+      </form>
+    </div>
   );
 }
 
