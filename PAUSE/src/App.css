@@ -215,6 +215,8 @@ body, html, #root {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
+  position: relative;
 }
 
  /* Centered header title */
@@ -448,3 +450,47 @@ nav {
   border-radius: 15px;
 }
 /*****************end back button********************************/
+
+/*****************Log In Page********************************/
+/* button */
+.button-container {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center the button horizontally */
+  margin-top: 20px; /* Add margin for spacing */
+}
+
+/* Button style */
+.sign-button {
+  background-color: #60ECAA; 
+  color: white;
+  font-family: "Bona Nova", serif;
+  font-size: 1.8vw; /* Adjust font size based on viewport width */
+  font-weight: 100; /* Adjusted font weight */
+  padding: 1vh 0; /* Adjust padding based on viewport height */
+  border: none;
+  border-radius: 50px; /* Rounded */
+  width: 18vw; /* Adjust width based on viewport width */
+  height: 9vh; /* Adjust height based on viewport height */
+  cursor: pointer;
+  position: relative; /* Use absolute positioning */
+  display: flex;
+  justify-content: center; /* Horizontally center text */
+  align-items: center; /* Vertically center text */
+}
+
+.logo-container {
+  margin-bottom: 20px; /* Adds space between the logo and the login form */
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+.login_body {
+  width: 100%;
+  max-width: 90vw; /* Adjust the maximum width as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

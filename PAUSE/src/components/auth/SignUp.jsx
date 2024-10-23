@@ -38,9 +38,9 @@ const SignUp = () => {
     }
 
     return (
-        <div className='sign-in-container'>
+        <div className='login_body'>
             <form onSubmit={handleSignUp}>
-                <h1 style={{ color: 'white' }}>Create an account</h1>
+              <p className='header-title' style={{ textAlign: 'center', color: 'white' }}>Create an account</p>
                 <input className='input'
                     type='email'
                     placeholder='Email'
@@ -53,7 +53,9 @@ const SignUp = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}>
                 </input>
-                <button type='submit'>Sign Up</button>
+                <div class="button-container">
+                  <button className="sign-button" type='submit'>Sign Up</button>
+                </div>
             </form>
 
             <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
