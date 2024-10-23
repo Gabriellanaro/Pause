@@ -111,6 +111,8 @@ def update_event(id):
     event_latitude = request.json.get("event_latitude", event.event_latitude)
     event_longitude = request.json.get("event_longitude", event.event_longitude)
 
+    # update the event
+    event.event_name = event_name
     # update the attributes of the Event object
     event.event_name = event_name 
     event.event_description = event_description
