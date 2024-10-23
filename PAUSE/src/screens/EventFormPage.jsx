@@ -8,6 +8,9 @@ import '../App.css';
 import { useUser } from "../contexts/UserContext";
 
 function EventFormPage() {
+  
+  const { user } = useUser();  // Get the user object from the UserContext
+
   const navigate = useNavigate();  // Initialize the useNavigate hook
   const [formData, setFormData] = useState({
     event_name: 'test name',
@@ -76,11 +79,6 @@ function EventFormPage() {
     });
     setSuggestions([]); // Hide suggestions after selection
   };
-  
-
-  const handleCreateEvent = async (e) => {
-    e.preventDefault(); // Prevent page refresh
-    
 
   // Send HTTP request to backend
   const sendHttpRequest = async (e) => {
