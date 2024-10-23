@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { useUser } from '../contexts/UserContext';
 import { FaPen } from "react-icons/fa";
@@ -9,8 +9,28 @@ import { FaPen } from "react-icons/fa";
 const EventInFeedPage = ( { event }) => {
   
   const user = useUser();
-  const userEmail = user.user.email;
-  console.log("USER EMAIL: ",userEmail);
+  const [loading, setLoading] = React.useState(true);
+
+  useEffect(() => {
+    // Simulate fetching or setting loading state
+    if (user.user) {
+      setLoading(false);
+    }
+  }, [user.user]); // Update loading state when user information changes
+
+  const userEmail = user.user ? user.user.email : null;
+  // console.log(user.user);
+
+  if (loading) {
+    return <p>Loading...</p>; // Show loading message while user data is being fetched
+  }
+  
+  if (!userEmail) {
+      // Handle the case when the user is not logged in
+      console.log("User is not logged in");
+      // You can return early, redirect, or set a state to show a message
+      return <p>Please log in to see events.</p>; // Example of showing a message
+  }
 
   // Function to format the event date and time
   const formatEventDateTime = (event) => {

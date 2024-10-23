@@ -15,8 +15,8 @@ db = SQLAlchemy(app)
 # Allow CORS for specific origin
 CORS(
     app,
-    # resources={r"/*": {"origins": "http://localhost:5173"}},
-    # supports_credentials=True,
+    methods=["GET", "POST", "OPTIONS"],
+    resources={r"/*": {"origins": "http://localhost:5173"}},
 )
 
 
@@ -62,24 +62,26 @@ def format_event(event):
     }
 
 
-@app.route("/events", methods=["OPTIONS", "GET", "POST"])
+# Apparently to solve the CORS issue, we need to add this route to the backend
+@app.route("/events", methods=["OPTIONS"])
 def events_options():
     return "", 200
-
 
 # Get all events
 @app.route("/events", methods=["GET"])
 def get_events():
     # Query all events ordered by id in ascending order
     events = Event.query.order_by(Event.id.asc()).all()
+    # print("EVENTS:", events)
     event_list = []
 
     # Format each event and add to the list
     for event in events:
         event_list.append(format_event(event))
 
+    # print(event_list)
     # Return the list of formatted events
-    return {"events": event_list}
+    return jsonify({"events": event_list}), 200
 
 
 # Get a single event
@@ -144,18 +146,17 @@ def update_event(id):
 @app.route("/events", methods=["POST"])
 def create_event():
     data = request.json  # retrieve data in json format from the request body
-    print(data)
 
     user_email = data.get(
         "user_email"
     )  # get the value of the key "user_email" from the json data
-    print("USER EMAIL: ", user_email)
+    # print("USER EMAIL: ", user_email)
     if not user_email:
         return jsonify({"error": "User email is required. Sign-in or log-in"}), 400
 
     # Convert start and end times to time objects
-    start_time = datetime.strptime(start_time, "%H:%M").time()
-    end_time = datetime.strptime(end_time, "%H:%M").time()
+    start_time = datetime.strptime(data["event_start_time"], "%H:%M").time()
+    end_time = datetime.strptime(data["event_end_time"], "%H:%M").time()
 
     # Create new instance of Event object
     event = Event(
@@ -224,10 +225,10 @@ def register_user():
         created_at=datetime.utcnow(),
     )
 
-    print("Received data:", data)
-    print("Email:", email)
-    print("First Name:", first_name)
-    print("Last Name:", last_name)
+    # print("Received data:", data)
+    # print("Email:", email)
+    # print("First Name:", first_name)
+    # print("Last Name:", last_name)
 
     # Add the user to the database
     db.session.add(new_user)

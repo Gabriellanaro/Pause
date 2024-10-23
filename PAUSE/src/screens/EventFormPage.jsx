@@ -10,8 +10,6 @@ function EventFormPage() {
   const navigate = useNavigate();
   
   const { user } = useUser(); // Access the user information
-  console.log("THIS IS THE USER", user);
-
 
   const [formData, setFormData] = useState({
     event_name: 'test name',
@@ -33,7 +31,7 @@ function EventFormPage() {
       ...formData,
       [name]: value,
     });
-
+    console.log(name, value);
     // Call to get the suggestions for the address
     if (name === 'event_location') {
       fetchSuggestions(value);
@@ -77,7 +75,7 @@ function EventFormPage() {
     
 
     try {
-      console.log(formData);
+      // console.log(formData);
       const response = await fetch('http://localhost:5000/events', {
         method: 'POST',
         headers: {
@@ -86,7 +84,7 @@ function EventFormPage() {
         body: JSON.stringify(formData),
       });
       const result = await response.json();
-      // console.log(result);
+      console.log(result);
       navigate('/'); // Navigate to home page after successful form submission
     } catch (error) {
       console.error('Error fetching data:', error);
