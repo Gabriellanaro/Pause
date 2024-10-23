@@ -41,7 +41,7 @@ const AuthDetails = () => {
                 <button onClick={userSignOut}>Sign Out</button>
             </div>
           ) : (
-            <p>No user is signed in</p>
+            <p className="event-subtitle" style={{ fontSize: '0.9vw', textAlign: 'center' }}>No user is signed in</p>
           )}
         </div>
       );

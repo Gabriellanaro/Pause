@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useState } from 'react';
-import img from '../assets/img.jpg';
+import img from '../assets/logo_nobackground.png';
 import '../App.css';
 import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import {signInWithPopup} from 'firebase/auth';
 import { auth, provider } from "../Firebase/firebase";
 import { useNavigate } from 'react-router-dom';
-
+import { useUser } from '../contexts/UserContext';
 import SignIn from '../components/auth/SignIn';
 import SignUp from '../components/auth/SignUp';
 import AuthDetails from '../components/AuthDetails';
@@ -17,9 +17,11 @@ import ErrorPopup from '../components/errorPopUp/ErrorPopUp';
 
 
 const LoginPage = () => {
-  const [inputText, setInputText] = useState('');
-  const [data, setData] = useState(null);
+  // const [inputText, setInputText] = useState('');
+  // const [data, setData] = useState(null);
+
   const [errorMessage, setErrorMessage] = useState('');
+  const { setUser } = useUser();
   const navigate = useNavigate();
 
   const signInWithGoogle = () => {
@@ -27,7 +29,8 @@ const LoginPage = () => {
       .then((result) => {
         // User info is available here
         console.log(result.user);
-        navigate('/map'); // Navigate to home page
+        setUser(result.user); // Set user in context
+        navigate('/'); // Navigate to home page
       })
       .catch((error) => {
         // Handle different types of errors
@@ -46,33 +49,37 @@ const LoginPage = () => {
   };
 
   
-  const sendHttpRequest = async () => {
-    try {
+  // const sendHttpRequest = async () => {
+  //   try {
 
-      const response = await fetch('http://localhost:5000/events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: inputText }),
-      });
+  //     const response = await fetch('http://localhost:5000/events', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ text: inputText }),
+  //     });
 
-      const result = await response.json();
-      setData(result);
-      console.log(result);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  //     const result = await response.json();
+  //     setData(result);
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
 
 
   return (
-    <div style={{flexDirection: 'column', height: '100vh', overflow: 'auto' }}>
+    <div className='form-screen' style={{ backgroundColor: '#8444C4'}}>
       <div>
-        <img src={img} alt="logo" />
+      <img
+        src={img}
+        alt="logo"
+        style={{ width: '150px', height: 'auto' }} // Set max height as needed
+      />
       </div>
 
-      <div>
+      <div className='login_body'>
         <SignIn />
         <SignUp />
         <AuthDetails />

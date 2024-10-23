@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 // src/screens/EventFormPage.js
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate hook
 import { FaArrowLeft } from 'react-icons/fa';   // Import FontAwesome left arrow icon
 import '../App.css';
+import { useUser } from "../contexts/UserContext";
 
 function EventFormPage() {
   const navigate = useNavigate();  // Initialize the useNavigate hook
@@ -16,6 +18,7 @@ function EventFormPage() {
     event_location: 'via pippo',
     event_latitude: 0,
     event_longitude: 0,
+    user_email: user.email
   });
 
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
@@ -32,6 +35,7 @@ function EventFormPage() {
       fetchSuggestions(value);
     }
   };
+
 
   // Handle image upload
   const handleImageUpload = (e) => {
@@ -72,6 +76,11 @@ function EventFormPage() {
     });
     setSuggestions([]); // Hide suggestions after selection
   };
+  
+
+  const handleCreateEvent = async (e) => {
+    e.preventDefault(); // Prevent page refresh
+    
 
   // Send HTTP request to backend
   const sendHttpRequest = async (e) => {
@@ -97,6 +106,7 @@ function EventFormPage() {
 
       const result = await response.json();
       console.log(result);
+
       navigate('/');  // Navigate back to the FeedPage after successful submission
     } catch (error) {
       console.error('Error fetching data:', error);

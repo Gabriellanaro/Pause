@@ -45,6 +45,7 @@ body, html, #root {
 /* Event Container */
 
 .event-container {
+  position: relative;
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
@@ -98,6 +99,26 @@ body, html, #root {
   margin: 0.5rem 0;
   font-size: 1.3vw; /* Scales with viewport width */
   /* border: 1px solid #1fde85; */
+}
+
+.modify-button {
+  background-color: transparent;
+  color: #f3f3e3;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center; /* Center align items vertically */
+  gap: 8px;
+  position: absolute; /* Position the button absolutely */
+  top: 10px; /* Position it 10px from the top */
+  right: 10px; /* Position it 10px from the right */
+}
+
+.modify-button:hover {
+  background-color: rgba(25, 245, 73, 0.1); /* Add a slight background color on hover */
 }
 
 /* Media queries for larger screens */
@@ -194,6 +215,8 @@ body, html, #root {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
+  position: relative;
 }
 
  /* Centered header title */
@@ -418,12 +441,6 @@ nav {
   width: 100%;
 }
 
-
-.map-view {
-  font-size: 0.7em;
-  font-weight: 500;
-}
-
 .tags {
   display: flex;
   gap: 10px;
@@ -455,3 +472,76 @@ nav {
 /*****************end feed control styles*************************/
 
 /*****************MAP styles********************************/
+
+
+.map-container {
+  height: 200vh; /* Full viewport height */
+  width: 200vh; /* Full viewport width */
+}
+
+/***************** END MAP styles********************************/
+
+
+/*****************BACK BUTTON********************************/
+.back-button {
+  color: #333;
+  background: none; /* No background */
+  border: none; /* No border */
+  padding: 10px; /* Padding for better click area */
+  font-size: 40px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  position: absolute; /* Position it absolutely */
+  left: 50px; /* Distance from the left side */
+  top: 50px; /* Distance from the top */
+}
+
+.back-button:hover {
+  background-color: #8444C4; /* Darker green on hover */
+  border: none;
+  border-radius: 15px;
+}
+/*****************end back button********************************/
+
+/*****************Log In Page********************************/
+/* button */
+.button-container {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center the button horizontally */
+  margin-top: 20px; /* Add margin for spacing */
+}
+
+/* Button style */
+.sign-button {
+  background-color: #60ECAA; 
+  color: white;
+  font-family: "Bona Nova", serif;
+  font-size: 1.8vw; /* Adjust font size based on viewport width */
+  font-weight: 100; /* Adjusted font weight */
+  padding: 1vh 0; /* Adjust padding based on viewport height */
+  border: none;
+  border-radius: 50px; /* Rounded */
+  width: 18vw; /* Adjust width based on viewport width */
+  height: 9vh; /* Adjust height based on viewport height */
+  cursor: pointer;
+  position: relative; /* Use absolute positioning */
+  display: flex;
+  justify-content: center; /* Horizontally center text */
+  align-items: center; /* Vertically center text */
+}
+
+.logo-container {
+  margin-bottom: 20px; /* Adds space between the logo and the login form */
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+.login_body {
+  width: 100%;
+  max-width: 90vw; /* Adjust the maximum width as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
