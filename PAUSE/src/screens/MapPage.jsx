@@ -5,6 +5,7 @@ import '../App.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { FaPlus } from 'react-icons/fa'; // Import FaPlus icon
+import { useUser } from '../contexts/UserContext';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -30,6 +31,8 @@ function MapPage() {
 
   const navigate = useNavigate(); // Create navigate function
   const [events, setEvents] = useState([]);
+  const { user } = useUser(); // Access the user information
+
   //function to fetch events from the database
   const fetchEvents = async () => {
     try {
@@ -44,9 +47,18 @@ function MapPage() {
   //to load the events when the page is loaded
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [user.user]);
 
-  const handleClick = () => {
+  const handleAddEventClick = () => {
+    console.log(user);
+    if (user) {
+      navigate('/event-form'); // Navigate to event form if user is logged in
+    } else {
+      navigate('/login'); // Navigate to login page if user is not logged in
+    }
+  };
+
+  const handlePinClick = () => {
     console.log('Popup clicked!');
     // Add any other actions you want to perform on click
   };
@@ -55,7 +67,7 @@ function MapPage() {
     <>
       <div className="feed-container">
           <h1 className="feed-title">HOT IN COPENHAGEN</h1>
-          <button className="add-event-button" onClick={() => navigate('/event-form')}>
+          <button className="add-event-button" onClick={handleAddEventClick}>
             <FaPlus className="add-icon" />
           </button>
 
@@ -85,14 +97,14 @@ function MapPage() {
           <Marker
             key={event.id}
             position={[event.event_latitude, event.event_longitude]}
-            eventHandlers={{ click: handleClick }}>
+            eventHandlers={{ click: handlePinClick }}>
 
             <Popup >
               <strong>{event.event_name}</strong>
                 <p>{event.event_description}</p>
                 <p>{`Date: ${event.event_date}`}</p>
                 <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
-              <div onClick={handleClick}></div>
+              <div onClick={handlePinClick}></div>
             </Popup>
           </Marker>
         ))}

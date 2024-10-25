@@ -3,16 +3,31 @@ import React, { useEffect, useState, useContext } from "react";
 import '../App.css';
 import EventInFeedPage from "../components/eventInFeedPage";
 import { FaPlus } from 'react-icons/fa';
+import { useUser } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-
+import HamburgerMenu from '../components/HamburgerMenu';
 
 const FeedPage = () => {
-    const [events, setEvents] = useState([]);
-    const navigate = useNavigate();
+  const [events, setEvents] = useState([]);
+  const navigate = useNavigate();
+  const user = useUser();
+  const [loading, setLoading] = React.useState(true);
 
-    const addEvent = () => {
-      navigate('/event-form'); // Redirect to the EventFormPage
-    };
+  useEffect(() => {
+    // Simulate fetching or setting loading state
+    if (user.user) {
+      setLoading(false);
+    }
+  }, [user.user]); // Update loading state when user information changes
+
+  const handleAddEventClick = () => {
+    console.log(user);
+    if (user.user) {
+      navigate('/event-form'); // Navigate to event form if user is logged in
+    } else {
+      navigate('/login'); // Navigate to login page if user is not logged in
+    }
+  };
   
     // const userProfile = () => {
     //   navigate('/'); // Redirect to the UserProfilePage
@@ -23,22 +38,25 @@ const FeedPage = () => {
       const fetchEvents = async () => {
           try {
             const response = await fetch('http://127.0.0.1:5000/events'); // Assicurati che questo corrisponda al tuo endpoint backend
-            console.log(response);
+            // console.log(response);
               if (!response.ok) {
                   throw new Error('Network response was not ok');
             }
             const rawText = await response.text(); // Read raw text of response
-            console.log('Raw response:', rawText);
+            // console.log('Raw response:', rawText);
      
             // If the response body is empty or not JSON, log it
             const data = JSON.parse(rawText || '{}');  // Handle empty or invalid JSON
-            console.log('Fetched data:', data);
+            // console.log('Fetched data:', data);
 
             // const data = await response.json();
             // console.log(data);
-              setEvents(data.events); 
+            setEvents(data.events); 
+            setLoading(false); // Set loading to false after events are fetched
+
           } catch (error) {
-              console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
+            setLoading(false); // Set loading to false even if there is an error
           }
       };
 
@@ -48,11 +66,9 @@ const FeedPage = () => {
 
     return (
       <div className="feed-container">
-        <button className="add-event-button" onClick={addEvent}>
-          <FaPlus className="add-icon" />
-        </button>
+        <HamburgerMenu />
         <h1 className="feed-title">HOT IN COPENHAGEN</h1>
-        <button className="add-event-button" onClick={addEvent}>
+        <button className="add-event-button" onClick={handleAddEventClick}>
           <FaPlus className="add-icon" />
         </button>
         <div className="feed-controls">

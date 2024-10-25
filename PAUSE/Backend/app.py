@@ -198,10 +198,18 @@ class User(db.Model):
         return f"<User {self.email}>"
 
 
+# Apparently to solve the CORS issue, we need to add this route to the backend
+@app.route("/users", methods=["OPTIONS"])
+def users_options():
+    return "", 200
+
+
 # Registration endpoint
-@app.route("/registration", methods=["POST"])
+@app.route("/users", methods=["POST"])
 def register_user():
     data = request.json  # Get the registration data from the request body (JSON)
+
+    print("DATA:", data)
 
     # Extract user data
     email = data.get("email")
@@ -238,6 +246,23 @@ def register_user():
 
     # Return success message
     return jsonify({"message": "User registered successfully"}), 201
+
+
+@app.route("/users/<email>", methods=["GET"])
+def get_user_by_email(email):
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        user_data = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "created_at": user.created_at,
+        }
+        return jsonify({"user": user_data}), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
 
 
 # creates tables in the database if they do not exist

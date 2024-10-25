@@ -6,6 +6,7 @@ import { UserProvider } from './contexts/UserContext';
 import EventFormPage from './screens/EventFormPage';
 import LoginPage from './screens/LoginPage';
 import MapPage from './screens/MapPage';
+import ProfilePage from './screens/ProfilePage';
 import UserRegistrationPage from './screens/RegistrationPage';
 import NavBar from './components/NavBar';
 import './App.css'
@@ -81,7 +82,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/registration" element={<UserRegistrationPage />} />
-
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </Router>
     </UserProvider>

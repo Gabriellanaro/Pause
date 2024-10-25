@@ -1,14 +1,19 @@
 /* eslint-disable no-unused-vars */
 // src/screens/UserRegistrationPage.jsx
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+// import { auth, provider } from "firebase";
+import { auth, provider } from "../Firebase/firebase";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import '../App.css';
 
 function UserRegistrationPage() {
-
+    const [email, setEmail] = useState('Prova111@gmail.com')
+    const [password, setPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate(); // Navigation object to redirect the user
-    const { user } = useUser(); // Access the user information
+    const { user, setUser } = useUser(null); // Access the user information
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -38,6 +43,7 @@ function UserRegistrationPage() {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevents page refresh
     if (formData.password !== formData.confirm_password) {
@@ -47,7 +53,7 @@ function UserRegistrationPage() {
     try {
       console.log(formData); // You can handle your registration logic here
 
-      const response = await fetch('http://localhost:5000/registration', {
+      const response = await fetch('http://127.0.0.1:5000/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,16 +64,22 @@ function UserRegistrationPage() {
           email: formData.email,
           password: formData.password,
         }),
-        credentials: 'include',
       });
       
       const result = await response.json();
 
       if (response.ok) {
         alert(result.message); // Optional: Show success alert
-
-        // Redirect to the home page after successful registration
-        navigate("/");
+        // Register with Firebase
+        createUserWithEmailAndPassword(auth, formData.email, formData.password)
+        .then((userCredential) => {
+          setUser(userCredential.user); // Sets user in context for immediate login
+          navigate('/'); // Navigate to home or desired page after successful login
+        })
+        .catch((error) => {
+          console.error("Firebase registration error:", error);
+          alert("Error logging in with Firebase");
+        });
       } else {
         alert(result.error); // Handle any error from backend
       }

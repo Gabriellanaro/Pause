@@ -1,18 +1,28 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { auth, provider } from '../../Firebase/firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom';
 import ErrorPopup from '../errorPopUp/ErrorPopUp';
 import '../../App.css';
 
 const SignIn = () => {
 
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState('Prova111@gmail.com')
     const [password, setPassword] = useState('')
+    const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+  
+    useEffect(() => {
+      // Monitor auth state changes
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+          setIsLoggedIn(!!user);
+      });
+      return () => unsubscribe();  // Clean up listener
+    }, []);
+  
     const handleSignIn = (e) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
@@ -37,9 +47,24 @@ const SignIn = () => {
                 setErrorMessage(message);
               });
     }
+  
+    const handleSignOut = () => {
+      signOut(auth)
+          .then(() => {
+              setIsLoggedIn(false);  // Update state after sign-out
+          })
+          .catch((error) => console.error('Sign out error:', error));
+    };
 
     return (
-        <div className='login_body'>
+      <div className='login_body'>
+        <div className="login_body">
+            {isLoggedIn ? (
+                <div>
+                    <p>Welcome back!</p>
+                    <button onClick={handleSignOut} className="sign-button" style={{height: '5vh', width: '15vw'}}>Sign Out</button>
+                </div>
+            ) : (
             <form onSubmit={handleSignIn}>
                 <p className='header-title' style={{ textAlign: 'center', color: 'white' }}>Log In</p>
                 <input className='input'
@@ -54,13 +79,14 @@ const SignIn = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}>
                 </input>
-                <div class="button-container">
-                  <button className="sign-button" type='submit'>Sign In</button>
+                <div className="button-container">
+                  <button className="sign-button" type='submit' style={{marginBottom:'10px'}}>Sign In</button>
                 </div>
             </form>
-
-            <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
+          )}
         </div>
+            <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
+      </div>
 
     )
 }
