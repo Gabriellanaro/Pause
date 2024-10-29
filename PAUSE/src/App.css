@@ -603,6 +603,7 @@ nav {
 .side-menu ul li a:hover {
   text-decoration: underline;
 }
+
 /* ----------------- End Hamburger menu ---------------------*/
 
 /* ----------------- Google sign in button ---------------------*/
@@ -655,3 +656,56 @@ nav {
 }
 
 /* ----------------- End sign up link ---------------------*/
+
+/* ----------------- Pop up log out -----------------------*/
+.logout-confirm-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures popup is on top */
+}
+
+.popup-content {
+  background: rgba(0, 0, 0, 1);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 300px;
+}
+
+.confirm-button,
+.cancel-button {
+  margin: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.confirm-button {
+  background-color: #60ECAA; /* Red for confirm */
+  color: rgb(0, 0, 0);
+}
+
+.cancel-button {
+  background-color: rgb(181, 181, 181); /* Blue for cancel */
+  color: black;
+}
+
+.confirm-button:hover {
+  background-color: #50c28d;
+}
+
+.cancel-button:hover {
+  background-color: rgb(154, 154, 154);
+}
+
+/* ----------------- End Pop up log out -----------------------*/

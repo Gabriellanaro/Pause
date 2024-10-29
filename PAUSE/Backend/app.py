@@ -84,6 +84,21 @@ def get_events():
     return jsonify({"events": event_list}), 200
 
 
+# Get all events for a specific user
+@app.route("/events/user/<user_email>", methods=["GET"])
+def get_events_user(user_email):
+    # Query all events with the specified user_email
+    events = Event.query.filter_by(user_email=user_email).order_by(Event.id.asc()).all()
+    event_list = []
+
+    # Format each event and add to the list
+    for event in events:
+        event_list.append(format_event(event))
+
+    # Return the list of formatted events
+    return jsonify({"events": event_list}), 200
+
+
 # Get a single event
 @app.route("/events/<id>", methods=["GET"])
 def get_event(id):
