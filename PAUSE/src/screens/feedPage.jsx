@@ -49,9 +49,26 @@ const FeedPage = () => {
             const data = JSON.parse(rawText || '{}');  // Handle empty or invalid JSON
             // console.log('Fetched data:', data);
 
+            // get today's data
+            // const today = new Date();
+
+            // filter past events and sort by date and time
+            const filteredAndSortedEvents = data.events
+              // .filter(event => new Date(event.event_date) >= today) 
+              .sort((a, b) => {
+                const dateA = new Date(a.event_date);
+                const dateB = new Date(b.event_date);
+                if (dateA.getTime() === dateB.getTime()) {
+                  return new Date(`1970-01-01T${a.event_start_time}`) - new Date(`1970-01-01T${b.event_start_time}`);
+                }
+                return dateA - dateB;
+              });
+
+            setEvents(filteredAndSortedEvents); 
+
             // const data = await response.json();
             // console.log(data);
-            setEvents(data.events); 
+            // setEvents(data.events); 
             setLoading(false); // Set loading to false after events are fetched
 
           } catch (error) {
