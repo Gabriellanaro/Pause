@@ -78,6 +78,7 @@ function EventFormPage() {
     e.preventDefault();  // Prevent form from reloading
 
     // Create form data to send the image and other details
+<<<<<<< Updated upstream
     const formDataToSend = new FormData();
     formDataToSend.append('event_name', formData.event_name);
     formDataToSend.append('event_description', formData.event_description);
@@ -88,11 +89,30 @@ function EventFormPage() {
     if (formData.event_image) {
       formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
     }
+=======
+    // const formDataToSend = new FormData();
+    // formDataToSend.append('event_name', formData.event_name);
+    // formDataToSend.append('event_description', formData.event_description);
+    // formDataToSend.append('event_date', formData.event_date);
+    // formDataToSend.append('event_start_time', formData.event_start_time);
+    // formDataToSend.append('event_end_time', formData.event_end_time);
+    // formDataToSend.append('event_location', formData.event_location);
+    // if (formData.event_image) {
+    //   formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
+    // }
+>>>>>>> Stashed changes
 
     try {
       const response = await fetch('http://localhost:5000/events', {
         method: 'POST',
+<<<<<<< Updated upstream
         body: formDataToSend,  // Send form data
+=======
+        headers: {
+        'Content-Type': 'application/json',  // Specify content type as JSON
+      },
+        body: JSON.stringify(formData),  // Send form data
+>>>>>>> Stashed changes
       });
 
       const result = await response.json();

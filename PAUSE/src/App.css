@@ -455,3 +455,324 @@ nav {
 /*****************end feed control styles*************************/
 
 /*****************MAP styles********************************/
+<<<<<<< Updated upstream
+=======
+
+
+.map-container {
+  height: 200vh; /* Full viewport height */
+  width: 200vh; /* Full viewport width */
+}
+
+/***************** END MAP styles********************************/
+
+
+/*****************BACK BUTTON********************************/
+
+/*****************end back button********************************/
+
+/*****************Log In Page********************************/
+/* button */
+.button-container {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center the button horizontally */
+  margin-top: 20px; /* Add margin for spacing */
+}
+
+/* Button style */
+.sign-button {
+  background-color: #60ECAA; 
+  color: white;
+  font-family: "Inter";
+  font-size: 25px; /* Adjust font size based on viewport width */
+  font-weight: 300; /* Adjusted font weight */
+  padding: 1vh 0; /* Adjust padding based on viewport height */
+  border: none;
+  border-radius: 50px; /* Rounded */
+  width: 18vw; /* Adjust width based on viewport width */
+  height: 5vh; /* Adjust height based on viewport height */
+  cursor: pointer;
+  position: relative; /* Use absolute positioning */
+  display: flex;
+  justify-content: center; /* Horizontally center text */
+  align-items: center; /* Vertically center text */
+}
+
+.sign-button:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.logo-container {
+  margin-bottom: 20px; /* Adds space between the logo and the login form */
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+.login_body {
+  width: 100%;
+  max-width: 90vw; /* Adjust the maximum width as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ----------------- End Hamburger menu ---------------------*/
+
+.hamburger-menu {
+  position: relative;
+}
+
+.menu-icon {
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  color: #60ECAA;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #1a1a1a;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 9;
+  padding-top: 60px;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.side-menu ul li {
+  margin: 20px;
+}
+
+.side-menu ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.side-menu ul li a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------- End Hamburger menu ---------------------*/
+
+/* ----------------- Google sign in button ---------------------*/
+
+.google-sign-in-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18vw;
+  height: 5vh;
+  border: 1px solid #dcdcdc;
+  border-radius: 50px;
+  background-color: white;
+  color: #757575;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.google-sign-in-btn:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.google-sign-in-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+}
+
+
+/* ----------------- END Google sign in button ---------------------*/
+
+/* ----------------- Sign up link---------------------*/
+
+.signup-link {
+  margin-top: 20px;
+  font-size: 18px;
+  color: white;
+}
+
+.signup-link a {
+  color: #639bf5;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------- End sign up link ---------------------*/
+
+/* ----------------- Pop up log out -----------------------*/
+.logout-confirm-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures popup is on top */
+}
+
+.popup-content {
+  background: rgba(0, 0, 0, 1);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 300px;
+}
+
+.confirm-button,
+.cancel-button {
+  margin: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.confirm-button {
+  background-color: #60ECAA; /* Red for confirm */
+  color: rgb(0, 0, 0);
+}
+
+.cancel-button {
+  background-color: rgb(181, 181, 181); /* Blue for cancel */
+  color: black;
+}
+
+.confirm-button:hover {
+  background-color: #50c28d;
+}
+
+.cancel-button:hover {
+  background-color: rgb(154, 154, 154);
+}
+
+/* ----------------- End Pop up log out -----------------------*/
+
+/* ----------------- Pop Up Event -----------------------*/
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Darker background for more contrast */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Popup content */
+.popup-content {
+  background-color: #1c1c1c;
+  color: #f1f1f1;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  position: relative;
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #50c28d; 
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.close-button:hover {
+  transform: scale(1.1); 
+}
+
+/* Popup image */
+.popup-image {
+  width: 100%;
+  max-height: 300px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  object-fit: cover;
+}
+
+/* Title */
+.popup-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* Date and time */
+.popup-date {
+  font-size: 16px;
+  color: #a9a9a9;
+  margin: 5px 0;
+}
+
+/* Location link */
+.popup-location a {
+  color: #60ECAA;
+  text-decoration: none;
+}
+
+.popup-location a:hover {
+  text-decoration: underline;
+}
+
+/* Created by text */
+.popup-creator {
+  font-size: 16px;
+  color: #a9a9a9;
+  margin-top: 10px;
+}
+
+/* Description */
+.popup-description {
+  font-size: 14px;
+  margin: 15px 0;
+  line-height: 1.5;
+  color: #c0c0c0;
+}
+
+/* ----------------- End Pop Up Event -----------------------*/
+>>>>>>> Stashed changes

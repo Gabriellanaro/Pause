@@ -7,7 +7,12 @@ app = Flask(__name__)
 
 # Configuration for the database
 app.config["SQLALCHEMY_DATABASE_URI"] = (
+<<<<<<< Updated upstream
     "postgresql://postgres:Pause2024@10.209.155.74:5432/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
+=======
+    # "postgresql://postgres:Pause2024@10.209.155.74:5432/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
+    "postgresql://postgres:Pause2024@10.209.155.74/Pausedatabase"  # URI EXPOSED, MUY PELIGROSO
+>>>>>>> Stashed changes
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -65,6 +70,21 @@ def get_events():
 
     # Return the list of formatted events
     return {"events": event_list}
+
+
+# Get all events for a specific user
+@app.route("/events/user/<user_email>", methods=["GET"])
+def get_events_user(user_email):
+    # Query all events with the specified user_email
+    events = Event.query.filter_by(user_email=user_email).order_by(Event.id.asc()).all()
+    event_list = []
+
+    # Format each event and add to the list
+    for event in events:
+        event_list.append(format_event(event))
+
+    # Return the list of formatted events
+    return jsonify({"events": event_list}), 200
 
 
 # Get a single event
@@ -131,6 +151,7 @@ def update_event(id):
 @app.route("/events", methods=["POST"])
 def create_event():
     data = request.json  # retrieve data in json format from the request body
+<<<<<<< Updated upstream
     print(data)
     event_name = data.get("event_name")  # get the value of the key "event_name" from the json data
     event_description = data.get("event_description")  
@@ -140,6 +161,15 @@ def create_event():
     event_location = data.get("event_location")
     event_latitude = data.get("event_latitude")
     event_longitude = data.get("event_longitude")
+=======
+    print("DATA:", data)
+    user_email = data.get(
+        "user_email"
+    )  # get the value of the key "user_email" from the json data
+    # print("USER EMAIL: ", user_email)
+    if not user_email:
+        return jsonify({"error": "User email is required. Sign-in or log-in"}), 400
+>>>>>>> Stashed changes
 
     # Convert start and end times to time objects
     start_time = datetime.strptime(event_start_time, "%H:%M").time()
@@ -162,6 +192,95 @@ def create_event():
     # Return the created event in json format for the frontend
     return jsonify(format_event(event)), 201
 
+<<<<<<< Updated upstream
+=======
+
+# Model for table User
+class User(db.Model):
+    __tablename__ = "users"  # table name in postgresql
+    user_id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(200), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    first_name = db.Column(db.String(200), nullable=False)
+    last_name = db.Column(db.String(200), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    events = db.relationship(
+        "Event", backref="user", lazy=True
+    )  # Relationship with Event table
+
+    def __repr__(self):
+        return f"<User {self.email}>"
+
+
+# Apparently to solve the CORS issue, we need to add this route to the backend
+@app.route("/users", methods=["OPTIONS"])
+def users_options():
+    return "", 200
+
+
+# Registration endpoint
+@app.route("/users", methods=["POST"])
+def register_user():
+    data = request.json  # Get the registration data from the request body (JSON)
+
+    print("DATA:", data)
+
+    # Extract user data
+    email = data.get("email")
+    password = data.get("password")  # to hash
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+
+    # Check if any of these values are None
+    if not email or not password or not first_name or not last_name:
+        return jsonify({"error": "Missing fields"}), 400
+
+    # Check if user already exists
+    existing_user = db.session.query(User).filter(User.email == email).first()
+    if existing_user:
+        return jsonify({"error": "User already exists"}), 400
+
+    # Create a new user and add to the database
+    new_user = User(
+        email=email,
+        password=password,  # Remember to hash this in a real application!
+        first_name=first_name,
+        last_name=last_name,
+        created_at=datetime.utcnow(),
+    )
+
+    # print("Received data:", data)
+    # print("Email:", email)
+    # print("First Name:", first_name)
+    # print("Last Name:", last_name)
+
+    # Add the user to the database
+    db.session.add(new_user)
+    db.session.commit()
+
+    # Return success message
+    return jsonify({"message": "User registered successfully"}), 201
+
+
+@app.route("/users/<email>", methods=["GET"])
+def get_user_by_email(email):
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        user_data = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "created_at": user.created_at,
+        }
+        return jsonify({"user": user_data}), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
+
+
+>>>>>>> Stashed changes
 # creates tables in the database if they do not exist
 with app.app_context():
     db.create_all()  

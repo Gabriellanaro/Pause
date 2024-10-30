@@ -4,6 +4,21 @@ import PropTypes from 'prop-types';
 import '../App.css';
 
 const EventInFeedPage = ( { event }) => {
+<<<<<<< Updated upstream
+=======
+  
+  const user = useUser();
+
+  const userEmail = user.user ? user.user.email : null;
+  // console.log(user.user);
+  
+  // if (!userEmail) {
+  //     // Handle the case when the user is not logged in
+  //     console.log("User is not logged in");
+  //     // You can return early, redirect, or set a state to show a message
+  //     return <p>Please log in to see events.</p>; // Example of showing a message
+  // }
+>>>>>>> Stashed changes
 
   // Function to format the event date and time
   const formatEventDateTime = (event) => {

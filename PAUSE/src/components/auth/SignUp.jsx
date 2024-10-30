@@ -52,7 +52,13 @@ const SignUp = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}>
                 </input>
+<<<<<<< Updated upstream
                 <button type='submit'>Sign Up</button>
+=======
+                <div className="button-container">
+                  <button className="sign-button" type='submit'>Sign Up</button>
+                </div>
+>>>>>>> Stashed changes
             </form>
 
             <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
