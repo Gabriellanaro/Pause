@@ -1,0 +1,80 @@
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
+import { FaBars, FaTimes } from 'react-icons/fa';
+import { auth } from '../Firebase/firebase';
+import { signOut } from 'firebase/auth';
+import '../app.css';
+
+const HamburgerMenu = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // Track logout confirmation popup
+
+    // Toggle menu open/close
+    const toggleMenu = () => setIsOpen(!isOpen);
+
+    useEffect(() => {
+        // Monitor auth state changes
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setIsLoggedIn(!!user);
+        });
+        return () => unsubscribe();  // Clean up listener
+    }, []);
+
+    const handleLogoutClick = () => {
+        if (!isLoggedIn) {
+            console.warn('User is not logged in. No need to logout.');
+            return;
+        }
+        setShowLogoutConfirm(true);  // Show confirmation popup
+    };
+
+    const confirmLogout = () => {
+        signOut(auth)
+            .then(() => {
+                setIsLoggedIn(false);  // Update state after sign-out
+                setShowLogoutConfirm(false);  // Hide confirmation popup
+            })
+            .catch((error) => console.error('Sign out error:', error));
+    };
+
+    const cancelLogout = () => {
+        setShowLogoutConfirm(false);  // Hide confirmation popup
+    };
+
+    return (
+        <div className={`hamburger-menu ${showLogoutConfirm ? 'blur-background' : ''}`}>
+            <button className="menu-icon" onClick={toggleMenu}>
+                {isOpen ? <FaTimes /> : <FaBars />}
+            </button>
+            
+            <nav className={`side-menu ${isOpen ? 'open' : ''}`}>
+                <ul>
+                    <li>
+                        <a href={isLoggedIn ? "/profile" : "/login"}>
+                            Profile
+                        </a>
+                    </li>
+                    <li><a href="/your-events">Your events</a></li>
+                    <li>
+                        <button className="logout-button" onClick={handleLogoutClick}>
+                            Logout
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            {showLogoutConfirm && (
+                <div className="logout-confirm-popup">
+                    <div className="popup-content">
+                        <p>Are you sure you want to logout?</p>
+                        <button className="confirm-button" onClick={confirmLogout}>Yes</button>
+                        <button className="cancel-button" onClick={cancelLogout}>No</button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default HamburgerMenu;

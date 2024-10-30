@@ -45,6 +45,7 @@ body, html, #root {
 /* Event Container */
 
 .event-container {
+  position: relative;
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
@@ -98,6 +99,26 @@ body, html, #root {
   margin: 0.5rem 0;
   font-size: 1.3vw; /* Scales with viewport width */
   /* border: 1px solid #1fde85; */
+}
+
+.modify-button {
+  background-color: transparent;
+  color: #f3f3e3;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center; /* Center align items vertically */
+  gap: 8px;
+  position: absolute; /* Position the button absolutely */
+  top: 10px; /* Position it 10px from the top */
+  right: 10px; /* Position it 10px from the right */
+}
+
+.modify-button:hover {
+  background-color: rgba(25, 245, 73, 0.1); /* Add a slight background color on hover */
 }
 
 /* Media queries for larger screens */
@@ -194,6 +215,8 @@ body, html, #root {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
+  position: relative;
 }
 
  /* Centered header title */
@@ -203,6 +226,7 @@ body, html, #root {
   font-weight: 700;
   color: black;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 /* Form styles */
@@ -211,6 +235,16 @@ form {
   flex-direction: column;
   gap: 20px;
   width: 600px;
+}
+
+/* Label styling */
+label {
+  text-align: left; 
+  display: block; 
+  width: 100%;
+  margin-bottom: 0.5rem; 
+  font-size: 1rem; 
+  color: black;
 }
 
 /* Form fields */
@@ -222,21 +256,27 @@ input, select, textarea {
   border-radius: 10px;
   box-sizing: border-box;
   background-color: #fff;
+  resize: none; /* Prevent resizing of the textarea */
+}
+
+textarea {
+  font-family: 'Arial', sans-serif; /* Ensure consistent font with input fields */
+  height: auto;
   color:#333;
 }
 
 /* Save button */
 .save-button {
   background-color: #8444C4; /* Purple button */
-  color: white;
+  color: black;
   font-family: "Bona Nova", serif;
   font-size: 48px;
   font-weight: 700;
-  padding: 41px 0;
+  padding: 20px 0;
   border: none;
-  border-radius: 50px; /* Rounded */
+  border-radius: 100px; /* Rounded */
   width: 630px;
-  height: 158px;
+  height: 100px;
   cursor: pointer;
   margin-top: 20px;
 }
@@ -248,6 +288,40 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #8444C4; /* Purple border on focus */
+}
+
+/* Image upload styling */
+.image-upload {
+  width: 100%;
+  font-size: 16px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+ 
+  background-color: #f9f9f9;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Styling for the Back button */
+.back-button {
+  background-color: #8444C4; /* Purple background */
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 100%;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.back-button:hover {
+  background-color: #6a2e99; /* Slightly darker on hover */
+}
+
+.back-button svg {
+  color:#60ECAA; /* Make sure the arrow icon is white */
+  display: block;
 }
 
 .error-popup {
@@ -367,12 +441,6 @@ nav {
   width: 100%;
 }
 
-
-.map-view {
-  font-size: 0.7em;
-  font-weight: 500;
-}
-
 .tags {
   display: flex;
   gap: 10px;
@@ -404,3 +472,240 @@ nav {
 /*****************end feed control styles*************************/
 
 /*****************MAP styles********************************/
+
+
+.map-container {
+  height: 200vh; /* Full viewport height */
+  width: 200vh; /* Full viewport width */
+}
+
+/***************** END MAP styles********************************/
+
+
+/*****************BACK BUTTON********************************/
+.back-button {
+  color: #333;
+  background: none; /* No background */
+  border: none; /* No border */
+  padding: 10px; /* Padding for better click area */
+  font-size: 40px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  position: absolute; /* Position it absolutely */
+  left: 50px; /* Distance from the left side */
+  top: 50px; /* Distance from the top */
+}
+
+.back-button:hover {
+  background-color: #8444C4; /* Darker green on hover */
+  border: none;
+  border-radius: 15px;
+}
+/*****************end back button********************************/
+
+/*****************Log In Page********************************/
+/* button */
+.button-container {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center the button horizontally */
+  margin-top: 20px; /* Add margin for spacing */
+}
+
+/* Button style */
+.sign-button {
+  background-color: #60ECAA; 
+  color: white;
+  font-family: "Inter";
+  font-size: 25px; /* Adjust font size based on viewport width */
+  font-weight: 300; /* Adjusted font weight */
+  padding: 1vh 0; /* Adjust padding based on viewport height */
+  border: none;
+  border-radius: 50px; /* Rounded */
+  width: 18vw; /* Adjust width based on viewport width */
+  height: 5vh; /* Adjust height based on viewport height */
+  cursor: pointer;
+  position: relative; /* Use absolute positioning */
+  display: flex;
+  justify-content: center; /* Horizontally center text */
+  align-items: center; /* Vertically center text */
+}
+
+.sign-button:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.logo-container {
+  margin-bottom: 20px; /* Adds space between the logo and the login form */
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+.login_body {
+  width: 100%;
+  max-width: 90vw; /* Adjust the maximum width as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ----------------- End Hamburger menu ---------------------*/
+
+.hamburger-menu {
+  position: relative;
+}
+
+.menu-icon {
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  color: #60ECAA;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #1a1a1a;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 9;
+  padding-top: 60px;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.side-menu ul li {
+  margin: 20px;
+}
+
+.side-menu ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.side-menu ul li a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------- End Hamburger menu ---------------------*/
+
+/* ----------------- Google sign in button ---------------------*/
+
+.google-sign-in-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18vw;
+  height: 5vh;
+  border: 1px solid #dcdcdc;
+  border-radius: 50px;
+  background-color: white;
+  color: #757575;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.google-sign-in-btn:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.google-sign-in-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+}
+
+
+/* ----------------- END Google sign in button ---------------------*/
+
+/* ----------------- Sign up link---------------------*/
+
+.signup-link {
+  margin-top: 20px;
+  font-size: 18px;
+  color: white;
+}
+
+.signup-link a {
+  color: #639bf5;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------- End sign up link ---------------------*/
+
+/* ----------------- Pop up log out -----------------------*/
+.logout-confirm-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures popup is on top */
+}
+
+.popup-content {
+  background: rgba(0, 0, 0, 1);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 300px;
+}
+
+.confirm-button,
+.cancel-button {
+  margin: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.confirm-button {
+  background-color: #60ECAA; /* Red for confirm */
+  color: rgb(0, 0, 0);
+}
+
+.cancel-button {
+  background-color: rgb(181, 181, 181); /* Blue for cancel */
+  color: black;
+}
+
+.confirm-button:hover {
+  background-color: #50c28d;
+}
+
+.cancel-button:hover {
+  background-color: rgb(154, 154, 154);
+}
+
+/* ----------------- End Pop up log out -----------------------*/
