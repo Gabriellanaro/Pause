@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import FeedPage from './screens/feedPage';
 import { UserProvider } from './contexts/UserContext';
 import EventFormPage from './screens/EventFormPage';
+import EditEventPage from './screens/EditEventPage';
 import LoginPage from './screens/LoginPage';
 import MapPage from './screens/MapPage';
 import ProfilePage from './screens/ProfilePage';
@@ -87,6 +88,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/your-events" element={<YourEventsPage />} />
           <Route path="/your-events-map" element={<YourEventsMapPage />} />
+          <Route path="/edit-event/:eventId" element={<EditEventPage />} />
         </Routes>
       </Router>
     </UserProvider>

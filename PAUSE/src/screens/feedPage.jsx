@@ -13,6 +13,52 @@ const FeedPage = () => {
   const user = useUser();
   const [loading, setLoading] = React.useState(true);
 
+  // events in local to test in case we don't have access to the database
+  const mockEvents = [
+  {
+    id: 1,
+    event_date: '11-17-2024',
+    event_description: 'There will be a lot of clothes and accessories for sale. Come and join us!',
+    event_start_time: '10:00:00',
+    event_end_time: '15:00:00',
+    event_name: 'VERAS MARKET',
+    event_location: 'Bispeengen 20, 2000 Frederiksberg',
+    event_latitud: 55.6786,
+    event_longitud: 12.5796,
+    user_email: 'user1@example.com',
+    // image: 'path_to_image1.jpg',
+    created_at: '2024-10-10 10:00:00',
+  },
+  {
+    id: 2,
+    event_date: '11-09-2024',
+    event_description: 'There will be a lot of clothes and accessories for sale. Come and join us!',
+    event_start_time: '09:00:00',
+    event_end_time: '15:00:00',
+    event_name: 'FREDERIKSBERG FLEA MARKET',
+    event_location: 'Frederiksberg Rådhus, Smallegade, 2000 Frederiksberg',
+    event_latitud: 55.6786,
+    event_longitud: 12.5796,
+    user_email: 'user2@example.com',
+    created_at: '2024-10-10 10:00:00',
+    // image: 'path_to_image2.jpg',
+  },
+  {
+    event_id: 3,
+    event_date: '11-10-2024',
+    event_description: 'There will be a lot of clothes and accessories for sale. Come and join us!',
+    event_start_time: '10:00:00',
+    event_end_time: '15:00:00',
+    event_name: 'VERAS MARKET',
+    event_location: 'Bispeengen 20, 2000 Frederiksberg',
+    event_latitud: 55.6786,
+    event_longitud: 12.5796,
+    user_email: 'paulagambus06@gmail.com',
+    // image: 'path_to_image3.jpg',
+    created_at: '2024-10-10 10:00:00',
+  },
+]; 
+
   useEffect(() => {
     // Simulate fetching or setting loading state
     if (user.user) {
