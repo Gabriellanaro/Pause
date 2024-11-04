@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';  // Import useNavigate hook
-import { FaArrowLeft } from 'react-icons/fa';   // Import FontAwesome left arrow icon
+import BackButton from "../components/backButton";
 import '../App.css';
 import { useUser } from "../contexts/UserContext";
 import { useEffect } from 'react';
@@ -27,6 +27,7 @@ function EditEventPage() {
     user_email: user.user_email
   });
 
+  const [loading, setLoading] = useState(true); // State for loading
     // Fetch event details using event ID
     useEffect(() => {
       const fetchEventDetails = async () => {
@@ -34,23 +35,26 @@ function EditEventPage() {
           const response = await fetch(`http://localhost:5000/events/${eventId}`);
           const event = await response.json();
           setFormData({
-            event_name: event.event_name,
-            event_description: event.event_description,
-            event_date: event.event_date,
-            event_start_time: event.event_start_time,
-            event_end_time: event.event_end_time,
-            event_location: event.event_location,
-            event_latitude: event.event_latitude,
-            event_longitude: event.event_longitude,
-            user_email: user.email
+            event_name: event.event.event_name,
+            event_description: event.event.event_description,
+            event_date: formatDate(event.event.event_date),
+            event_start_time: event.event.event_start_time,
+            event_end_time: event.event.event_end_time,
+            event_location: event.event.event_location,
+            event_latitude: event.event.event_latitude,
+            event_longitude: event.event.event_longitude,
+            user_email: event.event.user_email
           });
+          console.log('Fetched event details:', event.event.event_date);
+          setLoading(false);
         } catch (error) {
           console.error('Error fetching event details:', error);
+          setLoading(false);
         }
       };
   
       fetchEventDetails();
-    }, [eventId, user.email]);
+    }, [eventId]);
   
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -67,13 +71,6 @@ function EditEventPage() {
 
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
 
-  // Handle image upload
-  // const handleImageUpload = (e) => {
-  //   setFormData({
-  //     ...formData,
-  //     event_image: e.target.files[0],  // Get the uploaded file
-  //   });
-  // };
 
   // Fetch address suggestions
   const fetchSuggestions = async (inputValue) => {
@@ -115,151 +112,152 @@ function EditEventPage() {
     // };
 
   // Send HTTP request to backend
-  const sendHttpRequest = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();  // Prevent form from reloading
+    console.log(eventId);
 
-    // Create form data to send the image and other details
-    // const formDataToSend = new FormData();
-    // formDataToSend.append('event_name', formData.event_name);
-    // formDataToSend.append('event_description', formData.event_description);
-    // formDataToSend.append('event_date', formData.event_date);
-    // formDataToSend.append('event_start_time', formData.event_start_time);
-    // formDataToSend.append('event_end_time', formData.event_end_time);
-    // formDataToSend.append('event_location', formData.event_location);
-    // if (formData.event_image) {
-    //   formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
-    // }
+    // Format the event_date before sending
+    const updatedFormData = {
+      ...formData,
+      event_date: formatDate(formData.event_date),  // Ensure event_date is formatted correctly
+    };
+    console.log('Form data:', updatedFormData);
+    // console.log(`Fetching from: http://127.0.0.1:5000/events/${eventId}`);
 
     try {
-      const response = await fetch('http://localhost:5000/events', {
+      const response = await fetch(`http://127.0.0.1:5000/events/${eventId}`, {
         method: 'PUT',  // Use PUT method to update the event
         headers: {
         'Content-Type': 'application/json',  // Specify content type as JSON
       },
-        body: JSON.stringify(formData),  // Send form data
+        body: JSON.stringify(updatedFormData),  // Send form data
       });
+      
 
       const result = await response.json();
-      console.log(result);
 
-      navigate('/');  // Navigate back to the FeedPage after successful submission
+      console.log('Response:', result);
+      if (response.ok) {
+        navigate(`/`);
+      } else {
+        console.error('Error updating event:', response.statusText);
+      }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error updating event:', error);
     }
   };
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);  // Create a Date object from the string
 
-  // Back button functionality
-  const handleBackClick = () => {
-    navigate('/');  // Navigate back to the FeedPage
-  };
+    // Get the year, month, and day
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');  // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+
+    // Return the formatted date
+    return `${year}-${month}-${day}`;  // Returns in the format yyyy-MM-dd
+}
 
   return (
-    <div className="form-screen">
-      {/* Back button with arrow */}
-      <button onClick={handleBackClick} className="back-button">
-        <FaArrowLeft size={30} />
-      </button>
+<div className="form-screen">
+      {/* Loading Check */}
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          {/* Back button with arrow */}
+          <BackButton />
 
-      <h2 className="header-title">Edit your event</h2>
+          <h2 className="header-title">Edit your event</h2>
 
-      <form onSubmit={sendHttpRequest}>
-        {/* Image Upload Field */}
-        {/* <div>
-          <label htmlFor="event_image">Upload your cover</label>
-          <input
-            type="file"
-            name="event_image"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="image-upload"
-          />
-        </div> */}
+          <form onSubmit={handleSubmit}>
+            {/* Input Fields with Placeholders */}
+            <div>
+              <label htmlFor="event_name">Name of your event</label>
+              <input
+                type="text"
+                name="event_name"
+                placeholder="Name of your event"
+                value={formData.event_name}
+                onChange={handleChange}
+                required
+                />
+            </div>
 
-        {/* Input Fields with Placeholders */}
-        <div>
-          <label htmlFor="event_name">Name of your event</label>
-          <input
-            type="text"
-            name="event_name"
-            placeholder="Name of your event"
-            value={formData.event_name}
-            onChange={handleChange}
-            required
-          />
-        </div>
+            {/* Description Input Field */}
+            <div>
+              <textarea
+                name="event_description"
+                placeholder="Event Description"
+                value={formData.event_description}
+                onChange={handleChange}
+                rows="5"
+                required
+              />
+            </div>
 
-        {/* Description Input Field */}
-        <div>
-          <textarea
-            name="event_description"
-            placeholder="Event Description"
-            value={formData.event_description}
-            onChange={handleChange}
-            rows="5"
-            required
-          />
-        </div>
+            <div>
+              <label htmlFor="event_date">Select Date</label>
+              <input
+                type="date"
+                name="event_date"
+                value={formData.event_date}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="event_date">Select Date</label>
-          <input
-            type="date"
-            name="event_date"
-            value={formData.event_date}
-            onChange={handleChange}
-            required
-          />
-        </div>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <div style={{ flex: 1 }}>
+                <label htmlFor="event_start_time">Select Starting Time</label>
+                <input
+                  type="time"
+                  name="event_start_time"
+                  placeholder="Select Starting Time"
+                  value={formData.event_start_time}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label htmlFor="event_end_time">Select Closing Time</label>
+                <input
+                  type="time"
+                  name="event_end_time"
+                  placeholder="Select Closing Time"
+                  value={formData.event_end_time}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
 
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <div style={{ flex: 1 }}>
-            <label htmlFor="event_start_time">Select Starting Time</label>
-            <input
-              type="time"
-              name="event_start_time"
-              placeholder="Select Starting Time"
-              value={formData.event_start_time}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label htmlFor="event_end_time">Select Closing Time</label>
-            <input
-              type="time"
-              name="event_end_time"
-              placeholder="Select Closing Time"
-              value={formData.event_end_time}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
+            <div>
+              <label htmlFor="event_location">Location</label>
+              <input
+                type="text"
+                name="event_location"
+                placeholder="Location"
+                value={formData.event_location}
+                onChange={handleChange}
+                required
+              />
+              {suggestions.length > 0 && (
+                <ul className="suggestions-dropdown">
+                  {suggestions.map((suggestion) => (
+                    <li key={suggestion.value} onClick={() => handleSuggestionClick(suggestion)}>
+                      {suggestion.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-        <div>
-          <label htmlFor="event_location">Location</label>
-          <input
-            type="text"
-            name="event_location"
-            placeholder="Location"
-            value={formData.event_location}
-            onChange={handleChange}
-            required
-          />
-          {suggestions.length > 0 && (
-            <ul className="suggestions-dropdown">
-              {suggestions.map((suggestion) => (
-                <li key={suggestion.value} onClick={() => handleSuggestionClick(suggestion)}>
-                  {suggestion.label}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <button type="submit" className="save-button">Save</button>
-      </form>
+            <button type="submit" className="save-button">Save</button>
+          </form>
+        </>
+      )}
     </div>
   );
 }

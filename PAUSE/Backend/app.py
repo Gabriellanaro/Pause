@@ -19,7 +19,6 @@ CORS(
     resources={r"/*": {"origins": "http://localhost:5173"}},
 )
 
-
 # --------------------------------------------------------------------
 
 # Model for table Event (one model for each table in the database)
@@ -127,14 +126,24 @@ def delete_event(id):
 
 
 # Update an event
-@app.route("/events/<id>", methods=["PUT"])
+@app.route("/events/<id>", methods=["PUT", "OPTIONS"])
 def update_event(id):
-    event = Event.query.filter_by(id=id).first()  # get the event by id
-    if not event:
-        return jsonify({"error": "Event not found"}), 404  # return an error if not found
+    print("ID:", id)
+    if request.method == "OPTIONS":
+        # Allow the browser to know what methods are allowed
+        return "", 200
 
-    # get all the info needed to update
-    event_name = request.json.get("event_name", event.event_name) #nb: first event_name is a new name for the variable, "event_name" must match the key in the json data, event.event_name must match the attribute of the Event object
+    elif request.method == "PUT":  # Get the event by id
+        event = Event.query.get(id)  # Prefer .get() for a single record by primary key
+        print(event)
+        if not event:
+            return (
+                jsonify({"error": "Event not found"}),
+                404,
+            )  # Return an error if not found
+
+    # Get all the info needed to update
+    event_name = request.json.get("event_name", event.event_name)
     event_description = request.json.get("event_description", event.event_description)
     event_date = request.json.get("event_date", event.event_date)
     event_start_time = request.json.get("event_start_time", event.event_start_time)
@@ -143,10 +152,8 @@ def update_event(id):
     event_latitude = request.json.get("event_latitude", event.event_latitude)
     event_longitude = request.json.get("event_longitude", event.event_longitude)
 
-    # update the event
+    # Update the event attributes
     event.event_name = event_name
-    # update the attributes of the Event object
-    event.event_name = event_name 
     event.event_description = event_description
     event.event_date = event_date
     event.event_start_time = event_start_time
@@ -155,9 +162,10 @@ def update_event(id):
     event.event_latitude = event_latitude
     event.event_longitude = event_longitude
 
+    # Commit the changes to the database
     db.session.commit()
-    
-    return {"event": format_event(event)}
+
+    return jsonify({"event": format_event(event)}), 200  # Return the updated event
 
 # Create a new event
 @app.route("/events", methods=["POST"])
@@ -195,6 +203,7 @@ def create_event():
     return jsonify(format_event(event)), 201
 
 
+# ======================================== USER MODEL ==========================================
 # Model for table User
 class User(db.Model):
     __tablename__ = "users"  # table name in postgresql
