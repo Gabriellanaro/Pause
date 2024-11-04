@@ -3,8 +3,8 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate hook
-import { FaArrowLeft } from 'react-icons/fa';   // Import FontAwesome left arrow icon
 import '../App.css';
+import BackButton from "../components/backButton";
 import { useUser } from "../contexts/UserContext";
 
 function EventFormPage() {
@@ -114,17 +114,11 @@ function EventFormPage() {
     }
   };
 
-  // Back button functionality
-  const handleBackClick = () => {
-    navigate('/');  // Navigate back to the FeedPage
-  };
 
   return (
     <div className="form-screen">
       {/* Back button with arrow */}
-      <button onClick={handleBackClick} className="back-button">
-        <FaArrowLeft size={30} />
-      </button>
+      <BackButton></BackButton>
 
       <h2 className="header-title">Tell us more about your event</h2>
 
