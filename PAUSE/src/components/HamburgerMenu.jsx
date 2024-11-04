@@ -1,14 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { useUser } from '../contexts/UserContext';
 import { auth } from '../Firebase/firebase';
 import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import '../app.css';
 
 const HamburgerMenu = () => {
+    const user = useUser();
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // Track logout confirmation popup
+
+    const userName = user.user ? user.user.name : 'Guest';
 
     // Toggle menu open/close
     const toggleMenu = () => setIsOpen(!isOpen);
@@ -34,6 +40,7 @@ const HamburgerMenu = () => {
             .then(() => {
                 setIsLoggedIn(false);  // Update state after sign-out
                 setShowLogoutConfirm(false);  // Hide confirmation popup
+                navigate('/');
             })
             .catch((error) => console.error('Sign out error:', error));
     };
@@ -50,6 +57,11 @@ const HamburgerMenu = () => {
             
             <nav className={`side-menu ${isOpen ? 'open' : ''}`}>
                 <ul>
+                    Hi, {userName}
+                    
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
                     <li>
                         <a href={isLoggedIn ? "/profile" : "/login"}>
                             Profile
