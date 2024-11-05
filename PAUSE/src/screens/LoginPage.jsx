@@ -9,6 +9,7 @@ import {signInWithPopup} from 'firebase/auth';
 import { auth, provider } from "../Firebase/firebase";
 import { useNavigate, Link} from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import BackButton from "../components/backButton";
 import SignIn from '../components/auth/SignIn';
 import SignUp from '../components/auth/SignUp';
 import AuthDetails from '../components/AuthDetails';
@@ -69,7 +70,8 @@ const LoginPage = () => {
 
 
   return (
-    <div className='form-screen' style={{ backgroundColor: '#8444C4'}}>
+    <div className='form-screen' style={{ backgroundColor: '#8444C4' }}>
+      <BackButton></BackButton>
       <div>
       <img
         src={img}

@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 // src/screens/UserRegistrationPage.jsx
 import React, { useState, useEffect } from "react";
-// import { auth, provider } from "firebase";
 import { auth, provider } from "../Firebase/firebase";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import BackButton from "../components/BackButton";
 import '../App.css';
 
 function UserRegistrationPage() {
@@ -93,6 +93,7 @@ function UserRegistrationPage() {
     <>
       {/* User Registration Form */}
       <div className="form-screen">
+        <BackButton></BackButton>
         <h2 className="header-title">Create Your Account</h2>
         <form onSubmit={handleSubmit}>
           <div>
