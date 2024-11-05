@@ -107,7 +107,7 @@ function EventFormPage() {
 
       const result = await response.json();
       console.log(result);
-
+      alert('Event created successfully!');
       navigate('/');  // Navigate back to the FeedPage after successful submission
     } catch (error) {
       console.error('Error fetching data:', error);

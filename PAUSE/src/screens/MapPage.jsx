@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import '../App.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { FaPlus } from 'react-icons/fa'; // Import FaPlus icon
 import { useUser } from '../contexts/UserContext';
-import HamburgerMenu from '../components/HamburgerMenu';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -49,14 +49,7 @@ function MapPage() {
     fetchEvents();
   }, []);
 
-  const handleAddEventClick = () => {
-    console.log(user);
-    if (user) {
-      navigate('/event-form'); // Navigate to event form if user is logged in
-    } else {
-      navigate('/login'); // Navigate to login page if user is not logged in
-    }
-  };
+
 
   const handlePinClick = () => {
     console.log('Popup clicked!');
@@ -65,31 +58,9 @@ function MapPage() {
 
   return (
     <>
-      <div className="feed-container">
-          <HamburgerMenu />
-          <h1 className="feed-title">HOT IN COPENHAGEN</h1>
-          <button className="add-event-button" onClick={handleAddEventClick}>
-            <FaPlus className="add-icon" />
-          </button>
-
-          <div className="feed-controls">
-              <div className="tags">
-                  <button className="switchview-button" onClick={() => navigate('/map')}>
-                    Map View
-                  </button>
-                  <button className="switchview-button" onClick={() => navigate('/')}>
-                    Feed View
-                  </button>
-              </div>
-              <div className="tags">
-                  <span className="tag">Tag 1</span>
-                  <span className="tag">Tag 2</span>
-                  <span className="tag">Tag 3</span>
-              </div>
-        </div>
-      </div>
+      <Header/>
       {/* Mappa */}
-      <div className="feed-container">
+      
         <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '1000px', width: '80vw'}}>
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
@@ -111,7 +82,8 @@ function MapPage() {
             </Marker>
           ))}
         </MapContainer>
-      </div>
+      
+      <Footer/>
     </>
       
   )
