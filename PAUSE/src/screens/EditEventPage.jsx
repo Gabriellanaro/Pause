@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 // src/screens/EventFormPage.js
-
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';  // Import useNavigate hook
-import BackButton from "../components/backButton";
+import BackButton from "../components/BackButton";
 import '../App.css';
 import { useUser } from "../contexts/UserContext";
 import { useEffect } from 'react';
@@ -160,14 +159,14 @@ function EditEventPage() {
 }
 
   return (
-<div className="form-screen">
+    <div className="form-screen">
       {/* Loading Check */}
       {loading ? (
         <div>Loading...</div>
       ) : (
         <>
           {/* Back button with arrow */}
-          <BackButton />
+          <BackButton/>
 
           <h2 className="header-title">Edit your event</h2>
 
@@ -259,7 +258,6 @@ function EditEventPage() {
         </>
       )}
     </div>
-  );
+      );
 }
-
 export default EditEventPage;

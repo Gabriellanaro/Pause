@@ -9,7 +9,7 @@ import {signInWithPopup} from 'firebase/auth';
 import { auth, provider } from "../Firebase/firebase";
 import { useNavigate, Link} from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
-import BackButton from "../components/backButton";
+import BackButton from "../components/BackButton";
 import SignIn from '../components/auth/SignIn';
 import SignUp from '../components/auth/SignUp';
 import AuthDetails from '../components/AuthDetails';

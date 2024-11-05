@@ -3,9 +3,8 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate hook
-import BackButton from "../components/backButton";
+import BackButton from "../components/BackButton";
 import '../App.css';
-import BackButton from "../components/backButton";
 import { useUser } from "../contexts/UserContext";
 
 function EventFormPage() {
@@ -119,7 +118,7 @@ function EventFormPage() {
   return (
     <div className="form-screen">
       {/* Back button with arrow */}
-      <BackButton></BackButton>
+      <BackButton/>
 
       <h2 className="header-title">Tell us more about your event</h2>
 
