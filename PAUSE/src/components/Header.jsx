@@ -32,16 +32,16 @@ const Header = () => {
                 <div className="tags">
                     {/* Conditionally add 'active' class based on the current route */}
                     <button
-                        className={`switchview-button ${location.pathname === '/map' ? 'active' : ''}`}
-                        onClick={() => navigate('/map')}
-                    >
-                        Map View
-                    </button>
-                    <button
                         className={`switchview-button ${location.pathname === '/' ? 'active' : ''}`}
                         onClick={() => navigate('/')}
                     >
                         Feed View
+                    </button>
+                    <button
+                        className={`switchview-button ${location.pathname === '/map' ? 'active' : ''}`}
+                        onClick={() => navigate('/map')}
+                    >
+                        Map View
                     </button>
                 </div>
                 <div className="tags">
