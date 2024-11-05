@@ -4,11 +4,13 @@ import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { useUser } from '../contexts/UserContext';
 import { FaPen } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
 
 const EventInFeedPage = ( { event }) => {
   
   const user = useUser();
+  const navigate = useNavigate();
 
   const userEmail = user.user ? user.user.email : null;
   // console.log(user.user);
@@ -55,18 +57,18 @@ const EventInFeedPage = ( { event }) => {
     <div className="event-container">
       <img src={eventImage} alt={event.event_name} className="event-image" />
       <div className="event-details">
-        <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
-        <p className="event-title">{event.event_name}</p>
-        <p className="event-subtitle">{event.event_location}</p>
-        <p className="event-subtitle" style={{fontSize: '0.8vw'}}>Created by: {event.user_email}</p>
+      <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
+      <p className="event-title">{event.event_name}</p>
+      <p className="event-subtitle">{event.event_location}</p>
+      <p className="event-subtitle" style={{fontSize: '0.8vw'}}>Created by: {event.user_email}</p>
       </div>
       {userEmail === event.user_email && (
-          <button className='modify-button'>
-            <FaPen /> 
-          </button>
+        <button className='modify-button' onClick={() => navigate(`/edit-event/${event.id}`)}>
+        <FaPen /> 
+        </button>
       )}  
     </div>
-  );
+    );
 };
 
 export default EventInFeedPage;
