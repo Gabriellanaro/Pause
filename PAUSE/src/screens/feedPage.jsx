@@ -5,8 +5,9 @@ import EventInFeedPage from "../components/eventInFeedPage";
 import { FaPlus } from 'react-icons/fa';
 import { useUser } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from '../components/HamburgerMenu';
+import Header from '../components/Header';
 import LoginConfirmPopup from '../components/LoginConfirmPopup';
+import Footer from "../components/Footer";
 
 const FeedPage = () => {
   const [events, setEvents] = useState([]);
@@ -133,28 +134,10 @@ const FeedPage = () => {
 
 
     return (
+      
+      <>
+      <Header/>
       <div className="feed-container">
-        <HamburgerMenu />
-        <h1 className="feed-title">HOT IN COPENHAGEN</h1>
-        <button className="add-event-button" onClick={handleAddEventClick}>
-          <FaPlus className="add-icon" />
-        </button>
-        <div className="feed-controls">
-            <div className="tags">
-                <button className="switchview-button" onClick={() => navigate('/map')}>
-                  Map View
-                </button>
-                <button className="switchview-button" onClick={() => navigate('/')}>
-                  Feed View
-                </button>
-            </div>
-            <div className="tags">
-                <span className="tag">Tag 1</span>
-                <span className="tag">Tag 2</span>
-                <span className="tag">Tag 3</span>
-            </div>
-        </div>
-        
         {events && events.length > 0 ? (
           events.map((event, index) => (
           <EventInFeedPage key={index} event={event} />
@@ -168,7 +151,9 @@ const FeedPage = () => {
           <LoginConfirmPopup onConfirm={confirmLogin} onCancel={cancelLogin} />
         )}
 
-    </div>
+        </div>
+        <Footer/>
+        </>
     )
 }
 
