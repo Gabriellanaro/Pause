@@ -6,12 +6,17 @@ import { FaPlus } from 'react-icons/fa';
 import { useUser } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import HamburgerMenu from '../components/HamburgerMenu';
+import LoginConfirmPopup from '../components/LoginConfirmPopup';
 
 const FeedPage = () => {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
   const user = useUser();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
+  const [showLoginConfirm, setShowLoginConfirm] = useState(false); // Track logout confirmation popup
+
 
   useEffect(() => {
     // Simulate fetching or setting loading state
@@ -25,10 +30,19 @@ const FeedPage = () => {
     if (user.user) {
       navigate('/event-form'); // Navigate to event form if user is logged in
     } else {
-      navigate('/login'); // Navigate to login page if user is not logged in
+      setShowLoginConfirm(true);
     }
   };
   
+  const confirmLogin = () => {
+    setShowLoginConfirm(false);  // Hide confirmation popup
+    navigate('/login');
+  }
+
+  const cancelLogin = () => {
+    setShowLoginConfirm(false);  // Hide confirmation popup
+  }
+
     // const userProfile = () => {
     //   navigate('/'); // Redirect to the UserProfilePage
     // };
@@ -43,14 +57,9 @@ const FeedPage = () => {
                   throw new Error('Network response was not ok');
             }
             const rawText = await response.text(); // Read raw text of response
-            // console.log('Raw response:', rawText);
      
             // If the response body is empty or not JSON, log it
             const data = JSON.parse(rawText || '{}');  // Handle empty or invalid JSON
-            // console.log('Fetched data:', data);
-
-            // get today's data
-            // const today = new Date();
 
             // filter past events and sort by date and time
             const filteredAndSortedEvents = data.events
@@ -64,11 +73,7 @@ const FeedPage = () => {
                 return dateA - dateB;
               });
 
-            setEvents(filteredAndSortedEvents); 
-
-            // const data = await response.json();
-            // console.log(data);
-            // setEvents(data.events); 
+            setEvents(filteredAndSortedEvents); // Set events state to the fetched events
             setLoading(false); // Set loading to false after events are fetched
 
           } catch (error) {
@@ -111,6 +116,12 @@ const FeedPage = () => {
         ) : (
           <p>No events found</p>
         )}
+
+        {/* Show Login Confirm Popup if the user is not logged in and tries to add an event */}
+        {showLoginConfirm && (
+          <LoginConfirmPopup onConfirm={confirmLogin} onCancel={cancelLogin} />
+        )}
+
     </div>
     )
 }
