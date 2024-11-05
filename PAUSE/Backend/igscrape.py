@@ -103,9 +103,9 @@ def scrape_events():
         else:
             print(f"Post ID: {post.media_id} non ha didascalia.\n")
 
-    openai.api_key = "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"
+    openai.api_key = ""
 
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key="") #ask gabriele for key
     messages = [
         {"role": "system", "content": "You are a helpful assistant. You will find only date (in the format 'YYYY-MM-DD'), start_time, end_time, location, name (of the event), description (of the event) (if it is more than 200 char make a summary that it is under 200 char),  from a text that i will provide you. If you don't manage to find some of these information, put these default values: date: 2025-01-01 ,start_time = 09:00:00, end_time = 00:00:00, name= Scraped Event, description: no description available  . The output should have a dictionary structure. If the date of the event is more than one day, just provide the starting date."},
         {"role": "user", "content": caption_last_post},
