@@ -152,7 +152,7 @@ const FeedPage = () => {
         )}
 
         </div>
-        <Footer/>
+        {/* <Footer/> */}
         </>
     )
 }

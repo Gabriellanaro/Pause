@@ -61,7 +61,9 @@ function MapPage() {
       <Header/>
       {/* Mappa */}
       
-        <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '1000px', width: '80vw'}}>
+      <div style={{height:'80vh', overflowY: 'scroll', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+
+      <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '1000px', width: '80vw' }}>
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
             // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -82,8 +84,9 @@ function MapPage() {
             </Marker>
           ))}
         </MapContainer>
+      </div>  
       
-      <Footer/>
+      {/* <Footer/> */}
     </>
       
   )
