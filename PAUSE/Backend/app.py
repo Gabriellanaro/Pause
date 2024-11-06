@@ -91,7 +91,7 @@ def scrape_events():
         else:
             print(f"Post ID: {post.media_id} non ha didascalia.\n")
 
-    openai.api_key = "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"
+    openai.api_key = ""
 
     client = OpenAI(api_key=openai.api_key) # ask Gabriele for the api key
     messages = [
