@@ -50,6 +50,7 @@ class Event(db.Model):
     user_email = db.Column(
         db.String(200), db.ForeignKey("users.email"), nullable=False
     )  # Foreign key
+    media_id = db.Column(db.Integer, nullable=True) 
 
     def __repr__(self):
         return f"<Event {self.event_name}>"    
@@ -90,9 +91,9 @@ def scrape_events():
         else:
             print(f"Post ID: {post.media_id} non ha didascalia.\n")
 
-    openai.api_key = ""
+    openai.api_key = "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"
 
-    client = OpenAI(api_key="") # ask Gabriele for the api key
+    client = OpenAI(api_key=openai.api_key) # ask Gabriele for the api key
     messages = [
         {"role": "system", "content": "You are a helpful assistant. You will find only date (in the format 'YYYY-MM-DD'), start_time, end_time, location, name (of the event), description (of the event) (if it is more than 200 char make a summary that it is under 200 char),  from a text that i will provide you. If you don't manage to find some of these information, put these default values: date: 2025-01-01 ,start_time = 09:00:00, end_time = 00:00:00, name= Scraped Event, description: no description available  . The output should have a dictionary structure. If the date of the event is more than one day, just provide the starting date."},
         {"role": "user", "content": caption_last_post},
@@ -129,11 +130,12 @@ def scrape_events():
         event_location=event_location,
         user_email="user@example.com",  # Replace with actual user email or make it dynamic
         event_start_time=event_start_time,
-        event_end_time=event_end_time
+        event_end_time=event_end_time,
+        
     )
 
-    # Add the event to the session and commit
     with app.app_context():
+        # Add the event to the session and commit
         db.session.add(new_event)
         db.session.commit()
 
