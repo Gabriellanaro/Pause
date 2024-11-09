@@ -8,10 +8,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 const EventInFeedPage = ( { event }) => {
-  
+ 
   const user = useUser();
   const navigate = useNavigate();
-
   const userEmail = user.user ? user.user.email : null;
   // console.log(user.user);
   

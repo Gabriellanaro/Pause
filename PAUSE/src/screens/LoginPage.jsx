@@ -31,6 +31,9 @@ const LoginPage = () => {
         // console.log(result.user);
         setUser(result.user); // Set user in context
         navigate('/'); // Navigate to home page
+        // console.log(result.user);
+        setUser(result.user); // Set user in context
+        navigate('/'); // Navigate to home page
       })
       .catch((error) => {
         // Handle different types of errors

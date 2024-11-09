@@ -1,7 +1,10 @@
+
 /* eslint-disable no-unused-vars */
+// src/components/BackButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../App.css'; // Optional: Create a separate CSS file for styling
+import { FaArrowLeft } from 'react-icons/fa';  // Import the same icon
+import '../App.css';
 
 const BackButton = () => {
   const navigate = useNavigate();
@@ -12,7 +15,7 @@ const BackButton = () => {
 
   return (
     <button className="back-button" onClick={handleBackClick}>
-      &#8592;
+      <FaArrowLeft size={30} />
     </button>
   );
 };

@@ -18,7 +18,6 @@ function EventFormPage() {
     { value: 'Other', label: 'Other' },
   ];
   const [tagValue, setTagValue] = useState(tags[0].value); 
-
   const navigate = useNavigate();  // Initialize the useNavigate hook
   const [formData, setFormData] = useState({
     event_name: 'test name',
@@ -107,6 +106,7 @@ function EventFormPage() {
     //   formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
     // }
 
+
     try {
       const response = await fetch('http://localhost:5000/events', {
         method: 'POST',
@@ -135,6 +135,7 @@ function EventFormPage() {
 
       <form onSubmit={sendHttpRequest}>
         {/* Image Upload Field */}
+        <div>
         {/* <div>
           <label htmlFor="event_image">Upload your cover</label>
           <input
@@ -170,7 +171,7 @@ function EventFormPage() {
             required
           />
         </div>
-        
+      
         
         <div style={{ display: "flex", gap: "80px" }}>
           {tags.map((tag) => (
@@ -189,8 +190,7 @@ function EventFormPage() {
         </div>
 
 
-        {/* Date Inp
-        ut Field */}
+        {/* Date Input Field */}
         <div>
           <label htmlFor="event_date">Select Date</label>
           <input

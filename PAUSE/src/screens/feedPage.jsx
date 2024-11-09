@@ -5,19 +5,21 @@ import EventInFeedPage from "../components/eventInFeedPage";
 import { FaPlus } from 'react-icons/fa';
 import { useUser } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import HamburgerMenu from '../components/HamburgerMenu';
+import PopUpEvent from '../components/PopUpEvent'; // Import the PopUpEvent component
 import Header from '../components/Header';
 import LoginConfirmPopup from '../components/LoginConfirmPopup';
 import Footer from "../components/Footer";
 
 const FeedPage = () => {
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null); // State to manage selected event
+  const [showPopup, setShowPopup] = useState(false); // State to manage popup visibility
   const navigate = useNavigate();
   const user = useUser();
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = React.useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
   const [showLoginConfirm, setShowLoginConfirm] = useState(false); // Track logout confirmation popup
-
 
   // events in local to test in case we don't have access to the database
   const mockEvents = [
@@ -63,7 +65,8 @@ const FeedPage = () => {
     // image: 'path_to_image3.jpg',
     created_at: '2024-10-10 10:00:00',
   },
-]; 
+];
+
 
   useEffect(() => {
     // Simulate fetching or setting loading state
@@ -71,6 +74,24 @@ const FeedPage = () => {
       setLoading(false);
     }
   }, [user.user]); // Update loading state when user information changes
+
+  // Fetch events from the database
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/events'); // Ensure this matches your backend endpoint
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const rawText = await response.text(); // Read raw text of response
+        const data = JSON.parse(rawText || '{}'); // Handle empty or invalid JSON
+        setEvents(data.events);
+        setLoading(false); // Set loading to false after events are fetched
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false); // Set loading to false even if there is an error
+      }
+    };
 
   const handleAddEventClick = () => {
     console.log(user);
@@ -128,24 +149,36 @@ const FeedPage = () => {
             setLoading(false); // Set loading to false even if there is an error
           }
       };
+    fetchEvents();
+  }, []);
 
-      fetchEvents();
-    }, []);
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    setShowPopup(true);
+  };
 
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setSelectedEvent(null);
+  };
 
     return (
       
       <>
       <Header/>
       <div className="feed-container">
-        {events && events.length > 0 ? (
-          events.map((event, index) => (
-          <EventInFeedPage key={index} event={event} />
-          ))
-        ) : (
-          <p>No events found</p>
-        )}
-
+      {events && events.length > 0 ? (
+        events.map((event, index) => (
+          <div key={index} onClick={() => handleEventClick(event)}>
+            <EventInFeedPage event={event} />
+          </div>
+        ))
+      ) : (
+        <p>No events found</p>
+      )}
+      {showPopup && selectedEvent && (
+        <PopUpEvent event={selectedEvent} onClose={handleClosePopup} />
+      )}
         {/* Show Login Confirm Popup if the user is not logged in and tries to add an event */}
         {showLoginConfirm && (
           <LoginConfirmPopup onConfirm={confirmLogin} onCancel={cancelLogin} />

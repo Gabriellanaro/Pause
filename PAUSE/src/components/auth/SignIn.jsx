@@ -57,6 +57,7 @@ const SignIn = () => {
     };
 
     return (
+      <div className='sign-in-container'>
       <div className='login_body'>
         <div className="login_body">
             {isLoggedIn ? (
@@ -82,12 +83,15 @@ const SignIn = () => {
                 <div className="button-container">
                   <button className="sign-button" type='submit' style={{marginBottom:'10px'}}>Sign In</button>
                 </div>
+                <div className="button-container">
+                  <button className="sign-button" type='submit' style={{marginBottom:'10px'}}>Sign In</button>
+                </div>
             </form>
           )}
         </div>
             <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
       </div>
-
+  </div>
     )
 }
 
