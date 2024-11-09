@@ -1,20 +1,18 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
-import img from '../assets/img.jpg';
 import '../App.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-<<<<<<< Updated upstream
-=======
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { FaPlus } from 'react-icons/fa'; // Import FaPlus icon
 import { useUser } from '../contexts/UserContext';
->>>>>>> Stashed changes
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 
 
-// Configurazione per i marker della mappa
+// Configuration for the default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet/dist/images/marker-icon-2x.png',
@@ -22,7 +20,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet/dist/images/marker-shadow.png',
 });
 
-const center = [55.6867243, 12.5700724];
+const center = [55.6867243, 12.5700724]; // Copenhagen coordinates
 // const locations = [
 // //example locations, gabriel and ture's houses
 //   { id: 1, lat: 55.7291550, lng: 12.5706350, name: "Casa Gabriel" },
@@ -32,6 +30,7 @@ const center = [55.6867243, 12.5700724];
 
 function MapPage() {
 
+  const navigate = useNavigate(); // Create navigate function
   const [events, setEvents] = useState([]);
   const { user } = useUser(); // Access the user information
 
@@ -67,54 +66,37 @@ function MapPage() {
 
   return (
     <>
-<<<<<<< Updated upstream
-=======
-      <div className="feed-container">
-          <h1 className="feed-title">HOT IN COPENHAGEN</h1>
-          <button className="add-event-button" onClick={handleAddEventClick}>
-            <FaPlus className="add-icon" />
-          </button>
-
-          <div className="feed-controls">
-              <div className="tags">
-                  <button className="switchview-button" onClick={() => navigate('/map')}>
-                    Map View
-                  </button>
-                  <button className="switchview-button" onClick={() => navigate('/')}>
-                    Feed View
-                  </button>
-              </div>
-              <div className="tags">
-                  <span className="tag">Tag 1</span>
-                  <span className="tag">Tag 2</span>
-                  <span className="tag">Tag 3</span>
-              </div>
-        </div>
-      </div>
->>>>>>> Stashed changes
+      <Header/>
       {/* Mappa */}
-      <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '100vh', width: '100vh'}}>
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-          // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {events.map(event => (
-          <Marker
-            key={event.id}
-            position={[event.event_latitude, event.event_longitude]}
-            eventHandlers={{ click: handlePinClick }}>
+      
+      <div style={{height:'80vh', overflowY: 'scroll', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
 
-            <Popup >
-              <strong>{event.event_name}</strong>
-                <p>{event.event_description}</p>
-                <p>{`Date: ${event.event_date}`}</p>
-                <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
-              <div onClick={handlePinClick}></div>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+      <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '1000px', width: '80vw' }}>
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+            // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {events.map(event => (
+            <Marker
+              key={event.id}
+              position={[event.event_latitude, event.event_longitude]}
+              eventHandlers={{ click: handlePinClick }}>
+
+              <Popup >
+                <strong>{event.event_name}</strong>
+                  <p>{event.event_description}</p>
+                  <p>{`Date: ${event.event_date}`}</p>
+                  <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
+                <div onClick={handlePinClick}></div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </div>  
+      
+      {/* <Footer/> */}
     </>
+      
   )
 }
 

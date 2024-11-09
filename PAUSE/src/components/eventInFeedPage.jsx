@@ -1,14 +1,16 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
+import { useUser } from '../contexts/UserContext';
+import { FaPen } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+
 
 const EventInFeedPage = ( { event }) => {
-<<<<<<< Updated upstream
-=======
-  
+ 
   const user = useUser();
-
+  const navigate = useNavigate();
   const userEmail = user.user ? user.user.email : null;
   // console.log(user.user);
   
@@ -18,7 +20,6 @@ const EventInFeedPage = ( { event }) => {
   //     // You can return early, redirect, or set a state to show a message
   //     return <p>Please log in to see events.</p>; // Example of showing a message
   // }
->>>>>>> Stashed changes
 
   // Function to format the event date and time
   const formatEventDateTime = (event) => {
@@ -42,10 +43,8 @@ const EventInFeedPage = ( { event }) => {
 
     // Combine formatted date with starting and ending times
     const eventTime = `${formattedDate}, ${eventStartTime}h - ${eventEndTime}h`;
-
-    return eventTime;
-  };
-
+      return eventTime;
+    };
 
     const eventTime = formatEventDateTime(event);
 
@@ -54,27 +53,21 @@ const EventInFeedPage = ( { event }) => {
     const eventImage = event.event_image && event.event_image !== 'null' ? event.event_image : defaultImage;
 
     return (
-        <div className="event-container">
+    <div className="event-container">
       <img src={eventImage} alt={event.event_name} className="event-image" />
       <div className="event-details">
-        <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
-        <p className="event-title">{event.event_name}</p>
-        <p className="event-subtitle">{event.event_location}</p>
+      <p className="event-subtitle" style={{ fontSize: '1.8vw' }}>{eventTime}</p>
+      <p className="event-title">{event.event_name}</p>
+      <p className="event-subtitle">{event.event_location}</p>
+      <p className="event-subtitle" style={{fontSize: '0.8vw'}}>Created by: {event.user_email}</p>
       </div>
+      {userEmail === event.user_email && (
+        <button className='modify-button' onClick={() => navigate(`/edit-event/${event.id}`)}>
+        <FaPen /> 
+        </button>
+      )}  
     </div>
-  );
+    );
 };
-
-// EventInFeedPage.propTypes = {
-//   event: PropTypes.shape({
-//       event_date: PropTypes.string.isRequired,
-//       event_start_time: PropTypes.string.isRequired,
-//       event_end_time: PropTypes.string.isRequired,
-//       image: PropTypes.string.isRequired,
-//       event_title: PropTypes.string.isRequired,
-//       event_name: PropTypes.string.isRequired,
-//       event_location: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
 
 export default EventInFeedPage;

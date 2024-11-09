@@ -1,3 +1,5 @@
+
+/* eslint-disable no-unused-vars */
 // src/components/BackButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +10,7 @@ const BackButton = () => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    navigate('/'); // Navigate back to the FeedPage or previous page
+    navigate(-1); // Navigate back to the previous page
   };
 
   return (

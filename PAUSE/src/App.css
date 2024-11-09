@@ -45,6 +45,7 @@ body, html, #root {
 /* Event Container */
 
 .event-container {
+  position: relative;
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
@@ -98,6 +99,26 @@ body, html, #root {
   margin: 0.5rem 0;
   font-size: 1.3vw; /* Scales with viewport width */
   /* border: 1px solid #1fde85; */
+}
+
+.modify-button {
+  background-color: transparent;
+  color: #f3f3e3;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center; /* Center align items vertically */
+  gap: 8px;
+  position: absolute; /* Position the button absolutely */
+  top: 10px; /* Position it 10px from the top */
+  right: 10px; /* Position it 10px from the right */
+}
+
+.modify-button:hover {
+  background-color: rgba(25, 245, 73, 0.1); /* Add a slight background color on hover */
 }
 
 /* Media queries for larger screens */
@@ -194,6 +215,8 @@ body, html, #root {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
+  position: relative;
 }
 
  /* Centered header title */
@@ -418,12 +441,6 @@ nav {
   width: 100%;
 }
 
-
-.map-view {
-  font-size: 0.7em;
-  font-weight: 500;
-}
-
 .tags {
   display: flex;
   gap: 10px;
@@ -452,12 +469,16 @@ nav {
   color: #212121; /* Colore del testo bianco */
 }
 
+.switchview-button.active {
+  background-color: #fff5f5; /* Example active color */
+  color: black;
+  font-weight: bold;
+  /* Additional styles for the active button */
+}
+
 /*****************end feed control styles*************************/
 
 /*****************MAP styles********************************/
-<<<<<<< Updated upstream
-=======
-
 
 .map-container {
   height: 200vh; /* Full viewport height */
@@ -468,7 +489,23 @@ nav {
 
 
 /*****************BACK BUTTON********************************/
+.back-button {
+  color: #333;
+  background: none; /* No background */
+  border: none; /* No border */
+  padding: 10px; /* Padding for better click area */
+  font-size: 40px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  position: absolute; /* Position it absolutely */
+  left: 50px; /* Distance from the left side */
+  top: 50px; /* Distance from the top */
+}
 
+.back-button:hover {
+  background-color: #8444C4; /* Darker green on hover */
+  border: none;
+  border-radius: 15px;
+}
 /*****************end back button********************************/
 
 /*****************Log In Page********************************/
@@ -679,6 +716,7 @@ nav {
 
 /* ----------------- End Pop up log out -----------------------*/
 
+
 /* ----------------- Pop Up Event -----------------------*/
 
 .popup-overlay {
@@ -775,4 +813,63 @@ nav {
 }
 
 /* ----------------- End Pop Up Event -----------------------*/
->>>>>>> Stashed changes
+
+/* ------------------ FOOTER container -----------------------*/
+.footer {
+  background-color: #222;
+  color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.newsletter-section,
+.social-media-section,
+.contact-section {
+  max-width: 300px;
+  margin: 10px;
+}
+
+.footer h4 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.newsletter-form {
+  display: flex;
+}
+
+.newsletter-input {
+  padding: 8px;
+  border: none;
+  flex-grow: 1;
+  margin-right: 8px;
+}
+
+.newsletter-button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #f76c6c;
+  color: white;
+  cursor: pointer;
+}
+
+.social-icons a {
+  color: #f76c6c;
+  margin: 0 8px;
+  font-size: 1.4em;
+  text-decoration: none;
+}
+
+.footer-bottom {
+  margin-top: 20px;
+  font-size: 0.9em;
+}
+
+/* ------------------ END FOOTER container -----------------------*/

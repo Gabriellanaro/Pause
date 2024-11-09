@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
 import "../App.css";
-import BackButton from "../components/backButton";
+import BackButton from "../components/BackButton";
 
 function UserProfilePage() {
     const { user } = useUser(); // Access user data from context

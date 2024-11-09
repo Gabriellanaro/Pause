@@ -1,11 +1,23 @@
 /* eslint-disable no-unused-vars */
 // src/screens/EventFormPage.js
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate hook
-import { FaArrowLeft } from 'react-icons/fa';   // Import FontAwesome left arrow icon
+import BackButton from "../components/BackButton";
 import '../App.css';
+import { useUser } from "../contexts/UserContext";
 
 function EventFormPage() {
+  
+  const { user } = useUser();  // Get the user object from the UserContext
+
+  const tags = [
+    { value: 'Fleat Market', label: 'Flea Market' },
+    { value: 'Shop', label: 'Shop' },
+    { value: 'Garage Sale', label: 'Garage Sale' },
+    { value: 'Other', label: 'Other' },
+  ];
+  const [tagValue, setTagValue] = useState(tags[0].value); 
   const navigate = useNavigate();  // Initialize the useNavigate hook
   const [formData, setFormData] = useState({
     event_name: 'test name',
@@ -16,6 +28,8 @@ function EventFormPage() {
     event_location: 'via pippo',
     event_latitude: 0,
     event_longitude: 0,
+    user_email: user.email,
+    event_tag: tagValue,
   });
 
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
@@ -27,19 +41,22 @@ function EventFormPage() {
       [name]: value,
     });
 
+    console.log(name, value);
+
     // Fetch address suggestions
     if (name === 'event_location') {
       fetchSuggestions(value);
     }
   };
 
+
   // Handle image upload
-  const handleImageUpload = (e) => {
-    setFormData({
-      ...formData,
-      event_image: e.target.files[0],  // Get the uploaded file
-    });
-  };
+  // const handleImageUpload = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     event_image: e.target.files[0],  // Get the uploaded file
+  //   });
+  // };
 
   // Fetch address suggestions
   const fetchSuggestions = async (inputValue) => {
@@ -78,18 +95,6 @@ function EventFormPage() {
     e.preventDefault();  // Prevent form from reloading
 
     // Create form data to send the image and other details
-<<<<<<< Updated upstream
-    const formDataToSend = new FormData();
-    formDataToSend.append('event_name', formData.event_name);
-    formDataToSend.append('event_description', formData.event_description);
-    formDataToSend.append('event_date', formData.event_date);
-    formDataToSend.append('event_start_time', formData.event_start_time);
-    formDataToSend.append('event_end_time', formData.event_end_time);
-    formDataToSend.append('event_location', formData.event_location);
-    if (formData.event_image) {
-      formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
-    }
-=======
     // const formDataToSend = new FormData();
     // formDataToSend.append('event_name', formData.event_name);
     // formDataToSend.append('event_description', formData.event_description);
@@ -100,46 +105,38 @@ function EventFormPage() {
     // if (formData.event_image) {
     //   formDataToSend.append('event_image', formData.event_image);  // Append image if uploaded
     // }
->>>>>>> Stashed changes
+
 
     try {
       const response = await fetch('http://localhost:5000/events', {
         method: 'POST',
-<<<<<<< Updated upstream
-        body: formDataToSend,  // Send form data
-=======
         headers: {
         'Content-Type': 'application/json',  // Specify content type as JSON
       },
         body: JSON.stringify(formData),  // Send form data
->>>>>>> Stashed changes
       });
 
       const result = await response.json();
       console.log(result);
+      alert('Event created successfully!');
       navigate('/');  // Navigate back to the FeedPage after successful submission
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  // Back button functionality
-  const handleBackClick = () => {
-    navigate('/');  // Navigate back to the FeedPage
-  };
 
   return (
     <div className="form-screen">
       {/* Back button with arrow */}
-      <button onClick={handleBackClick} className="back-button">
-        <FaArrowLeft size={30} />
-      </button>
+      <BackButton/>
 
       <h2 className="header-title">Tell us more about your event</h2>
 
       <form onSubmit={sendHttpRequest}>
         {/* Image Upload Field */}
         <div>
+        {/* <div>
           <label htmlFor="event_image">Upload your cover</label>
           <input
             type="file"
@@ -148,7 +145,7 @@ function EventFormPage() {
             onChange={handleImageUpload}
             className="image-upload"
           />
-        </div>
+        </div> */}
 
         {/* Input Fields with Placeholders */}
         <div>
@@ -174,7 +171,26 @@ function EventFormPage() {
             required
           />
         </div>
+      
+        
+        <div style={{ display: "flex", gap: "80px" }}>
+          {tags.map((tag) => (
+            <div key={tag.value} style={{ display: "flex", alignItems: "center", gap: "5px", whiteSpace: "nowrap" }}>
+              <input
+                type="radio"
+                id={tag.value}
+                name="event_tag"
+                value={tag.value}
+                checked={formData.event_tag === tag.value}
+                onChange={handleChange}
+              />
+              <label htmlFor={tag.value}>{tag.label}</label>
+            </div>
+          ))}
+        </div>
 
+
+        {/* Date Input Field */}
         <div>
           <label htmlFor="event_date">Select Date</label>
           <input

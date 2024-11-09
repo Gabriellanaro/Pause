@@ -32,15 +32,12 @@ const AuthDetails = () => {
                 <p>Welcome, {user.displayName ? user.displayName : user.email}</p>
                 {/* <button onClick={userSignOut}>Sign Out</button> */}
             </div>
-<<<<<<< Updated upstream
           ) : (
             <p>No user is signed in</p>
           )}
-=======
             ) : (
                 console.log('No user logged in')
             )}
->>>>>>> Stashed changes
         </div>
       );
 }

@@ -28,7 +28,7 @@ const SignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 console.log(userCredential)
-                navigate('/map');
+                navigate('/');
             })
             .catch((error) => {
                 // Handle different types of errors
@@ -57,9 +57,7 @@ const SignIn = () => {
     };
 
     return (
-<<<<<<< Updated upstream
-        <div className='sign-in-container'>
-=======
+      <div className='sign-in-container'>
       <div className='login_body'>
         <div className="login_body">
             {isLoggedIn ? (
@@ -68,9 +66,8 @@ const SignIn = () => {
                     <button onClick={handleSignOut} className="sign-button" style={{height: '5vh', width: '15vw'}}>Sign Out</button>
                 </div>
             ) : (
->>>>>>> Stashed changes
             <form onSubmit={handleSignIn}>
-                <h1 style={{ color: 'white' }}>Log In</h1>
+                <p className='header-title' style={{ textAlign: 'center', color: 'white' }}>Log In</p>
                 <input className='input'
                     type='email'
                     placeholder='Email'
@@ -83,19 +80,18 @@ const SignIn = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}>
                 </input>
-<<<<<<< Updated upstream
-                <button type='submit'>Sign In</button>
-=======
                 <div className="button-container">
                   <button className="sign-button" type='submit' style={{marginBottom:'10px'}}>Sign In</button>
                 </div>
->>>>>>> Stashed changes
+                <div className="button-container">
+                  <button className="sign-button" type='submit' style={{marginBottom:'10px'}}>Sign In</button>
+                </div>
             </form>
           )}
         </div>
             <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
       </div>
-
+  </div>
     )
 }
 
