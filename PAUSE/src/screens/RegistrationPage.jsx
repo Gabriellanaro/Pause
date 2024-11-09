@@ -51,7 +51,7 @@ function UserRegistrationPage() {
       return;
     }
     try {
-      console.log(formData); // You can handle your registration logic here
+      // console.log(formData);
 
       const response = await fetch('http://127.0.0.1:5000/users', {
         method: 'POST',

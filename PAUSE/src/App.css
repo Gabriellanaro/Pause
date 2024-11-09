@@ -302,9 +302,9 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
 }
 
-/* Styling for the Back button */
+/* Styling for the Back button
 .back-button {
-  background-color: #8444C4; /* Purple background */
+  background-color: #8444C4; /* Purple background
   color: white;
   border: none;
   cursor: pointer;
@@ -316,13 +316,14 @@ input:focus, select:focus, textarea:focus {
 }
 
 .back-button:hover {
-  background-color: #6a2e99; /* Slightly darker on hover */
+  background-color: #6a2e99;
 }
 
 .back-button svg {
-  color:#60ECAA; /* Make sure the arrow icon is white */
+  color:#60ECAA;
   display: block;
-}
+} 
+*/
 
 .error-popup {
   position: fixed;

@@ -19,10 +19,19 @@ function EventFormPage() {
   ];
   const [tagValue, setTagValue] = useState(tags[0].value); 
   const navigate = useNavigate();  // Initialize the useNavigate hook
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const [formData, setFormData] = useState({
     event_name: 'test name',
     event_description: 'beautiful clothes',
-    event_date: '2024-10-12',
+    event_date: getTodayDate(),
     event_start_time: '10:00',
     event_end_time: '14:01',
     event_location: 'via pippo',
@@ -135,7 +144,6 @@ function EventFormPage() {
 
       <form onSubmit={sendHttpRequest}>
         {/* Image Upload Field */}
-        <div>
         {/* <div>
           <label htmlFor="event_image">Upload your cover</label>
           <input
@@ -211,6 +219,7 @@ function EventFormPage() {
               placeholder="Select Starting Time"
               value={formData.event_start_time}
               onChange={handleChange}
+              step={300}
               required
             />
           </div>
@@ -222,6 +231,7 @@ function EventFormPage() {
               placeholder="Select Closing Time"
               value={formData.event_end_time}
               onChange={handleChange}
+              step={300}
               required
             />
           </div>

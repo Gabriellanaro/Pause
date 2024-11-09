@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import { auth, provider } from '../../Firebase/firebase'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ErrorPopup from '../errorPopUp/ErrorPopUp';
 import '../../App.css';
 
@@ -13,15 +14,26 @@ const SignIn = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
+  // Monitor auth state changes
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(!!user);
+      if (user) {
+        // Check if the user came from the event creation page (popup flow)
+        const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
+        if (redirectAfterLogin === 'true') {
+          navigate('/event-form');
+          localStorage.removeItem('redirectAfterLogin'); // Clear flag after redirect
+        } else {
+          navigate('/');
+        }
+      }
+    });
+    return () => unsubscribe();  // Clean up listener
+  }, [navigate]);
   
-    useEffect(() => {
-      // Monitor auth state changes
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-          setIsLoggedIn(!!user);
-      });
-      return () => unsubscribe();  // Clean up listener
-    }, []);
   
     const handleSignIn = (e) => {
         e.preventDefault();
@@ -80,9 +92,6 @@ const SignIn = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}>
                 </input>
-                <div className="button-container">
-                  <button className="sign-button" type='submit' style={{marginBottom:'10px'}}>Sign In</button>
-                </div>
                 <div className="button-container">
                   <button className="sign-button" type='submit' style={{marginBottom:'10px'}}>Sign In</button>
                 </div>

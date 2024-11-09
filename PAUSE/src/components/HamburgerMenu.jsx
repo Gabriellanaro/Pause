@@ -14,7 +14,7 @@ const HamburgerMenu = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // Track logout confirmation popup
 
-    const userName = user.user ? user.user.name : 'Guest';
+    const userName = user.user ? user.user.email : 'Guest';
 
     // Toggle menu open/close
     const toggleMenu = () => setIsOpen(!isOpen);

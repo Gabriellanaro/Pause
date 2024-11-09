@@ -4,21 +4,33 @@ import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocati
 import { FaPlus } from 'react-icons/fa'; // Import FaPlus icon
 import { useUser } from '../contexts/UserContext';
 import HamburgerMenu from '../components/HamburgerMenu';
+import LoginConfirmPopup from '../components/LoginConfirmPopup';
 import '../app.css';
 
 const Header = () => {
     const { user } = useUser(); // Get the user object from the UserContext
     const navigate = useNavigate(); // Create navigate function
     const location = useLocation(); // Get the current location
+    const [showLoginConfirm, setShowLoginConfirm] = useState(false); // Track logout confirmation popup
 
     const handleAddEventClick = () => {
         console.log(user);
         if (user) {
           navigate('/event-form'); // Navigate to event form if user is logged in
-        } else {
-          navigate('/login'); // Navigate to login page if user is not logged in
+        } else if(user === null) {
+          setShowLoginConfirm(true);
         }
-    };
+      };
+    
+      const confirmLogin = () => {
+        setShowLoginConfirm(false);  // Hide confirmation popup
+        localStorage.setItem('redirectAfterLogin', 'true');
+        navigate('/login');
+      }
+  
+      const cancelLogin = () => {
+        setShowLoginConfirm(false);  // Hide confirmation popup
+      }
 
     return (
         <div>
@@ -50,7 +62,12 @@ const Header = () => {
                     <span className="tag">Tag 3</span>
                 </div>
             </div>
+            {/* Show Login Confirm Popup if the user is not logged in and tries to add an event */}
+            {showLoginConfirm && (
+                <LoginConfirmPopup onConfirm={confirmLogin} onCancel={cancelLogin} />
+            )}
         </div>
+
     );
 }
 

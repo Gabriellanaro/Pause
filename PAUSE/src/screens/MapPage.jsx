@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import '../App.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { FaPlus } from 'react-icons/fa'; // Import FaPlus icon
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -48,16 +47,7 @@ function MapPage() {
   //to load the events when the page is loaded
   useEffect(() => {
     fetchEvents();
-  }, [user.user]);
-
-  const handleAddEventClick = () => {
-    console.log(user);
-    if (user) {
-      navigate('/event-form'); // Navigate to event form if user is logged in
-    } else {
-      navigate('/login'); // Navigate to login page if user is not logged in
-    }
-  };
+  }, [user]);
 
   const handlePinClick = () => {
     console.log('Popup clicked!');
