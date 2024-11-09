@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy import Enum
 
 app = Flask(__name__)
 
@@ -38,6 +39,10 @@ class Event(db.Model):
     user_email = db.Column(
         db.String(200), db.ForeignKey("users.email"), nullable=False
     )  # Foreign key
+    event_tag = db.Column(
+        Enum("Shop", "Flea Market", "Garage Sale", "Other", name="event_tag"),
+        nullable=False,
+    )
 
     def __repr__(self):
         return f"<Event {self.event_name}>"    
@@ -58,6 +63,7 @@ def format_event(event):
         "event_longitude": event.event_longitude,
         "created_at": event.created_at,
         "user_email": event.user_email,
+        "event_tag": event.event_tag,
     }
 
 
@@ -151,6 +157,7 @@ def update_event(id):
     event_location = request.json.get("event_location", event.event_location)
     event_latitude = request.json.get("event_latitude", event.event_latitude)
     event_longitude = request.json.get("event_longitude", event.event_longitude)
+    event_tag = request.json.get("event_tag", event.event_tag)
 
     # Update the event attributes
     event.event_name = event_name
@@ -161,6 +168,7 @@ def update_event(id):
     event.event_location = event_location
     event.event_latitude = event_latitude
     event.event_longitude = event_longitude
+    event.event_tag = event_tag
 
     # Commit the changes to the database
     db.session.commit()
@@ -194,6 +202,7 @@ def create_event():
         event_latitude=data.get("event_latitude"),
         event_longitude=data.get("event_longitude"),
         user_email=user_email,  # Store the user email for reference
+        event_tag=data.get("event_tag"),
     )
 
     db.session.add(event)  # add event to the session

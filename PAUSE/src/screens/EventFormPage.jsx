@@ -11,6 +11,14 @@ function EventFormPage() {
   
   const { user } = useUser();  // Get the user object from the UserContext
 
+  const tags = [
+    { value: 'Fleat Market', label: 'Flea Market' },
+    { value: 'Shop', label: 'Shop' },
+    { value: 'Garage Sale', label: 'Garage Sale' },
+    { value: 'Other', label: 'Other' },
+  ];
+  const [tagValue, setTagValue] = useState(tags[0].value); 
+
   const navigate = useNavigate();  // Initialize the useNavigate hook
   const [formData, setFormData] = useState({
     event_name: 'test name',
@@ -21,7 +29,8 @@ function EventFormPage() {
     event_location: 'via pippo',
     event_latitude: 0,
     event_longitude: 0,
-    user_email: user.email
+    user_email: user.email,
+    event_tag: tagValue,
   });
 
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
@@ -32,6 +41,8 @@ function EventFormPage() {
       ...formData,
       [name]: value,
     });
+
+    console.log(name, value);
 
     // Fetch address suggestions
     if (name === 'event_location') {
@@ -159,7 +170,27 @@ function EventFormPage() {
             required
           />
         </div>
+        
+        
+        <div style={{ display: "flex", gap: "80px" }}>
+          {tags.map((tag) => (
+            <div key={tag.value} style={{ display: "flex", alignItems: "center", gap: "5px", whiteSpace: "nowrap" }}>
+              <input
+                type="radio"
+                id={tag.value}
+                name="event_tag"
+                value={tag.value}
+                checked={formData.event_tag === tag.value}
+                onChange={handleChange}
+              />
+              <label htmlFor={tag.value}>{tag.label}</label>
+            </div>
+          ))}
+        </div>
 
+
+        {/* Date Inp
+        ut Field */}
         <div>
           <label htmlFor="event_date">Select Date</label>
           <input
