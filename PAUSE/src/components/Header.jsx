@@ -22,15 +22,15 @@ const Header = () => {
         }
       };
     
-      const confirmLogin = () => {
+    const confirmLogin = () => {
         setShowLoginConfirm(false);  // Hide confirmation popup
         localStorage.setItem('redirectAfterLogin', 'true');
         navigate('/login');
-      }
+    };
   
-      const cancelLogin = () => {
+    const cancelLogin = () => {
         setShowLoginConfirm(false);  // Hide confirmation popup
-      }
+    };
 
     return (
         <div>

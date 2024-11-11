@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import Enum
+from flask_cors import cross_origin
 
 app = Flask(__name__)
 
@@ -118,7 +119,8 @@ def get_event(id):
 
 
 # Delete an event
-@app.route("/events/<id>", methods=["DELETE"])
+@app.route("/events_delete/<id>", methods=["DELETE"])
+@cross_origin(methods=["DELETE"])
 def delete_event(id):
     # Query the event by id
     event = Event.query.filter_by(id=id).one()
@@ -132,14 +134,11 @@ def delete_event(id):
 
 
 # Update an event
-@app.route("/events/<id>", methods=["PUT", "OPTIONS"])
+@app.route("/events_update/<id>", methods=["PUT", "OPTIONS"])
+@cross_origin(methods=["PUT"])
 def update_event(id):
-    print("ID:", id)
-    if request.method == "OPTIONS":
-        # Allow the browser to know what methods are allowed
-        return "", 200
 
-    elif request.method == "PUT":  # Get the event by id
+    if request.method == "PUT":  # Get the event by id
         event = Event.query.get(id)  # Prefer .get() for a single record by primary key
         print(event)
         if not event:
@@ -157,6 +156,7 @@ def update_event(id):
     event_location = request.json.get("event_location", event.event_location)
     event_latitude = request.json.get("event_latitude", event.event_latitude)
     event_longitude = request.json.get("event_longitude", event.event_longitude)
+    event_user_email = request.json.get("user_email", event.user_email)
     event_tag = request.json.get("event_tag", event.event_tag)
 
     # Update the event attributes
@@ -168,6 +168,7 @@ def update_event(id):
     event.event_location = event_location
     event.event_latitude = event_latitude
     event.event_longitude = event_longitude
+    event.user_email = event_user_email
     event.event_tag = event_tag
 
     # Commit the changes to the database
@@ -175,21 +176,14 @@ def update_event(id):
 
     return jsonify({"event": format_event(event)}), 200  # Return the updated event
 
+
 # Create a new event
 @app.route("/events", methods=["POST"])
 def create_event():
     data = request.json  # retrieve data in json format from the request body
-    print(data)
-    event_name = data.get("event_name")  # get the value of the key "event_name" from the json data
-    event_description = data.get("event_description")  
-    event_date = data.get("event_date") 
-    event_start_time = data.get("event_start_time")
-    event_end_time = data.get("event_end_time")
-    event_location = data.get("event_location")
-    event_latitude = data.get("event_latitude")
-    event_longitude = data.get("event_longitude")
 
     print("DATA:", data)
+
     user_email = data.get(
         "user_email"
     )  # get the value of the key "user_email" from the json data

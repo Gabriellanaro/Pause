@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';  // Import useNavigate hook
 import BackButton from "../components/BackButton";
+import { MdDeleteOutline } from "react-icons/md";
 import '../App.css';
 import { useUser } from "../contexts/UserContext";
 import { useEffect } from 'react';
+import DeleteConfirmPopup from '../components/DeleteConfirmPopup';
 
 function EditEventPage() {
   
@@ -120,11 +122,9 @@ function EditEventPage() {
       ...formData,
       event_date: formatDate(formData.event_date),  // Ensure event_date is formatted correctly
     };
-    console.log('Form data:', updatedFormData);
-    // console.log(`Fetching from: http://127.0.0.1:5000/events/${eventId}`);
-
+    // console.log('Form data:', updatedFormData);
     try {
-      const response = await fetch(`http://127.0.0.1:5000/events/${eventId}`, {
+      const response = await fetch(`http://localhost:5000/events_update/${eventId}`, {
         method: 'PUT',  // Use PUT method to update the event
         headers: {
         'Content-Type': 'application/json',  // Specify content type as JSON
@@ -156,7 +156,34 @@ function EditEventPage() {
 
     // Return the formatted date
     return `${year}-${month}-${day}`;  // Returns in the format yyyy-MM-dd
-}
+  }
+  
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);  // Track delete confirmation popup
+
+  const handleDelete = () => {
+    setShowDeleteConfirm(true);  // Show confirmation popup
+  }
+
+  const confirmDelete = async () => {
+    setShowDeleteConfirm(false);  // Hide confirmation popup
+    try {
+      const response = await fetch(`http://localhost:5000/events_delete/${eventId}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        navigate('/');
+      } else {
+        console.error('Error deleting event:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+    navigate('/');
+  }
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);  // Hide confirmation popup
+  }
 
   return (
     <div className="form-screen">
@@ -170,6 +197,10 @@ function EditEventPage() {
 
           <h2 className="header-title">Edit your event</h2>
 
+          <button className="delete-button" style={{ float: 'right'
+}} onClick={handleDelete}>
+          <MdDeleteOutline /> Delete Event
+          </button>
           <form onSubmit={handleSubmit}>
             {/* Input Fields with Placeholders */}
             <div>
@@ -255,8 +286,14 @@ function EditEventPage() {
 
             <button type="submit" className="save-button">Save</button>
           </form>
-        </>
+          </>
       )}
+
+      {/* Show Delete Confirm Popup */}
+        {showDeleteConfirm && (
+          <DeleteConfirmPopup onConfirm={confirmDelete} onCancel={cancelDelete} />
+      )}
+      
     </div>
       );
 }

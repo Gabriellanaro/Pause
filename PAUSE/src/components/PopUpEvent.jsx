@@ -6,9 +6,16 @@ import React from 'react';
 import '../App.css';
 
 const PopUpEvent = ({ event, onClose }) => {
+
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains('popup-overlay')) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="popup-overlay">
-      <div className="popup-content">
+    <div className="popup-overlay" onClick={handleOverlayClick}>
+      <div className="popup-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>
           <svg
             stroke="currentColor"
@@ -44,7 +51,7 @@ const PopUpEvent = ({ event, onClose }) => {
         
         <p className="popup-description">{event.event_description}</p>
         
-        <p className="popup-creator">Created by: {event.user_name}</p>
+        <p className="popup-creator">Created by: {event.user_email}</p>
         
         <div className="tags">
           {event.tags && event.tags.map((tag, index) => (

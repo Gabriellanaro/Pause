@@ -4,15 +4,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate hook
 import BackButton from "../components/BackButton";
-import '../App.css';
 import { useUser } from "../contexts/UserContext";
+import '../App.css';
 
 function EventFormPage() {
   
   const { user } = useUser();  // Get the user object from the UserContext
 
   const tags = [
-    { value: 'Fleat Market', label: 'Flea Market' },
+    { value: 'Flea Market', label: 'Flea Market' },
     { value: 'Shop', label: 'Shop' },
     { value: 'Garage Sale', label: 'Garage Sale' },
     { value: 'Other', label: 'Other' },
@@ -219,7 +219,7 @@ function EventFormPage() {
               placeholder="Select Starting Time"
               value={formData.event_start_time}
               onChange={handleChange}
-              step={300}
+              step="900"
               required
             />
           </div>
@@ -231,7 +231,7 @@ function EventFormPage() {
               placeholder="Select Closing Time"
               value={formData.event_end_time}
               onChange={handleChange}
-              step={300}
+              step="900"
               required
             />
           </div>

@@ -874,3 +874,37 @@ nav {
 }
 
 /* ------------------ END FOOTER container -----------------------*/
+
+/* ------------------ Delete button -----------------------*/
+.delete-button {
+  background-color: #ff4d4d; /* Rosso pericolo */
+  color: white; /* Colore del testo */
+  border: none;
+  border-radius: 5px; /* Angoli arrotondati */
+  padding: 10px 15px; /* Spaziatura interna */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s; /* Effetti di transizione */
+}
+
+/* Hover effect per cambiare colore e dare feedback */
+.delete-button:hover {
+  background-color: #e60000; /* Colore leggermente più scuro */
+  transform: scale(1.05); /* Leggera crescita */
+}
+
+/* Effetto click */
+.delete-button:active {
+  background-color: #cc0000; /* Colore più scuro durante il click */
+  transform: scale(0.98); /* Rimpicciolisce leggermente */
+}
+
+/* Se necessario per disabilitare il pulsante */
+.delete-button:disabled {
+  background-color: #ffcccc; /* Colore più chiaro per il disabilitato */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ------------------ END Delete button -----------------------*/
