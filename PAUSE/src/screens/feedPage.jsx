@@ -2,11 +2,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import '../App.css';
 import EventInFeedPage from "../components/eventInFeedPage";
-import { FaPlus } from 'react-icons/fa';
 import { useUser } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from '../components/HamburgerMenu';
-import PopUpEvent from '../components/PopUpEvent'; // Import the PopUpEvent component
+import PopUpEvent from '../components/PopUpEvent';
 import Header from '../components/Header';
 import Footer from "../components/Footer";
 
@@ -74,27 +72,25 @@ const FeedPage = () => {
     }
   }, [user.user]); // Update loading state when user information changes
 
-  // Fetch events from the database
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:5000/events'); // Ensure this matches your backend endpoint
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const rawText = await response.text(); // Read raw text of response
-        const data = JSON.parse(rawText || '{}'); // Handle empty or invalid JSON
-        setEvents(data.events);
-        setLoading(false); // Set loading to false after events are fetched
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(false); // Set loading to false even if there is an error
-      }
-    }
-  });
+  // // Fetch events from the database
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     try {
+  //       const response = await fetch('http://127.0.0.1:5000/events'); // Ensure this matches your backend endpoint
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       const rawText = await response.text(); // Read raw text of response
+  //       const data = JSON.parse(rawText || '{}'); // Handle empty or invalid JSON
+  //       setEvents(data.events);
+  //       setLoading(false); // Set loading to false after events are fetched
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //       setLoading(false); // Set loading to false even if there is an error
+  //     }
+  //   }
+  // });
   
-
-
 
     // const userProfile = () => {
     //   navigate('/'); // Redirect to the UserProfilePage

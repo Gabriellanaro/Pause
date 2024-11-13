@@ -2,13 +2,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import '../App.css';
 import EventInFeedPage from "../components/eventInFeedPage";
-import { FaPlus } from 'react-icons/fa';
 import { useUser } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from '../components/HamburgerMenu';
+import PopUpEvent from '../components/PopUpEvent';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const YourEventsPage = () => {
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null); // State to manage selected event
+  const [showPopup, setShowPopup] = useState(false); // State to manage popup visibility
   const navigate = useNavigate();
   const user = useUser();
   const [loading, setLoading] = React.useState(true);
@@ -29,56 +32,62 @@ const YourEventsPage = () => {
     }
   };
     
-    //FETCH USER EVENTS FROM THE DATABASE
-    useEffect(() => {
-      const fetchEvents = async () => {
-          try {
-              console.log(user.user.email);
-              const response = await fetch('http://127.0.0.1:5000/events/user/' + user.user.email); // Assicurati che questo corrisponda al tuo endpoint backend
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
+   //FETCH EVENTS FROM THE DATABASE
+   useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/events/user/' + user.user.email); // Assicurati che questo corrisponda al tuo endpoint backend
+        // console.log(response);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const rawText = await response.text(); // Read raw text of response
+   
+        // If the response body is empty or not JSON, log it
+        const data = JSON.parse(rawText || '{}');  // Handle empty or invalid JSON
+        
+        // Get today's date at 00:00:00
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // filter past events and sort by date and time
+        const filteredAndSortedEvents = data.events
+          .filter(event => new Date(event.event_date) >= today)  // Filter out past events
+          // .filter(event => new Date(event.event_date) >= today) 
+          .sort((a, b) => {
+            const dateA = new Date(a.event_date);
+            const dateB = new Date(b.event_date);
+            if (dateA.getTime() === dateB.getTime()) {
+              return new Date(`1970-01-01T${a.event_start_time}`) - new Date(`1970-01-01T${b.event_start_time}`);
             }
-            const rawText = await response.text(); // Read raw text of response
-     
-            // If the response body is empty or not JSON, log it
-            const data = JSON.parse(rawText || '{}');  // Handle empty or invalid JSON
+            return dateA - dateB;
+          });
 
-            setEvents(data.events); 
-            setLoading(false); // Set loading to false after events are fetched
+        setEvents(filteredAndSortedEvents); // Set events state to the fetched events
+        setLoading(false); // Set loading to false after events are fetched
 
-          } catch (error) {
-            console.error('Error fetching data:', error);
-            setLoading(false); // Set loading to false even if there is an error
-          }
-      };
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false); // Set loading to false even if there is an error
+      }
+    };
+    fetchEvents();
+  }, []);
 
-      fetchEvents();
-    }, [user]);
+  const handleEventClick = (event) => {
+      setSelectedEvent(event);
+      setShowPopup(true);
+    };
 
+    const handleClosePopup = () => {
+      setShowPopup(false);
+      setSelectedEvent(null);
+    };
 
     return (
-      <div className="feed-container">
-        <HamburgerMenu />
-        <h1 className="feed-title">YOUR HOT EVENTS</h1>
-        <button className="add-event-button" onClick={handleAddEventClick}>
-          <FaPlus className="add-icon" />
-        </button>
-        <div className="feed-controls">
-            <div className="tags">
-                <button className="switchview-button" onClick={() => navigate('/your-events-map')}>
-                  Map View
-                </button>
-                <button className="switchview-button" onClick={() => navigate('/your-events')}>
-                  Feed View
-                </button>
-            </div>
-            <div className="tags">
-                <span className="tag">Tag 1</span>
-                <span className="tag">Tag 2</span>
-                <span className="tag">Tag 3</span>
-            </div>
-        </div>
-        
+      <>
+      <Header/>
+      
         {events && events.length > 0 ? (
           events.map((event, index) => (
           <EventInFeedPage key={index} event={event} />
@@ -86,7 +95,10 @@ const YourEventsPage = () => {
         ) : (
           <p>No events found</p>
         )}
-    </div>
+        {showPopup && selectedEvent && (
+            <PopUpEvent event={selectedEvent} onClose={handleClosePopup} />
+        )}
+      </>
     )
 }
 

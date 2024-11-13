@@ -179,6 +179,7 @@ def update_event(id):
 
 # Create a new event
 @app.route("/events", methods=["POST"])
+@cross_origin(methods=["POST"])
 def create_event():
     data = request.json  # retrieve data in json format from the request body
 
