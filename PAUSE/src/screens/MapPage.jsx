@@ -94,6 +94,7 @@ function MapPage() {
           // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         {events.map(event => (
+          event.event_latitude && event.event_longitude ? (
           <Marker
             key={event.id}
             position={[event.event_latitude, event.event_longitude]}
@@ -107,6 +108,7 @@ function MapPage() {
               <div onClick={handlePinClick}></div>
             </Popup>
           </Marker>
+        ) : null
         ))}
       </MapContainer>
     </>

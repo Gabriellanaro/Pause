@@ -50,7 +50,7 @@ class Event(db.Model):
     user_email = db.Column(
         db.String(200), db.ForeignKey("users.email"), nullable=False
     )  # Foreign key
-    media_id = db.Column(db.Integer, nullable=True) 
+    media_id = db.Column(db.String(200), nullable=True) 
 
     def __repr__(self):
         return f"<Event {self.event_name}>"    
@@ -81,67 +81,69 @@ def scrape_events():
     loader.login('icoliandro', 'Pause2024')        # (login)
 
     #list of the profiles to be scraped
-    profile_name = 'frederiksbergloppemarked' 
-    profile = instaloader.Profile.from_username(loader.context, profile_name)
+    profile_names = ['frederiksbergloppemarked', 'icoliandro'] 
+    for profile_name in profile_names:
+        profile = instaloader.Profile.from_username(loader.context, profile_name)
 
-    for post in profile.get_posts():
-        if post.caption:  # check if caption is empty
-            caption_last_post = post.caption
-            break # get only the first post
-        else:
-            print(f"Post ID: {post.media_id} non ha didascalia.\n")
+        for post in profile.get_posts():
+            if post.caption:  # check if caption is empty
+                caption_last_post = post.caption
+                break # get only the first post
+            else:
+                print(f"Post ID: {post.shortcode} non ha didascalia.\n")
 
-    openai.api_key = ""
+        with app.app_context():
+            existing_event = Event.query.filter_by(media_id=post.shortcode).first()
+            if existing_event is None:
+                openai.api_key = ""
 
-    client = OpenAI(api_key=openai.api_key) # ask Gabriele for the api key
-    messages = [
-        {"role": "system", "content": "You are a helpful assistant. You will find only date (in the format 'YYYY-MM-DD'), start_time, end_time, location, name (of the event), description (of the event) (if it is more than 200 char make a summary that it is under 200 char),  from a text that i will provide you. If you don't manage to find some of these information, put these default values: date: 2025-01-01 ,start_time = 09:00:00, end_time = 00:00:00, name= Scraped Event, description: no description available  . The output should have a dictionary structure. If the date of the event is more than one day, just provide the starting date."},
-        {"role": "user", "content": caption_last_post},
-    ]
+                client = OpenAI(api_key=openai.api_key) # ask Gabriele for the api key
+                messages = [
+                    {"role": "system", "content": "You are a helpful assistant. You will find only date (in the format 'YYYY-MM-DD'), start_time, end_time, location, name (of the event), description (of the event) (if it is more than 200 char make a summary that it is under 200 char),  from a text that i will provide you. If you don't manage to find some of these information, put these default values: date: 2025-01-01 ,start_time = 09:00:00, end_time = 00:00:00, name=Scraped Event, description: no description available  . The output should have a dictionary structure. If the date of the event is more than one day, just provide the starting date."},
+                    {"role": "user", "content": caption_last_post},
+                ]
 
-    response=client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=messages,
-        temperature=0.5,
-    )
-    # Parse the response as JSON
-    event_data = response.choices[0].message.content
-    print(event_data)
-    event_info = eval(event_data)  # Be cautious with eval, consider safer alternatives like json.loads if possible
+                response=client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages,
+                    temperature=0.5,
+                )
+                # Parse the response as JSON
+                event_data = response.choices[0].message.content
+                print(event_data)
+                event_info = eval(event_data)  # Be cautious with eval, consider safer alternatives like json.loads if possible
 
-    # Extract the information
-    event_name = event_info.get("name")
-    event_description = event_info.get("description")
-    event_location = event_info.get("location")
-    event_date_str = event_info.get("date")  # Assuming 'start_time' includes the date
-    event_start_time = event_info.get("start_time")
-    event_end_time = event_info.get("end_time")
+                # Extract the information
+                event_name = event_info.get("name")
+                event_description = event_info.get("description")
+                event_location = event_info.get("location")
+                event_date_str = event_info.get("date")  # Assuming 'start_time' includes the date
+                event_start_time = event_info.get("start_time")
+                event_end_time = event_info.get("end_time")
 
-    # Convert event_date_str to a date object (consider parsing the date format correctly)
-    event_date = datetime.strptime(event_date_str, '%Y-%m-%d').date()  # Adjust the date format as necessary
-    event_start_time = datetime.strptime(event_start_time, '%H:%M:%S').time()  # Modifica il formato se necessario
-    event_end_time = datetime.strptime(event_end_time, '%H:%M:%S').time() 
+                # Convert event_date_str to a date object (consider parsing the date format correctly)
+                event_date = datetime.strptime(event_date_str, '%Y-%m-%d').date()  # Adjust the date format as necessary
+                event_start_time = datetime.strptime(event_start_time, '%H:%M:%S').time()  # Modifica il formato se necessario
+                event_end_time = datetime.strptime(event_end_time, '%H:%M:%S').time() 
 
-    # Create a new event instance
-    new_event = Event(
-        event_name=event_name,
-        event_description=event_description,
-        event_date=event_date,
-        event_location=event_location,
-        user_email="user@example.com",  # Replace with actual user email or make it dynamic
-        event_start_time=event_start_time,
-        event_end_time=event_end_time,
-        
-    )
+                # Create a new event instance
+                new_event = Event(
+                    event_name=event_name,
+                    event_description=event_description,
+                    event_date=event_date,
+                    event_location=event_location,
+                    user_email="user@example.com",  # Replace with actual user email or make it dynamic
+                    event_start_time=event_start_time,
+                    event_end_time=event_end_time,
+                    media_id=post.shortcode,
+                )
+                # Add the event to the session and commit
+                db.session.add(new_event)
+                db.session.commit()
 
-    with app.app_context():
-        # Add the event to the session and commit
-        db.session.add(new_event)
-        db.session.commit()
+                print(f"New event added: {event_name}")
 
-    print(f"New event added: {event_name}")
-
-    return response.choices[0].message.content
+            # return response.choices[0].message.content
 
 
 # Apparently to solve the CORS issue, we need to add this route to the backend
@@ -367,7 +369,7 @@ with app.app_context():
     db.create_all()
 
 # start scraping
-eventstruct = scrape_events()
+scrape_events()
 
 if __name__ == "__main__":
     app.run(debug=True)
