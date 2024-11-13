@@ -75,7 +75,7 @@ function MapPage() {
 
   return (
     <>
-      <Header/>
+      <Header title='HOT IN COPENHAGEN' navigation={true}/>
       {/* Mappa */}
       
       <div style={{height:'80vh', overflowY: 'scroll', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>

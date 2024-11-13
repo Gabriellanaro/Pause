@@ -75,7 +75,7 @@ function YourEventMapPage() {
 
   return (
     <>
-      <Header/>
+      <Header title='YOUR HOT EVENTS' navigation={false}/>
       {/* Mappa */}
       <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '100vh', width: '80%'}}>
         <TileLayer

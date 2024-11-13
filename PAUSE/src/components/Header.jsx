@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
@@ -7,7 +8,7 @@ import HamburgerMenu from '../components/HamburgerMenu';
 import LoginConfirmPopup from '../components/LoginConfirmPopup';
 import '../app.css';
 
-const Header = () => {
+const Header = ({ title, navigation }) => {
     const { user } = useUser(); // Get the user object from the UserContext
     const navigate = useNavigate(); // Create navigate function
     const location = useLocation(); // Get the current location
@@ -16,11 +17,11 @@ const Header = () => {
     const handleAddEventClick = () => {
         console.log(user);
         if (user) {
-          navigate('/event-form'); // Navigate to event form if user is logged in
-        } else if(user === null) {
-          setShowLoginConfirm(true);
+            navigate('/event-form'); // Navigate to event form if user is logged in
+        } else if (user === null) {
+            setShowLoginConfirm(true);
         }
-      };
+    };
     
     const confirmLogin = () => {
         setShowLoginConfirm(false);  // Hide confirmation popup
@@ -32,43 +33,63 @@ const Header = () => {
         setShowLoginConfirm(false);  // Hide confirmation popup
     };
 
+    const renderSwitchViewButtons = () => {
+        const buttonConfigs = navigation
+            ? [
+                { text: 'Feed View', path: '/' },
+                { text: 'Map View', path: '/map' },
+            ]
+            : [
+                { text: 'Feed View', path: '/your-events' },
+                { text: 'Map View', path: '/your-events-map' },
+            ];
+    
+        return (
+            <>
+                {buttonConfigs.map(({ text, path }) => (
+                    <button
+                        key={path}
+                        className={`switchview-button ${location.pathname === path ? 'active' : ''}`}
+                        onClick={() => navigate(path)}
+                    >
+                        {text}
+                    </button>
+                ))}
+            </>
+        );
+    };
+    
+    const tags = ['Tag 1', 'Tag 2', 'Tag 3'];
+    
     return (
         <div>
-            <HamburgerMenu />
-            <h1 className="feed-title">HOT IN COPENHAGEN</h1>
-            <button className="add-event-button" onClick={handleAddEventClick}>
-                <FaPlus className="add-icon" />
-            </button>
-
-            <div className="feed-controls">
+            <header>
+                <HamburgerMenu />
+                <h1 className="feed-title">{title}</h1>
+                <button className="add-event-button" onClick={handleAddEventClick}>
+                    <FaPlus className="add-icon" />
+                </button>
+            </header>
+    
+            <section className="feed-controls">
                 <div className="tags">
-                    {/* Conditionally add 'active' class based on the current route */}
-                    <button
-                        className={`switchview-button ${location.pathname === '/' ? 'active' : ''}`}
-                        onClick={() => navigate('/')}
-                    >
-                        Feed View
-                    </button>
-                    <button
-                        className={`switchview-button ${location.pathname === '/map' ? 'active' : ''}`}
-                        onClick={() => navigate('/map')}
-                    >
-                        Map View
-                    </button>
+                    {renderSwitchViewButtons()}
                 </div>
                 <div className="tags">
-                    <span className="tag">Tag 1</span>
-                    <span className="tag">Tag 2</span>
-                    <span className="tag">Tag 3</span>
+                    {tags.map((tag) => (
+                        <span key={tag} className="tag">
+                            {tag}
+                        </span>
+                    ))}
                 </div>
-            </div>
+            </section>
+    
             {/* Show Login Confirm Popup if the user is not logged in and tries to add an event */}
             {showLoginConfirm && (
                 <LoginConfirmPopup onConfirm={confirmLogin} onCancel={cancelLogin} />
             )}
         </div>
-
     );
-}
+};
 
 export default Header;

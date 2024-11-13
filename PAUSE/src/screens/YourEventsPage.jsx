@@ -22,16 +22,7 @@ const YourEventsPage = () => {
       setLoading(false);
     }
   }, [user.user]); // Update loading state when user information changes
-
-  const handleAddEventClick = () => {
-    // console.log(user.user);
-    if (user.user) {
-      navigate('/event-form'); // Navigate to event form if user is logged in
-    } else {
-      navigate('/login'); // Navigate to login page if user is not logged in
-    }
-  };
-    
+ 
    //FETCH EVENTS FROM THE DATABASE
    useEffect(() => {
     const fetchEvents = async () => {
@@ -72,7 +63,7 @@ const YourEventsPage = () => {
       }
     };
     fetchEvents();
-  }, []);
+  }, [user]);
 
   const handleEventClick = (event) => {
       setSelectedEvent(event);
@@ -86,7 +77,7 @@ const YourEventsPage = () => {
 
     return (
       <>
-      <Header/>
+      <Header title='YOUR HOT EVENTS' navigation={false}/>
       
         {events && events.length > 0 ? (
           events.map((event, index) => (
