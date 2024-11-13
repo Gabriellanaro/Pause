@@ -908,3 +908,64 @@ nav {
 }
 
 /* ------------------ END Delete button -----------------------*/
+
+/* ------------------ FOOTER -----------------------*/
+
+.footer {
+  /* background-color: #333; */
+  color: #fff;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer-content h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-section, .social-media-section, .contact-section {
+  flex: 1;
+  min-width: 200px;
+  max-width: 250px;
+}
+
+.about-section p,
+.contact-section p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+.social-icons a {
+  color: #fff;
+  margin: 0 0.3rem;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #1da1f2; /* Customize for hover effect */
+}
+
+.footer-bottom {
+  font-size: 0.85rem;
+  margin-top: 1rem;
+  border-top: 1px solid #444;
+  padding-top: 1rem;
+}
+
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ------------------ END FOOTER -----------------------*/

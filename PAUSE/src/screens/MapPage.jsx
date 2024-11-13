@@ -80,35 +80,35 @@ function MapPage() {
       
       <div style={{height:'80vh', overflowY: 'scroll', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
 
-      <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '1000px', width: '80vw' }}>
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-            // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {events.map(event => (
-            <Marker
-              key={event.id}
-              position={[event.event_latitude, event.event_longitude]}
-              eventHandlers={{ click: handlePinClick }}>
+        <MapContainer center={center} zoom={13} zoomControl={false} style={{ height: '1000px', width: '80vw' }}>
+            <TileLayer
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+              // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {events.map(event => (
+              <Marker
+                key={event.id}
+                position={[event.event_latitude, event.event_longitude]}
+                eventHandlers={{ click: handlePinClick }}>
 
-              <Popup >
-              <div onClick={() => handleEventClick(event)}>
-                <strong >{event.event_name}</strong>
-                  <p>{event.event_description}</p>
-                  <p>{`Date: ${new Date(event.event_date).toDateString()}`}</p>
-                  <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
-                <div onClick={handlePinClick}></div>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
-        {showPopup && selectedEvent && (
-            <PopUpEvent event={selectedEvent} onClose={handleClosePopup} />
-        )}
+                <Popup >
+                  <div onClick={() => handleEventClick(event)}>
+                    <strong >{event.event_name}</strong>
+                      <p>{event.event_description}</p>
+                      <p>{`Date: ${new Date(event.event_date).toDateString()}`}</p>
+                      <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
+                    <div onClick={handlePinClick}></div>
+                    </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+          {showPopup && selectedEvent && (
+              <PopUpEvent event={selectedEvent} onClose={handleClosePopup} />
+          )}
+        <Footer/>
       </div>  
       
-      {/* <Footer/> */}
     </>
       
   )

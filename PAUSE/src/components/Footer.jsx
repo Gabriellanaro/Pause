@@ -1,4 +1,3 @@
-// src/components/Footer.js
 import '../app.css'; // Adjust styling here if needed
 
 const Footer = () => {
@@ -6,21 +5,11 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-content">
         
-        {/* Newsletter Subscription */}
-        {/* <div className="newsletter-section">
-          <h4>Subscribe to Our Newsletter</h4>
-          <p>Stay updated with the latest events in Copenhagen.</p>
-          <form className="newsletter-form">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              aria-label="Email"
-              className="newsletter-input"
-              required
-            />
-            <button type="submit" className="newsletter-button">Subscribe</button>
-          </form>
-        </div> */}
+        {/* About Us Section */}
+        <div className="about-section">
+          <h4>About Us</h4>
+          <p>Pause is dedicated to promoting sustainable fashion by connecting people with second-hand clothing events in Copenhagen.</p>
+        </div>
 
         {/* Social Media Links */}
         <div className="social-media-section">
@@ -48,7 +37,6 @@ const Footer = () => {
           <p>Phone: +45 1234 5678</p>
           <p>Address: Copenhagen, Denmark</p>
         </div>
-        
       </div>
 
       {/* Footer Bottom */}

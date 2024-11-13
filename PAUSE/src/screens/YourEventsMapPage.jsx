@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
-import img from '../assets/img.jpg';
-import '../App.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { FaPlus } from 'react-icons/fa'; // Import FaPlus icon
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
+import PopUpEvent from '../components/PopUpEvent';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import HamburgerMenu from '../components/HamburgerMenu';
+import '../App.css';
 
 
 // Configuration for the default marker icon
@@ -33,13 +32,15 @@ function YourEventMapPage() {
   const navigate = useNavigate(); // Create navigate function
   const [events, setEvents] = useState([]);
   const { user } = useUser(); // Access the user information
+  const [selectedEvent, setSelectedEvent] = useState(null); // State to manage selected event
+  const [showPopup, setShowPopup] = useState(false); // State to manage popup visibility
 
     //FETCH USER EVENTS FROM THE DATABASE
     useEffect(() => {
       const fetchEvents = async () => {
           try {
-              console.log(user.user.email);
-              const response = await fetch('http://127.0.0.1:5000/events/user/' + user.user.email); // Assicurati che questo corrisponda al tuo endpoint backend
+              console.log(user.email);
+              const response = await fetch('http://127.0.0.1:5000/events/user/' + user.email); // Assicurati che questo corrisponda al tuo endpoint backend
             // console.log(response);
               if (!response.ok) {
                   throw new Error('Network response was not ok');
@@ -59,20 +60,22 @@ function YourEventMapPage() {
       fetchEvents();
     }, [user]);
 
-  const handleAddEventClick = () => {
-    console.log(user);
-    if (user) {
-      navigate('/event-form'); // Navigate to event form if user is logged in
-    } else {
-      navigate('/login'); // Navigate to login page if user is not logged in
-    }
-  };
-
   const handlePinClick = () => {
     console.log('Popup clicked!');
+    console.log('event:', event.event_date);
     // Add any other actions you want to perform on click
   };
 
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    console.log(event.event_date);
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setSelectedEvent(null);
+  };
   return (
     <>
       <Header title='YOUR HOT EVENTS' navigation={false}/>
@@ -88,16 +91,22 @@ function YourEventMapPage() {
             position={[event.event_latitude, event.event_longitude]}
             eventHandlers={{ click: handlePinClick }}>
 
-            <Popup >
-              <strong>{event.event_name}</strong>
-                <p>{event.event_description}</p>
-                <p>{`Date: ${event.event_date}`}</p>
-                <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
-              <div onClick={handlePinClick}></div>
-            </Popup>
-          </Marker>
+              <Popup >
+                <div onClick={() => handleEventClick(event)}>
+                  <strong >{event.event_name}</strong>
+                    <p>{event.event_description}</p>
+                    <p>{`Date: ${new Date(event.event_date).toDateString()}`}</p>
+                    <p>{`Time: ${event.event_start_time} - ${event.event_end_time}`}</p>
+                  <div onClick={handlePinClick}></div>
+                  </div>
+              </Popup>
+            </Marker>
         ))}
       </MapContainer>
+      {showPopup && selectedEvent && (
+            <PopUpEvent event={selectedEvent} onClose={handleClosePopup} />
+      )}
+      <Footer/>
     </>
   )
 }

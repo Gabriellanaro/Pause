@@ -81,7 +81,9 @@ const YourEventsPage = () => {
       
         {events && events.length > 0 ? (
           events.map((event, index) => (
-          <EventInFeedPage key={index} event={event} />
+            <div key={index} onClick={() => handleEventClick(event)}>
+                <EventInFeedPage event={event} />
+            </div>
           ))
         ) : (
           <p>No events found</p>
@@ -89,6 +91,7 @@ const YourEventsPage = () => {
         {showPopup && selectedEvent && (
             <PopUpEvent event={selectedEvent} onClose={handleClosePopup} />
         )}
+        <Footer/>
       </>
     )
 }

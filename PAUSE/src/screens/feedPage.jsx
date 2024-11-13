@@ -119,8 +119,8 @@ const FeedPage = () => {
             <PopUpEvent event={selectedEvent} onClose={handleClosePopup} />
           )}
 
+        <Footer/>
         </div>
-        {/* <Footer/> */}
       </>
     )
   }
