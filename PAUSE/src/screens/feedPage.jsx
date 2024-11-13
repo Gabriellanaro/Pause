@@ -113,9 +113,14 @@ const FeedPage = () => {
      
           // If the response body is empty or not JSON, log it
           const data = JSON.parse(rawText || '{}');  // Handle empty or invalid JSON
+          
+          // Get today's date at 00:00:00
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
 
           // filter past events and sort by date and time
           const filteredAndSortedEvents = data.events
+            .filter(event => new Date(event.event_date) >= today)  // Filter out past events
             // .filter(event => new Date(event.event_date) >= today) 
             .sort((a, b) => {
               const dateA = new Date(a.event_date);

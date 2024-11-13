@@ -36,7 +36,16 @@ function MapPage() {
     try {
       const response = await fetch('http://localhost:5000/events');
       const data = await response.json();
-      setEvents(data.events); // Store events in state
+      
+      // Get today's date at 00:00:00
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const filteredAndSortedEvents = data.events
+      .filter(event => new Date(event.event_date) >= today)  // Filter out past events
+      
+      setEvents(filteredAndSortedEvents); // Store events in state
+
     } catch (error) {
       console.error('Error fetching events:', error);
     }
