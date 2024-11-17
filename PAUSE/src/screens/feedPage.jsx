@@ -12,6 +12,7 @@ const FeedPage = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null); // State to manage selected event
   const [showPopup, setShowPopup] = useState(false); // State to manage popup visibility
+  const [selectedTags, setSelectedTags] = useState([]); // State to manage selected tags
   const navigate = useNavigate();
   const user = useUser();
   const [loading, setLoading] = React.useState(true);
@@ -25,71 +26,77 @@ const FeedPage = () => {
     }
   }, [user.user]); // Update loading state when user information changes
 
-  // // Fetch events from the database
-  // useEffect(() => {
-  //   const fetchEvents = async () => {
-  //     try {
-  //       const response = await fetch('http://127.0.0.1:5000/events'); // Ensure this matches your backend endpoint
-  //       if (!response.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       const rawText = await response.text(); // Read raw text of response
-  //       const data = JSON.parse(rawText || '{}'); // Handle empty or invalid JSON
-  //       setEvents(data.events);
-  //       setLoading(false); // Set loading to false after events are fetched
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //       setLoading(false); // Set loading to false even if there is an error
-  //     }
-  //   }
-  // });
-  
 
-    // const userProfile = () => {
-    //   navigate('/'); // Redirect to the UserProfilePage
-    // };
     
-    //FETCH EVENTS FROM THE DATABASE
-    useEffect(() => {
-      const fetchEvents = async () => {
-        try {
-          const response = await fetch('http://127.0.0.1:5000/events'); // Assicurati che questo corrisponda al tuo endpoint backend
-          // console.log(response);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+  //FETCH EVENTS FROM THE DATABASE
+  useEffect(() => {
+    console.log("Updated selectedTags:", selectedTags);
+      fetchEvents(selectedTags); // Fetch events whenever selectedTags change
+    }, [selectedTags]);
+
+  const handleTagClick1 = (tag) => {
+    let updatedTags;
+  
+    if (selectedTags.includes(tag)) {
+      updatedTags = selectedTags.filter(t => t !== tag);  // Rimuovi il tag
+    } else {
+      updatedTags = [...selectedTags, tag];  // Aggiungi il tag
+    }
+  
+    setSelectedTags(updatedTags);  // Aggiorna lo stato
+  
+    fetchEvents(updatedTags);  // Ricarica gli eventi con i nuovi tag
+  };
+  
+  const fetchEvents = async (filterTags = []) => {
+    console.log("Fetching events with tags:", filterTags);
+    
+    try {
+      const tagQuery = Array.isArray(filterTags) && filterTags.length > 0
+      ? `?tag=${encodeURIComponent(filterTags.join(','))}` 
+      : '';
+  
+      const url = `http://127.0.0.1:5000/events${tagQuery}`;
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const rawText = await response.text(); // Leggi il testo grezzo della risposta
+  
+      // Se la risposta è vuota o non valida, gestisci l'errore
+      const data = JSON.parse(rawText || '{}');
+  
+      // Ottieni la data odierna a mezzanotte
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+  
+      // Filtra gli eventi passati e ordina per data e ora
+      const filteredAndSortedEvents = data.events
+        .filter(event => new Date(event.event_date) >= today) // Filtra gli eventi passati
+        .filter(event => {
+          if (filterTags.length === 0) return true; // Se non ci sono tag, non filtrare
+          // Confronto diretto se l'evento contiene il tag selezionato
+          return filterTags.includes(event.event_tags);
+        })
+        .sort((a, b) => {
+          const dateA = new Date(a.event_date);
+          const dateB = new Date(b.event_date);
+          if (dateA.getTime() === dateB.getTime()) {
+            return new Date(`1970-01-01T${a.event_start_time}`) - new Date(`1970-01-01T${b.event_start_time}`);
           }
-          const rawText = await response.text(); // Read raw text of response
-     
-          // If the response body is empty or not JSON, log it
-          const data = JSON.parse(rawText || '{}');  // Handle empty or invalid JSON
-          
-          // Get today's date at 00:00:00
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-
-          // filter past events and sort by date and time
-          const filteredAndSortedEvents = data.events
-            .filter(event => new Date(event.event_date) >= today)  // Filter out past events
-            // .filter(event => new Date(event.event_date) >= today) 
-            .sort((a, b) => {
-              const dateA = new Date(a.event_date);
-              const dateB = new Date(b.event_date);
-              if (dateA.getTime() === dateB.getTime()) {
-                return new Date(`1970-01-01T${a.event_start_time}`) - new Date(`1970-01-01T${b.event_start_time}`);
-              }
-              return dateA - dateB;
-            });
-
-          setEvents(filteredAndSortedEvents); // Set events state to the fetched events
-          setLoading(false); // Set loading to false after events are fetched
-
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          setLoading(false); // Set loading to false even if there is an error
-        }
-      };
-      fetchEvents();
-    }, []);
+          return dateA - dateB;
+        });
+  
+      setEvents(filteredAndSortedEvents); // Imposta lo stato degli eventi con quelli filtrati e ordinati
+      setLoading(false); // Imposta lo stato di loading su false dopo aver ricevuto gli eventi
+  
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(false); // Imposta lo stato di loading su false anche in caso di errore
+    }
+  };
 
     const handleEventClick = (event) => {
       setSelectedEvent(event);
@@ -104,7 +111,7 @@ const FeedPage = () => {
     return (
       
       <>
-        <Header title='HOT IN COPENHAGEN' navigation={true}/>
+        <Header title='HOT IN COPENHAGEN' navigation={true} onTagClick={handleTagClick1} selectedTag={selectedTags} />
         <div className="feed-container">
           {events && events.length > 0 ? (
             events.map((event, index) => (

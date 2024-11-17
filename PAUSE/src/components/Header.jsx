@@ -6,9 +6,10 @@ import { FaPlus } from 'react-icons/fa'; // Import FaPlus icon
 import { useUser } from '../contexts/UserContext';
 import HamburgerMenu from '../components/HamburgerMenu';
 import LoginConfirmPopup from '../components/LoginConfirmPopup';
+import img from '../assets/logo_nobackground.png';
 import '../app.css';
 
-const Header = ({ title, navigation }) => {
+const Header = ({ title, navigation, onTagClick, selectedTags = [] }) => {
     const { user } = useUser(); // Get the user object from the UserContext
     const navigate = useNavigate(); // Create navigate function
     const location = useLocation(); // Get the current location
@@ -59,12 +60,32 @@ const Header = ({ title, navigation }) => {
         );
     };
     
-    const tags = ['Tag 1', 'Tag 2', 'Tag 3'];
+    const tags = ['Shop', 'Flea Market', 'Garage Sale', 'Other'];
+    
+    // Effect to monitor selectedTags changes and log it
+    
+    const handleTagClick = (tag) => {
+        // Aggiungi o rimuovi il tag dai tag selezionati
+        if (selectedTags.includes(tag)) {
+            // Se il tag è già selezionato, rimuovilo
+            onTagClick(selectedTags.filter((item) => item !== tag));
+        } else {
+            // Altrimenti aggiungilo
+            onTagClick([...selectedTags, tag]);
+        }
+        console.log("Updated selectedTags from Header:", selectedTags); // Log selectedTags every time it changes
+    };
     
     return (
         <div>
-            <header>
-                <HamburgerMenu />
+            <header className="header">
+                <div className="left-container">
+                    {/* <div className="logo-container">
+                        <img src={img} alt="logo" className="logo" />
+                        <span className="logo-text">Pause</span>
+                    </div> */}
+                    <HamburgerMenu />
+                </div>  
                 <h1 className="feed-title">{title}</h1>
                 <button className="add-event-button" onClick={handleAddEventClick}>
                     <FaPlus className="add-icon" />
@@ -76,11 +97,15 @@ const Header = ({ title, navigation }) => {
                     {renderSwitchViewButtons()}
                 </div>
                 <div className="tags">
-                    {tags.map((tag) => (
-                        <span key={tag} className="tag">
-                            {tag}
-                        </span>
-                    ))}
+                {tags.map((tag) => (
+                    <span 
+                    key={tag} 
+                    className={`tag ${selectedTags.includes(tag) ? 'active' : ''}`} 
+                    onClick={() => handleTagClick(tag)} // Gestisci il click
+                    >
+                    {tag}
+                    </span>
+                ))}
                 </div>
             </section>
     

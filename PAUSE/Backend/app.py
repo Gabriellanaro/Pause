@@ -73,20 +73,36 @@ def format_event(event):
 def events_options():
     return "", 200
 
+
 # Get all events
 @app.route("/events", methods=["GET"])
+@cross_origin(methods=["GET"])
 def get_events():
-    # Query all events ordered by id in ascending order
-    events = Event.query.order_by(Event.id.asc()).all()
-    # print("EVENTS:", events)
-    event_list = []
 
-    # Format each event and add to the list
+    # Ottieni i tag dalla query string
+    event_tag = request.args.get("tag")
+    print("EVENT TAG:", event_tag)
+
+    # Se sono presenti tag, suddividi i tag e rimuovi i duplicati
+    if event_tag:
+        # Split the tags by comma and filter for each tag
+        tags = event_tag.split(",")
+        events = (
+            Event.query.filter(
+                Event.event_tag.in_(
+                    tags
+                )  # Check if event_tag is one of the selected tags
+            )
+            .order_by(Event.id.asc())
+            .all()
+        )
+    else:
+        events = Event.query.order_by(Event.id.asc()).all()
+
+    event_list = []
     for event in events:
         event_list.append(format_event(event))
 
-    # print(event_list)
-    # Return the list of formatted events
     return jsonify({"events": event_list}), 200
 
 
