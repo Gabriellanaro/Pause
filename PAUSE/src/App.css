@@ -160,6 +160,7 @@ body, html, #root {
 }
 
 .feed-title {
+  flex-grow: 1;
   letter-spacing: 0.2px;
   font-size: 5.5vw; /* Scales with viewport width */
   margin: 0;
@@ -190,20 +191,80 @@ body, html, #root {
   font-weight: 500;
 }
 
+/* Contenitore dei tag */
 .tags {
   display: flex;
   gap: 10px;
 }
 
+/* Stile dei tag */
 .tag {
   padding: 5px 10px;
   border: 1px solid #fff5f5;
   border-radius: 20px;
   background-color: transparent;
   font-size: 0.9em;
+  color: #fff5f5; /* Colore del testo */
+  cursor: pointer;
+}
+
+/* Quando il tag è attivo */
+.tag.active {
+  background-color: #fff5f5;  /* Colore di sfondo quando il tag è attivo */
+  color: black;  /* Colore del testo quando attivo */
+  font-weight: bold;  /* Rende il testo in grassetto */
+  border-color: #212121; /* Colore del bordo per il tag attivo */
+}
+
+/* Effetto hover su tag */
+.tag:hover {
+  background-color: #fff5f5;  /* Sfondo quando ci passi sopra col mouse */
+  color: black;  /* Colore del testo al passaggio del mouse */
 }
 
 /********************end feed page style********************************/
+
+/******************** START header ***************************************/
+
+/* Centered header title */
+.header-title {
+ display: flex;
+ font-family: "Bona Nova", serif;
+ font-size: 48px;
+ font-weight: 700;
+ color: black;
+ margin-bottom: 30px;
+ text-align: center;
+ justify-content: space-between;
+}
+
+.left-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Allinea tutto a sinistra */
+  justify-content: flex-start; /* Assicura che gli elementi siano disposti dall'alto */
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Allinea il logo e il testo a sinistra */
+  margin-bottom: 10px; /* Spazio tra il logo e l'hamburger menu */
+}
+
+.logo {
+  width: auto;
+  height: 40px; /* Modifica l'altezza del logo per maggiore visibilità */
+}
+
+.logo-text {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 5px;
+  text-align: left; /* Testo allineato a sinistra */
+}
+
+/******************** END header ***************************************/
 
 /********************form screen***************************************/
 .form-screen {
@@ -219,15 +280,6 @@ body, html, #root {
   position: relative;
 }
 
- /* Centered header title */
- .header-title {
-  font-family: "Bona Nova", serif;
-  font-size: 48px;
-  font-weight: 700;
-  color: black;
-  margin-bottom: 30px;
-  text-align: center;
-}
 
 /* Form styles */
 form {

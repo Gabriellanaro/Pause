@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy import Enum
+from sqlalchemy import Enum, or_, text
 from flask_cors import cross_origin
 
 app = Flask(__name__)
@@ -73,20 +73,32 @@ def format_event(event):
 def events_options():
     return "", 200
 
+
 # Get all events
 @app.route("/events", methods=["GET"])
+@cross_origin(methods=["GET"])
 def get_events():
-    # Query all events ordered by id in ascending order
-    events = Event.query.order_by(Event.id.asc()).all()
-    # print("EVENTS:", events)
-    event_list = []
 
-    # Format each event and add to the list
+    # Ottieni i tag dalla query string
+    event_tag = request.args.get("tag")
+
+    # Se sono presenti tag, suddividi i tag e rimuovi i duplicati
+    if event_tag:
+        # Split the tags by comma and filter for each tag
+        tags = [str(tag.strip()) for tag in event_tag.split(",")]
+        tags = list(tags)
+
+        events = (
+            Event.query.filter(Event.event_tag.in_(tags)).order_by(Event.id.asc()).all()
+        )
+
+    else:
+        events = Event.query.order_by(Event.id.asc()).all()
+
+    event_list = []
     for event in events:
         event_list.append(format_event(event))
 
-    # print(event_list)
-    # Return the list of formatted events
     return jsonify({"events": event_list}), 200
 
 
@@ -140,7 +152,6 @@ def update_event(id):
 
     if request.method == "PUT":  # Get the event by id
         event = Event.query.get(id)  # Prefer .get() for a single record by primary key
-        print(event)
         if not event:
             return (
                 jsonify({"error": "Event not found"}),
