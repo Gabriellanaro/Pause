@@ -87,15 +87,10 @@ def get_events():
         # Split the tags by comma and filter for each tag
         tags = [str(tag.strip()) for tag in event_tag.split(",")]
         tags = list(tags)
-        # print("EVENT TAGS:", tags)
-        # print("EVENT TAGS:", type(tags))
-        # print("tags type", (type(tag) for tag in tags))
+
         events = (
             Event.query.filter(Event.event_tag.in_(tags)).order_by(Event.id.asc()).all()
         )
-        print("Event list: ", events)
-        # events = Event.query.filter_by(event_tag == "Flea Market").all()
-        # events = Event.query.filter_by(user_email=user_email).order_by(Event.id.asc()).all()
 
     else:
         events = Event.query.order_by(Event.id.asc()).all()
@@ -104,7 +99,6 @@ def get_events():
     for event in events:
         event_list.append(format_event(event))
 
-    print("EVENT LIST:", event_list)
     return jsonify({"events": event_list}), 200
 
 
@@ -158,7 +152,6 @@ def update_event(id):
 
     if request.method == "PUT":  # Get the event by id
         event = Event.query.get(id)  # Prefer .get() for a single record by primary key
-        print(event)
         if not event:
             return (
                 jsonify({"error": "Event not found"}),
