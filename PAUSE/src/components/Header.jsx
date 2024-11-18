@@ -110,9 +110,6 @@ const Header = ({ title, navigation, onTagClick }) => {
                 ))}
                 </div>
             </section>
-                <span>
-                        TAGS: {headerTags}        
-                </span>
     
             {/* Show Login Confirm Popup if the user is not logged in and tries to add an event */}
             {showLoginConfirm && (
