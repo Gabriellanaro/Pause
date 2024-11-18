@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy import Enum
+from sqlalchemy import Enum, or_, text
 from flask_cors import cross_origin
 
 app = Flask(__name__)
@@ -81,21 +81,22 @@ def get_events():
 
     # Ottieni i tag dalla query string
     event_tag = request.args.get("tag")
-    print("EVENT TAG:", event_tag)
 
     # Se sono presenti tag, suddividi i tag e rimuovi i duplicati
     if event_tag:
         # Split the tags by comma and filter for each tag
-        tags = event_tag.split(",")
+        tags = [str(tag.strip()) for tag in event_tag.split(",")]
+        tags = list(tags)
+        # print("EVENT TAGS:", tags)
+        # print("EVENT TAGS:", type(tags))
+        # print("tags type", (type(tag) for tag in tags))
         events = (
-            Event.query.filter(
-                Event.event_tag.in_(
-                    tags
-                )  # Check if event_tag is one of the selected tags
-            )
-            .order_by(Event.id.asc())
-            .all()
+            Event.query.filter(Event.event_tag.in_(tags)).order_by(Event.id.asc()).all()
         )
+        print("Event list: ", events)
+        # events = Event.query.filter_by(event_tag == "Flea Market").all()
+        # events = Event.query.filter_by(user_email=user_email).order_by(Event.id.asc()).all()
+
     else:
         events = Event.query.order_by(Event.id.asc()).all()
 
@@ -103,6 +104,7 @@ def get_events():
     for event in events:
         event_list.append(format_event(event))
 
+    print("EVENT LIST:", event_list)
     return jsonify({"events": event_list}), 200
 
 

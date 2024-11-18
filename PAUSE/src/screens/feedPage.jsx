@@ -15,22 +15,10 @@ const FeedPage = () => {
   const [selectedTags, setSelectedTags] = useState([]); // State to manage selected tags
   const navigate = useNavigate();
   const user = useUser();
-  const [loading, setLoading] = React.useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  // Track login state
-  const [showLoginConfirm, setShowLoginConfirm] = useState(false); // Track logout confirmation popup
 
-  useEffect(() => {
-    // Simulate fetching or setting loading state
-    if (user.user) {
-      setLoading(false);
-    }
-  }, [user.user]); // Update loading state when user information changes
-
-
-    
+  
   //FETCH EVENTS FROM THE DATABASE
   useEffect(() => {
-    console.log("Updated selectedTags:", selectedTags);
       fetchEvents(selectedTags); // Fetch events whenever selectedTags change
     }, [selectedTags]);
 
@@ -49,8 +37,6 @@ const FeedPage = () => {
   };
   
   const fetchEvents = async (filterTags = []) => {
-    console.log("Fetching events with tags:", filterTags);
-    
     try {
       const tagQuery = Array.isArray(filterTags) && filterTags.length > 0
       ? `?tag=${encodeURIComponent(filterTags.join(','))}` 
@@ -67,7 +53,6 @@ const FeedPage = () => {
   
       // Se la risposta è vuota o non valida, gestisci l'errore
       const data = JSON.parse(rawText || '{}');
-  
       // Ottieni la data odierna a mezzanotte
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -78,7 +63,7 @@ const FeedPage = () => {
         .filter(event => {
           if (filterTags.length === 0) return true; // Se non ci sono tag, non filtrare
           // Confronto diretto se l'evento contiene il tag selezionato
-          return filterTags.includes(event.event_tags);
+          return filterTags.includes(event.event_tag);
         })
         .sort((a, b) => {
           const dateA = new Date(a.event_date);
@@ -88,13 +73,10 @@ const FeedPage = () => {
           }
           return dateA - dateB;
         });
-  
-      setEvents(filteredAndSortedEvents); // Imposta lo stato degli eventi con quelli filtrati e ordinati
-      setLoading(false); // Imposta lo stato di loading su false dopo aver ricevuto gli eventi
-  
+      
+      setEvents(filteredAndSortedEvents); // Imposta lo stato degli eventi con quelli filtrati e ordinati  
     } catch (error) {
       console.error('Error fetching data:', error);
-      setLoading(false); // Imposta lo stato di loading su false anche in caso di errore
     }
   };
 
@@ -111,7 +93,7 @@ const FeedPage = () => {
     return (
       
       <>
-        <Header title='HOT IN COPENHAGEN' navigation={true} onTagClick={handleTagClick1} selectedTag={selectedTags} />
+        <Header title='HOT IN COPENHAGEN' navigation={true} onTagClick={handleTagClick1} />
         <div className="feed-container">
           {events && events.length > 0 ? (
             events.map((event, index) => (

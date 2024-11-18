@@ -9,11 +9,12 @@ import LoginConfirmPopup from '../components/LoginConfirmPopup';
 import img from '../assets/logo_nobackground.png';
 import '../app.css';
 
-const Header = ({ title, navigation, onTagClick, selectedTags = [] }) => {
+const Header = ({ title, navigation, onTagClick }) => {
     const { user } = useUser(); // Get the user object from the UserContext
     const navigate = useNavigate(); // Create navigate function
     const location = useLocation(); // Get the current location
     const [showLoginConfirm, setShowLoginConfirm] = useState(false); // Track logout confirmation popup
+    const [headerTags, setHeaderTags] = useState([]); // State to manage selected tags
 
     const handleAddEventClick = () => {
         console.log(user);
@@ -65,15 +66,16 @@ const Header = ({ title, navigation, onTagClick, selectedTags = [] }) => {
     // Effect to monitor selectedTags changes and log it
     
     const handleTagClick = (tag) => {
-        // Aggiungi o rimuovi il tag dai tag selezionati
-        if (selectedTags.includes(tag)) {
-            // Se il tag è già selezionato, rimuovilo
-            onTagClick(selectedTags.filter((item) => item !== tag));
+        
+        if (headerTags.includes(tag)) {
+            // If the tag is already selected, remove it
+            setHeaderTags(headerTags.filter((item) => item !== tag));
         } else {
-            // Altrimenti aggiungilo
-            onTagClick([...selectedTags, tag]);
+            // Otherwise add it
+            setHeaderTags([...headerTags, tag]);
         }
-        console.log("Updated selectedTags from Header:", selectedTags); // Log selectedTags every time it changes
+        
+        onTagClick(tag);
     };
     
     return (
@@ -100,14 +102,17 @@ const Header = ({ title, navigation, onTagClick, selectedTags = [] }) => {
                 {tags.map((tag) => (
                     <span 
                     key={tag} 
-                    className={`tag ${selectedTags.includes(tag) ? 'active' : ''}`} 
-                    onClick={() => handleTagClick(tag)} // Gestisci il click
+                    className={`tag ${headerTags.includes(tag) ? 'active' : ''}`} 
+                    onClick={() => handleTagClick(tag)}
                     >
                     {tag}
                     </span>
                 ))}
                 </div>
             </section>
+                <span>
+                        TAGS: {headerTags}        
+                </span>
     
             {/* Show Login Confirm Popup if the user is not logged in and tries to add an event */}
             {showLoginConfirm && (
