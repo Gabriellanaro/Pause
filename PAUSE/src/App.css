@@ -1021,3 +1021,44 @@ nav {
 }
 
 /* ------------------ END FOOTER -----------------------*/
+
+/* ------------------ Profile Page -----------------------*/
+.profile-picture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto; /* Center horizontally */
+  width: 150px; /* Same size as the circle */
+  height: 150px; /* Same size as the circle */
+}
+
+.profile-picture, .profile-picture-placeholder {
+  width: 150px; /* Puedes ajustar este tamaño */
+  height: 150px;
+  border-radius: 50%; /* Para hacerla circular */
+  object-fit: cover;
+  background-color: #f0f0f0; /* Color de fondo por defecto */
+  border: 2px solid #ccc; /* Bordes para la imagen */
+}
+
+.profile-picture-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 18px;
+  background-image: url('/default_profile_photo.png'); /* Imagen predeterminada */
+  background-size: cover;
+  background-position: center;
+}
+
+input[type="file"] {
+  display: none; /* Oculta el input de archivo */
+}
+
+.profile-picture-container label {
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+/* ------------------ END Profile Page -----------------------*/

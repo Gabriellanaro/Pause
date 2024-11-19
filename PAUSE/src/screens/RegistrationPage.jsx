@@ -119,6 +119,17 @@ function UserRegistrationPage() {
             />
           </div>
           <div>
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
             <label htmlFor="email">Email</label>
             <input
               type="email"

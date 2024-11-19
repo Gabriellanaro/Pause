@@ -42,10 +42,40 @@ function UserProfilePage() {
 
     return (
       <div className="form-screen">
-      <BackButton></BackButton>
+      <BackButton />
+      <div style={{ marginTop: '20px' }}></div>
       <h2 className="header-title">Your Profile</h2>
       <form>
-        <div>
+      <div className="profile-picture-container">
+        <label htmlFor="profile-picture-input">
+          {userData && userData.profile_picture ? (
+            <img
+              src={userData.profile_picture}
+              alt="Profile"
+              className="profile-picture"
+            />
+          ) : (
+            <div className="profile-picture-placeholder"></div>
+          )}
+        </label>
+        <input
+          type="file"
+          id="profile-picture-input"
+          name="profile_picture"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setUserData({ ...userData, profile_picture: reader.result });
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+        />
+      </div>
+      <div>
         <label htmlFor="first_name">First Name</label>
         <input
           type="text"
@@ -53,55 +83,62 @@ function UserProfilePage() {
           value={userData ? userData.first_name : ''}
           onChange={(e) => setUserData({ ...userData, first_name: e.target.value })}
         />
-        </div>
-        <div>
-        <label htmlFor="last_name">Last Name</label>
-        <input
-          type="text"
-          name="last_name"
-          value={userData ? userData.last_name : ''}
-          onChange={(e) => setUserData({ ...userData, last_name: e.target.value })}
-        />
-        </div>
-        <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          value={userData ? userData.email : ''}
-          onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-        />
-        </div>
-        <div>
-        <button
-          type="submit"
-          className="save-button"
-          style={{ width: '100%' }}
-          onClick={async (e) => {
-          e.preventDefault();
-          try {
-            const response = await fetch(`http://127.0.0.1:5000/users/${user.email}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-            });
+      </div>
+      <div>
+      <label htmlFor="last_name">Last Name</label>
+      <input
+        type="text"
+        name="last_name"
+        value={userData ? userData.last_name : ''}
+        onChange={(e) => setUserData({ ...userData, last_name: e.target.value })}
+      />
+      </div>
+      <div>
+      <label htmlFor="username">Username</label>
+      <input
+        type="text"
+        name="username"
+        value={userData ? userData.username : ''}
+        onChange={(e) => setUserData({ ...userData, username: e.target.value })}
+      />
+      </div>
+      <div>
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        name="email"
+        value={userData ? userData.email : ''}
+        onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+      />
+      </div>
+      <button
+      type="submit"
+      className="save-button"
+      style={{ width: '100%' }}
+      onClick={async (e) => {
+        e.preventDefault();
+        try {
+        const response = await fetch(`http://127.0.0.1:5000/users/${user.email}`, {
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+        });
 
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
 
-            const data = await response.json();
-            console.log('User data updated successfully:', data);
-          } catch (error) {
-            console.error('Error updating user data:', error);
-          }
-          }}
-        >
-          Save
-        </button>
-        </div>
+        const data = await response.json();
+        console.log('User data updated successfully:', data);
+        } catch (error) {
+        console.error('Error updating user data:', error);
+        }
+      }}
+      >
+      Save
+      </button>
       </form>
       </div>
     );
