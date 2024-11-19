@@ -258,7 +258,7 @@ function EventFormPage() {
           )}
         </div>
 
-        <button type="submit" className="save-button">Save</button>
+        <button type="submit" className="save-button" style={{ width: '100%' }}>Save</button>
       </form>
     </div>
   );
