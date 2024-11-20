@@ -7,10 +7,8 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-<<<<<<< HEAD
 from sqlalchemy import Enum, or_, text
 from flask_cors import cross_origin
-=======
 import instaloader
 import os
 import openai
@@ -21,7 +19,6 @@ import atexit
 
 #scheduer to run scrap events every tot time
 scheduler = BackgroundScheduler()
->>>>>>> igscraping
 
 app = Flask(__name__)
 
@@ -38,6 +35,7 @@ CORS(
     methods=["GET", "POST", "OPTIONS"],
     resources={r"/*": {"origins": "http://localhost:5173"}},
 )
+
 
 # --------------------------------------------------------------------
 
@@ -58,14 +56,11 @@ class Event(db.Model):
     user_email = db.Column(
         db.String(200), db.ForeignKey("users.email"), nullable=False
     )  # Foreign key
-<<<<<<< HEAD
     event_tag = db.Column(
         Enum("Shop", "Flea Market", "Garage Sale", "Other", name="event_tag"),
         nullable=False,
     )
-=======
     media_id = db.Column(db.String(200), nullable=True) 
->>>>>>> igscraping
 
     def __repr__(self):
         return f"<Event {self.event_name}>"    
@@ -178,7 +173,6 @@ def scrape_events():
 @app.route("/events", methods=["OPTIONS"])
 def events_options():
     return "", 200
-
 
 # Get all events
 @app.route("/events", methods=["GET"])
