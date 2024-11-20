@@ -115,7 +115,6 @@ def scrape_events():
             existing_event = Event.query.filter_by(media_id=post.shortcode).first()
             if existing_event is None:
                 openai.api_key = os.getenv('OPENAI_API_KEY')
-                # openai.api_key = "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"
                 if not openai_api_key:
                     print("API OpenAI key not found in the environment variables, exiting function scrape_events()")
                     return
