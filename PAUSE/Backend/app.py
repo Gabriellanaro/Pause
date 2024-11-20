@@ -82,10 +82,10 @@ def scrape_events():
     caption_last_post = ''
     #instaloader instance 
     loader = instaloader.Instaloader()
-    loader.login('mrscrape5', 'Pause2024')        # (login)
+    loader.login('mrscrape6', 'Pause2024')        # (login)
 
     #list of the profiles to be scraped
-    profile_names = ['frederiksbergloppemarked', 'icoliandro'] 
+    profile_names = ['icoliandro'] 
     for profile_name in profile_names:
         profile = instaloader.Profile.from_username(loader.context, profile_name)
 
