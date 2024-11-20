@@ -17,7 +17,15 @@ function EventFormPage() {
     { value: 'Garage Sale', label: 'Garage Sale' },
     { value: 'Other', label: 'Other' },
   ];
+
+  const clothes_types = [
+    { value: 'Female', label: 'Female' },
+    { value: 'Male', label: 'Male' },
+    { value: 'Unisex', label: 'Unisex' },
+  ];
+
   const [tagValue, setTagValue] = useState(tags[0].value); 
+  const [clothes_types_value, setclothes_types_value] = useState(clothes_types[0].value); 
   const navigate = useNavigate();  // Initialize the useNavigate hook
 
   const getTodayDate = () => {
@@ -39,6 +47,7 @@ function EventFormPage() {
     event_longitude: 0,
     user_email: user.email,
     event_tag: tagValue,
+    event_gender: clothes_types_value,
   });
 
   const [suggestions, setSuggestions] = useState([]); // State for address suggestions
@@ -193,6 +202,22 @@ function EventFormPage() {
                 onChange={handleChange}
               />
               <label htmlFor={tag.value}>{tag.label}</label>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", gap: "80px" }}>
+          {clothes_types.map((gender) => (
+            <div key={gender.value} style={{ display: "flex", alignItems: "center", gap: "5px", whiteSpace: "nowrap" }}>
+              <input
+                type="radio"
+                id={gender.value}
+                name="event_gender"
+                value={gender.value}
+                checked={formData.event_gender === gender.value}
+                onChange={handleChange}
+              />
+              <label htmlFor={gender.value}>{gender.label}</label>
             </div>
           ))}
         </div>
