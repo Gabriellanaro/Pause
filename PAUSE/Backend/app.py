@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import Enum, or_, text
 from flask_cors import cross_origin
-import instaloader
+import instaloader  # type: ignore
 import os
 import openai
 from openai import OpenAI
@@ -17,9 +17,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 
 
-#load ambient variables from .env file  
-load_dotenv(dotenv_path='PAUSE/Backend/.env')
-#scheduer to run scrap events every tot time
+# load ambient variables from .env file
+load_dotenv(dotenv_path="PAUSE/Backend/.env")
+# scheduer to run scrap events every tot time
 scheduler = BackgroundScheduler()
 
 app = Flask(__name__)
@@ -41,6 +41,7 @@ CORS(
 
 # --------------------------------------------------------------------
 
+
 # Model for table Event (one model for each table in the database)
 class Event(db.Model):
     # NB: the names of the fields like event_name don't have to match the names of the columns in the database
@@ -49,10 +50,10 @@ class Event(db.Model):
     event_name = db.Column(db.String(200), nullable=False)
     event_description = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    event_date = db.Column(db.Date, nullable=False)  
-    event_start_time = db.Column(db.Time, nullable=False) 
+    event_date = db.Column(db.Date, nullable=False)
+    event_start_time = db.Column(db.Time, nullable=False)
     event_end_time = db.Column(db.Time, nullable=False)
-    event_location = db.Column(db.String(255), nullable=True) 
+    event_location = db.Column(db.String(255), nullable=True)
     event_latitude = db.Column(db.Float, nullable=True)
     event_longitude = db.Column(db.Float, nullable=True)
     user_email = db.Column(
@@ -62,13 +63,21 @@ class Event(db.Model):
         Enum("Shop", "Flea Market", "Garage Sale", "Other", name="event_tag"),
         nullable=False,
     )
-    media_id = db.Column(db.String(200), nullable=True) 
+
+    media_id = db.Column(db.String(200), nullable=True)
+
+    event_gender = db.Column(
+        Enum("Female", "Male", "Unisex", name="event_gender"),
+        nullable=False,
+    )
 
     def __repr__(self):
-        return f"<Event {self.event_name}>"    
+        return f"<Event {self.event_name}>"
+
 
 # it converts the Event object (that is an instance of SQLAlchemy model) to a dictionary, that can be converted to JSON.
 # this is because SQLAlchemy objects are not serializable to JSON.
+
 
 def format_event(event):
     return {
@@ -84,55 +93,61 @@ def format_event(event):
         "created_at": event.created_at,
         "user_email": event.user_email,
         "event_tag": event.event_tag,
+        "event_gender": event.event_gender,
     }
 
 
 def scrape_events():
-    caption_last_post = ''
-    #instaloader instance 
+    caption_last_post = ""
+    # instaloader instance
     loader = instaloader.Instaloader()
     try:
-        #try login to the scraper profile
-        loader.login('mrscrape6', 'Pause2024')
+        # try login to the scraper profile
+        loader.login("mrscrape6", "Pause2024")
     except Exception as e:
         print(f"Error during login to ig profile: {e}")
         return  # exit function if login fails
     print("-------------Login to instgram was successful---------------")
 
-    #list of the profiles to be scraped
-    profile_names = ['icoliandro'] 
+    # list of the profiles to be scraped
+    profile_names = ["icoliandro"]
     for profile_name in profile_names:
         profile = instaloader.Profile.from_username(loader.context, profile_name)
 
         for post in profile.get_posts():
             if post.caption:  # check if caption is empty
                 caption_last_post = post.caption
-                break # get only the first post
+                break  # get only the first post
             else:
                 print(f"Post ID: {post.shortcode} non ha didascalia.\n")
 
         with app.app_context():
             existing_event = Event.query.filter_by(media_id=post.shortcode).first()
             if existing_event is None:
-                openai.api_key = os.getenv('OPENAI_API_KEY')
+                openai.api_key = os.getenv("OPENAI_API_KEY")
                 if not openai.api_key:
-                    print("API OpenAI key not found in the environment variables, exiting function scrape_events()")
+                    print(
+                        "API OpenAI key not found in the environment variables, exiting function scrape_events()"
+                    )
                     return
 
-                client = OpenAI(api_key=openai.api_key) # ask Gabriele for the api key
+                client = OpenAI(api_key=openai.api_key)  # ask Gabriele for the api key
                 messages = [
-                    {"role": "system", "content": '''You are a helpful assistant. 
+                    {
+                        "role": "system",
+                        "content": """You are a helpful assistant. 
                      from a text that i will provide you, you will find only date (in the format 'YYYY-MM-DD'), start_time, end_time, location (only if it is a real one, if location is for example "park", "secret", "street", leave it empty ), 
                      name (of the event), description (of the event) 
                      (if it is more than 200 char make a summary of the description that it is under 200 char). If you don't manage to 
                      find some of these information, default values: location: "", date: "" ,start_time = 09:00:00, end_time = 00:00:00, name=Scraped Event, description: no description available . 
                      The output should have a dictionary structure. If the date of the event is more than one day, just provide the starting date. 
                      If the caption say something like This <day of the week>, it means that the date is the closest <day of the week> from today.
-                     If the caption say something like next <day of the week>, it means that the date is the closest <day of the week> next week'''},
+                     If the caption say something like next <day of the week>, it means that the date is the closest <day of the week> next week""",
+                    },
                     {"role": "user", "content": caption_last_post},
                 ]
 
-                response=client.chat.completions.create(
+                response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=messages,
                     temperature=0.5,
@@ -140,13 +155,17 @@ def scrape_events():
                 # Parse the response as JSON
                 event_data = response.choices[0].message.content
                 print(event_data)
-                event_info = eval(event_data)  # Be cautious with eval, consider safer alternatives like json.loads if possible
+                event_info = eval(
+                    event_data
+                )  # Be cautious with eval, consider safer alternatives like json.loads if possible
 
                 # Extract the information
                 event_name = event_info.get("name")
                 event_description = event_info.get("description")
                 event_location = event_info.get("location")
-                event_date_str = event_info.get("date")  # Assuming 'start_time' includes the date
+                event_date_str = event_info.get(
+                    "date"
+                )  # Assuming 'start_time' includes the date
                 event_start_time = event_info.get("start_time")
                 event_end_time = event_info.get("end_time")
 
@@ -156,9 +175,13 @@ def scrape_events():
                     continue
 
                 # Convert event_date_str to a date object (consider parsing the date format correctly)
-                event_date = datetime.strptime(event_date_str, '%Y-%m-%d').date()  # Adjust the date format as necessary
-                event_start_time = datetime.strptime(event_start_time, '%H:%M:%S').time()  # Modifica il formato se necessario
-                event_end_time = datetime.strptime(event_end_time, '%H:%M:%S').time() 
+                event_date = datetime.strptime(
+                    event_date_str, "%Y-%m-%d"
+                ).date()  # Adjust the date format as necessary
+                event_start_time = datetime.strptime(
+                    event_start_time, "%H:%M:%S"
+                ).time()  # Modifica il formato se necessario
+                event_end_time = datetime.strptime(event_end_time, "%H:%M:%S").time()
 
                 # Create a new event instance
                 new_event = Event(
@@ -176,9 +199,11 @@ def scrape_events():
                 db.session.commit()
 
                 print(f"New event added: {event_name}")
-            
-            else: #the scraped event already exists in the database
-                print(f"Event with media_id {post.shortcode} already exists in the database, skip")
+
+            else:  # the scraped event already exists in the database
+                print(
+                    f"Event with media_id {post.shortcode} already exists in the database, skip"
+                )
 
             # return response.choices[0].message.content
 
@@ -187,6 +212,7 @@ def scrape_events():
 @app.route("/events", methods=["OPTIONS"])
 def events_options():
     return "", 200
+
 
 # Get all events
 @app.route("/events", methods=["GET"])
@@ -204,6 +230,21 @@ def get_events():
 
         events = (
             Event.query.filter(Event.event_tag.in_(tags)).order_by(Event.id.asc()).all()
+        )
+
+    # Ottieni i gender dalla query string
+    event_gender = request.args.get("gender")
+
+    # Se sono presenti gender, suddividi i gender e rimuovi i duplicati
+    if event_gender:
+        # Split the genders by comma and filter for each gender
+        genders = [str(gender.strip()) for gender in event_gender.split(",")]
+        genders = list(genders)
+
+        events = (
+            Event.query.filter(Event.event_gender.in_(genders))
+            .order_by(Event.id.asc())
+            .all()
         )
 
     else:
@@ -283,6 +324,7 @@ def update_event(id):
     event_longitude = request.json.get("event_longitude", event.event_longitude)
     event_user_email = request.json.get("user_email", event.user_email)
     event_tag = request.json.get("event_tag", event.event_tag)
+    event_gender = request.json.get("event_gender", event.event_gender)
 
     # Update the event attributes
     event.event_name = event_name
@@ -295,6 +337,7 @@ def update_event(id):
     event.event_longitude = event_longitude
     event.user_email = event_user_email
     event.event_tag = event_tag
+    event.event_gender = event_gender
 
     # Commit the changes to the database
     db.session.commit()
@@ -333,6 +376,7 @@ def create_event():
         event_longitude=data.get("event_longitude"),
         user_email=user_email,  # Store the user email for reference
         event_tag=data.get("event_tag"),
+        event_gender=data.get("event_gender"),
     )
 
     db.session.add(event)  # add event to the session
@@ -431,6 +475,7 @@ def create_event():
 # with app.app_context():
 #     db.create_all()
 
+
 # ======================================== USER MODEL ==========================================
 # Model for table User
 class User(db.Model):
@@ -522,7 +567,7 @@ with app.app_context():
     db.create_all()
 
 
-#scheduler to run scrap events every tot time
+# scheduler to run scrap events every tot time
 # scheduler.add_job(scrape_events, 'interval', seconds=20)
 # scheduler.start()
 # # exit handler to stop scheduler when flask is stopped
