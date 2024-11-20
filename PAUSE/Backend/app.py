@@ -14,9 +14,11 @@ import os
 import openai
 from openai import OpenAI
 from apscheduler.schedulers.background import BackgroundScheduler
-import atexit
+from dotenv import load_dotenv
 
 
+#load ambient variables from .env file  
+load_dotenv(dotenv_path='PAUSE/Backend/.env')
 #scheduer to run scrap events every tot time
 scheduler = BackgroundScheduler()
 
@@ -89,7 +91,13 @@ def scrape_events():
     caption_last_post = ''
     #instaloader instance 
     loader = instaloader.Instaloader()
-    loader.login('mrscrape6', 'Pause2024')        # (login)
+    try:
+        #try login to the scraper profile
+        loader.login('mrscrape6', 'Pause2024')
+    except Exception as e:
+        print(f"Error during login to ig profile: {e}")
+        return  # exit function if login fails
+    print("-------------Login to instgram was successful---------------")
 
     #list of the profiles to be scraped
     profile_names = ['icoliandro'] 
@@ -106,7 +114,11 @@ def scrape_events():
         with app.app_context():
             existing_event = Event.query.filter_by(media_id=post.shortcode).first()
             if existing_event is None:
-                openai.api_key = ""
+                openai.api_key = os.getenv('OPENAI_API_KEY')
+                # openai.api_key = "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"
+                if not openai_api_key:
+                    print("API OpenAI key not found in the environment variables, exiting function scrape_events()")
+                    return
 
                 client = OpenAI(api_key=openai.api_key) # ask Gabriele for the api key
                 messages = [
@@ -165,6 +177,9 @@ def scrape_events():
                 db.session.commit()
 
                 print(f"New event added: {event_name}")
+            
+            else: #the scraped event already exists in the database
+                print(f"Event with media_id {post.shortcode} already exists in the database, skip")
 
             # return response.choices[0].message.content
 
