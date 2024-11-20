@@ -1,9 +1,27 @@
+# from flask import Flask, request, render_template, redirect, url_for, jsonify
+# from flask_cors import CORS
+# from flask_sqlalchemy import SQLAlchemy
+# from datetime import datetime
+
 from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+<<<<<<< HEAD
 from sqlalchemy import Enum, or_, text
 from flask_cors import cross_origin
+=======
+import instaloader
+import os
+import openai
+from openai import OpenAI
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
+
+
+#scheduer to run scrap events every tot time
+scheduler = BackgroundScheduler()
+>>>>>>> igscraping
 
 app = Flask(__name__)
 
@@ -40,10 +58,14 @@ class Event(db.Model):
     user_email = db.Column(
         db.String(200), db.ForeignKey("users.email"), nullable=False
     )  # Foreign key
+<<<<<<< HEAD
     event_tag = db.Column(
         Enum("Shop", "Flea Market", "Garage Sale", "Other", name="event_tag"),
         nullable=False,
     )
+=======
+    media_id = db.Column(db.String(200), nullable=True) 
+>>>>>>> igscraping
 
     def __repr__(self):
         return f"<Event {self.event_name}>"    
@@ -66,6 +88,90 @@ def format_event(event):
         "user_email": event.user_email,
         "event_tag": event.event_tag,
     }
+
+
+def scrape_events():
+    caption_last_post = ''
+    #instaloader instance 
+    loader = instaloader.Instaloader()
+    loader.login('mrscrape6', 'Pause2024')        # (login)
+
+    #list of the profiles to be scraped
+    profile_names = ['icoliandro'] 
+    for profile_name in profile_names:
+        profile = instaloader.Profile.from_username(loader.context, profile_name)
+
+        for post in profile.get_posts():
+            if post.caption:  # check if caption is empty
+                caption_last_post = post.caption
+                break # get only the first post
+            else:
+                print(f"Post ID: {post.shortcode} non ha didascalia.\n")
+
+        with app.app_context():
+            existing_event = Event.query.filter_by(media_id=post.shortcode).first()
+            if existing_event is None:
+                openai.api_key = ""
+
+                client = OpenAI(api_key=openai.api_key) # ask Gabriele for the api key
+                messages = [
+                    {"role": "system", "content": '''You are a helpful assistant. 
+                     from a text that i will provide you, you will find only date (in the format 'YYYY-MM-DD'), start_time, end_time, location (only if it is a real one, if location is for example "park", "secret", "street", leave it empty ), 
+                     name (of the event), description (of the event) 
+                     (if it is more than 200 char make a summary of the description that it is under 200 char). If you don't manage to 
+                     find some of these information, default values: location: "", date: "" ,start_time = 09:00:00, end_time = 00:00:00, name=Scraped Event, description: no description available . 
+                     The output should have a dictionary structure. If the date of the event is more than one day, just provide the starting date. 
+                     If the caption say something like This <day of the week>, it means that the date is the closest <day of the week> from today.
+                     If the caption say something like next <day of the week>, it means that the date is the closest <day of the week> next week'''},
+                    {"role": "user", "content": caption_last_post},
+                ]
+
+                response=client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages,
+                    temperature=0.5,
+                )
+                # Parse the response as JSON
+                event_data = response.choices[0].message.content
+                print(event_data)
+                event_info = eval(event_data)  # Be cautious with eval, consider safer alternatives like json.loads if possible
+
+                # Extract the information
+                event_name = event_info.get("name")
+                event_description = event_info.get("description")
+                event_location = event_info.get("location")
+                event_date_str = event_info.get("date")  # Assuming 'start_time' includes the date
+                event_start_time = event_info.get("start_time")
+                event_end_time = event_info.get("end_time")
+
+                # Skip event if location or date is missing
+                if not event_location or not event_date_str:
+                    print(f"Skipping event: {event_name} - Missing location or date")
+                    continue
+
+                # Convert event_date_str to a date object (consider parsing the date format correctly)
+                event_date = datetime.strptime(event_date_str, '%Y-%m-%d').date()  # Adjust the date format as necessary
+                event_start_time = datetime.strptime(event_start_time, '%H:%M:%S').time()  # Modifica il formato se necessario
+                event_end_time = datetime.strptime(event_end_time, '%H:%M:%S').time() 
+
+                # Create a new event instance
+                new_event = Event(
+                    event_name=event_name,
+                    event_description=event_description,
+                    event_date=event_date,
+                    event_location=event_location,
+                    user_email="user@example.com",  # Replace with actual user email or make it dynamic
+                    event_start_time=event_start_time,
+                    event_end_time=event_end_time,
+                    media_id=post.shortcode,
+                )
+                # Add the event to the session and commit
+                db.session.add(new_event)
+                db.session.commit()
+
+                print(f"New event added: {event_name}")
+
+            # return response.choices[0].message.content
 
 
 # Apparently to solve the CORS issue, we need to add this route to the backend
@@ -407,6 +513,13 @@ def get_user_by_email(email):
 with app.app_context():
     db.create_all()
 
+
+#scheduler to run scrap events every tot time
+# scheduler.add_job(scrape_events, 'interval', seconds=20)
+# scheduler.start()
+# # exit handler to stop scheduler when flask is stopped
+# atexit.register(lambda: scheduler.shutdown())
+scrape_events()
 
 if __name__ == "__main__":
     app.run(debug=True)
