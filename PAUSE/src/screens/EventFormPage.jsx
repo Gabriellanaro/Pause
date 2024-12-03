@@ -192,7 +192,7 @@ function EventFormPage() {
         
         <div style={{ display: "flex", gap: "80px" }}>
           {tags.map((tag) => (
-            <div key={tag.value} style={{ display: "flex", alignItems: "center", gap: "5px", whiteSpace: "nowrap" }}>
+            <div key={tag.value} style={{ display: "flex", alignItems: "center", gap: "5px", whiteSpace: "nowrap", marginTop: "2px"}}>
               <input
                 type="radio"
                 id={tag.value}
@@ -201,14 +201,14 @@ function EventFormPage() {
                 checked={formData.event_tag === tag.value}
                 onChange={handleChange}
               />
-              <label htmlFor={tag.value}>{tag.label}</label>
+              <label htmlFor={tag.value} style={{ marginTop: "8px"} }>{tag.label}</label>
             </div>
           ))}
         </div>
 
         <div style={{ display: "flex", gap: "80px" }}>
           {clothes_types.map((gender) => (
-            <div key={gender.value} style={{ display: "flex", alignItems: "center", gap: "5px", whiteSpace: "nowrap" }}>
+            <div key={gender.value} style={{ display: "flex", alignItems: "center", gap: "5px", whiteSpace: "nowrap"}}>
               <input
                 type="radio"
                 id={gender.value}
@@ -217,7 +217,7 @@ function EventFormPage() {
                 checked={formData.event_gender === gender.value}
                 onChange={handleChange}
               />
-              <label htmlFor={gender.value}>{gender.label}</label>
+              <label htmlFor={gender.value} style={{ marginTop: "8px" } }>{gender.label}</label>
             </div>
           ))}
         </div>
@@ -244,7 +244,7 @@ function EventFormPage() {
               placeholder="Select Starting Time"
               value={formData.event_start_time}
               onChange={handleChange}
-              step="900"
+              step= "300"
               required
             />
           </div>
@@ -256,7 +256,7 @@ function EventFormPage() {
               placeholder="Select Closing Time"
               value={formData.event_end_time}
               onChange={handleChange}
-              step="900"
+              step="300"
               required
             />
           </div>

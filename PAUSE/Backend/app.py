@@ -444,11 +444,6 @@ def register_user():
         created_at=datetime.utcnow(),
     )
 
-    # print("Received data:", data)
-    # print("Email:", email)
-    # print("First Name:", first_name)
-    # print("Last Name:", last_name)
-
     # Add the user to the database
     db.session.add(new_user)
     db.session.commit()
@@ -484,7 +479,9 @@ with app.app_context():
 # scheduler.start()
 # # exit handler to stop scheduler when flask is stopped
 # atexit.register(lambda: scheduler.shutdown())
+
 scrape_events()
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -663,6 +663,21 @@ nav {
   text-decoration: underline;
 }
 
+.logout-button {
+  /* position: absolute;
+  bottom: 20px;
+  left: 20px; */
+  font-family: 'Inter';
+  font-size: 16px;
+  background-color: #60ECAA;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+
 /* ----------------- End Hamburger menu ---------------------*/
 
 /* ----------------- Google sign in button ---------------------*/

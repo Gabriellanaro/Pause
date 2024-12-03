@@ -34,6 +34,10 @@ const HamburgerMenu = () => {
         }
         setShowLogoutConfirm(true);  // Show confirmation popup
     };
+    
+    const handleLoginClick = () => {
+        navigate("/login")
+    };
 
     const confirmLogout = () => {
         signOut(auth)
@@ -68,11 +72,18 @@ const HamburgerMenu = () => {
                         </a>
                     </li>
                     <li><a href="/your-events">Your events</a></li>
-                    <li>
-                        <button className="logout-button" onClick={handleLogoutClick}>
-                            Logout
+                    {isLoggedIn ? (
+                        <li>
+                            <button className="logout-button" onClick={handleLogoutClick}>
+                                Logout
+                            </button>
+                        </li>
+                    ) : (
+                        <button className="logout-button" onClick={handleLoginClick}>
+                                Login
                         </button>
-                    </li>
+                    )
+                    }
                 </ul>
             </nav>
 
